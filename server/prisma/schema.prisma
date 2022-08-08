@@ -9,3 +9,87 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model City {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  user      User[]
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  username       String
+  email          String        @unique
+  password       String
+  activationLink String
+  isActivated    Boolean       @default(false)
+  role           String
+  info           String?       @db.VarChar(500)
+  userPic        String?
+  city           City          @relation(fields: [cityId], references: [id])
+  cityId         Int
+  token          Token?
+  schedule       Schedule[]
+  eventClient    Event[]       @relation("client")
+  eventMaster    Event[]       @relation("master")
+  serviceItem    ServiceItem[]
+}
+
+model Token {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  refreshToken String
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @unique
+}
+
+model Schedule {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  startDateTime DateTime
+  endDateTime   DateTime
+  master        User     @relation(fields: [masterId], references: [id])
+  masterId      Int
+}
+
+model ServiceCategory {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  title       String
+  serviceItem ServiceItem[]
+}
+
+model ServiceItem {
+  id                Int             @id @default(autoincrement())
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  title             String
+  duration          Int
+  price             Int
+  serviceCategory   ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
+  serviceCategoryId Int
+  master            User            @relation(fields: [masterId], references: [id])
+  masterId          Int
+  event             Event[]
+}
+
+model Event {
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  startDateTime DateTime
+  status        String
+  client        User        @relation("client", fields: [clientId], references: [id])
+  clientId      Int
+  master        User        @relation("master", fields: [masterId], references: [id])
+  masterId      Int
+  serviceItem   ServiceItem @relation(fields: [serviceItemId], references: [id])
+  serviceItemId Int
+}
