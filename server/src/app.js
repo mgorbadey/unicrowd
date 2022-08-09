@@ -4,6 +4,7 @@ const express = require('express') // подключение  express
 const morgan = require('morgan') // подключение  morgan
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const authRouter = require('./routes/authRoute')
 
 const { PORT, CLIENT_URL } = process.env // получение переменных env
 const { dbConnect } = require('../prisma/dbConnect')
@@ -31,6 +32,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.use('/auth', authRouter)
 
 app.listen(PORT, () => {
   dbConnect()
