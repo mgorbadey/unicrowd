@@ -44,7 +44,31 @@ class TockenService {
     const tokenData = await prisma.token.delete({ where: { refreshToken } })
     return tokenData
   }
-  
+
+  // функция валидации аксесс-токена 
+  validateAccessToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+      return userData
+    } catch (e) {
+      return null
+    }
+  }
+// функция валидации рефреш-токена
+  validateRefreshToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
+      return userData
+    } catch (e) {
+      return null
+    }
+  }
+// функция поиска рефреш-токена в бд
+  async findToken(refreshToken) {
+    const tokenData = await prisma.token.findUnique({ where: { refreshToken } })
+    return tokenData
+  }
+
 }
 
 module.exports = new TockenService()

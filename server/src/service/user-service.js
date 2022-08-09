@@ -90,6 +90,28 @@ class UserService {
       }
     }
 
+    // функция обновления токена
+    async refresh(refreshToken) {
+      try {
+        if (!refreshToken) {
+          throw serverError.UnauthorizedError()
+        }
+      const userData = tokenService.validateRefreshToken(refreshToken)
+      const tokenFromDb = await tokenService.findToken(refreshToken)
+      if (!userData || !tokenFromDb) {
+        throw serverError.UnauthorizedError()
+      }
+      const user = await prisma.user.findUnique({ where: { id: userData.id } })
+      const userDto = new UserDto(user)
+      const tokens = tokenService.generateTokens({ ...userDto })
+
+      await tokenService.saveToken(userDto.id, tokens.refreshToken)
+      return { ...tokens, user: userDto }
+      } catch (error) {
+        throw serverError.BadRequest('Ошибка обновления токена')
+      }
+    }
+
 }
 
 module.exports = new UserService()
