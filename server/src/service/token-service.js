@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 class TockenService {
 
@@ -18,7 +18,8 @@ class TockenService {
     }
   }
   // функция сохранения рефреш-токена в бд
-  async saveToken(userId, { refreshToken }) {
+  async saveToken(userId,  refreshToken ) {
+    console.log(refreshToken);
     const tockenData = await prisma.token.findUnique({
       where: { userId },
     })

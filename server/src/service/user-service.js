@@ -24,8 +24,7 @@ class UserService {
           password: hashPassword,
           username,
           role,
-          activationLink: `http://localhost:3500/auth/activate/${activationLink}`,
-          isActivated: false,
+          activationLink: `http://localhost:3500/auth/activate/${activationLink}`
         },
       })
       await mailService.sendActivationMail(email, `http://localhost:3500/auth/activate/${activationLink}`) // отправляем письмо с ссылкой активации
@@ -35,7 +34,8 @@ class UserService {
       return { ...tokens, user: userDto } // в результате регистрации возвращаем токены и информацию о юзере
 
     } catch (error) {
-      throw serverError.BadRequest('Ошибка регистрации')
+      // throw serverError.BadRequest('Ошибка регистрации')
+      console.log(error);
     }
   }
   // функция активации аккаунта 
@@ -72,8 +72,7 @@ class UserService {
         const userDto = new UserDto(user)
   
         const tokens = tokenService.generateTokens({ ...userDto })
-  
-        await tokenService.saveToken(userDto.id, tokens)
+        await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return { ...tokens, user: userDto }
       } catch (error) {
         throw serverError.BadRequest('Ошибка входа')

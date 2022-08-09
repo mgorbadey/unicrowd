@@ -38,5 +38,5 @@ app.use(errorMiddleware)
 
 app.listen(PORT, () => {
   dbConnect()
-  console.log(`Сервер запущен на порте ${PORT}! `)
+  console.log(`Сервер запущен на порте ${PORT} `)
 })
