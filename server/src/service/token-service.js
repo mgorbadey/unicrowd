@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken')
 
 class TockenService {
+
+  //функция генерации пары токенов
   generateTokens(payload) {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
       expiresIn: '30m',
@@ -15,7 +17,7 @@ class TockenService {
       refreshToken,
     }
   }
-
+  // функция сохранения рефреш-токена в бд
   async saveToken(userId, { refreshToken }) {
     const tockenData = await prisma.token.findUnique({
       where: { userId },
@@ -36,6 +38,13 @@ class TockenService {
     })
     return token
   }
+
+  // функция удаления рефреш-токена из бд
+  async removeToken(refreshToken) {
+    const tokenData = await prisma.token.delete({ where: { refreshToken } })
+    return tokenData
+  }
+  
 }
 
 module.exports = new TockenService()
