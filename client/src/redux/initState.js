@@ -1,5 +1,5 @@
 const initState = {
-  search: [],
+  search: {},
   master: [],
 }
 
