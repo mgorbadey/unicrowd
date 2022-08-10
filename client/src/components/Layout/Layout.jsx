@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import MasterCalendar from '../../pages/MasterCalendar'
+import Search from '../../pages/Search/Search'
 import Header from '../Header/Header'
 import LoginForm from '../LoginForm/LoginForm'
 import Main from '../Main/Main'
@@ -14,6 +15,7 @@ const Layout = () => {
         <Header />
         <Main>
           <Routes>
+            <Route path='/search' element={<Search />} />
             {/* <Route path='/' element={<Navigate to={} replace={true} />} /> */}
             <Route path='/masters/:id/schedules' element={<MasterCalendar />} />
             <Route path='/masters/:id/profile' element={<MasterProfile />} />

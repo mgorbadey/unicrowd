@@ -1,5 +1,5 @@
 const searchType = {
-  ALL_DATA: 'ALL_DATA',
+  GET_SEARCH_DATA: 'GET_SEARCH_DATA',
 }
 
 export default searchType
