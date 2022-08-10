@@ -33,6 +33,25 @@ async function main() {
       },
     ],
   })
+  const city = await prisma.city.createMany({
+    data: [
+      { name: 'Москва' },
+      { name: 'Санкт-Петербург' },
+      { name: 'Новосибирск' },
+      { name: 'Екатеринбург' },
+      { name: 'Казань' },
+      { name: 'Нижний Новгород' },
+      { name: 'Челябинск' },
+      { name: 'Омск' },
+      { name: 'Самара' },
+      { name: 'Ростов-на-Дону' },
+      { name: 'Уфа' },
+      { name: 'Красноярск' },
+      { name: 'Пермь' },
+      { name: 'Воронеж' },
+      { name: 'Волгоград' },
+    ],
+  })
   const user = await prisma.user.create({
     data: {
       username: 'Вася Васин',
@@ -42,25 +61,6 @@ async function main() {
       role: 'master',
     },
   })
-  // const city = await prisma.city.createMany({
-  //   data: [
-  //     { name: 'Москва' },
-  //     { name: 'Санкт-Петербург' },
-  //     { name: 'Новосибирск' },
-  //     { name: 'Екатеринбург' },
-  //     { name: 'Казань' },
-  //     { name: 'Нижний Новгород' },
-  //     { name: 'Челябинск' },
-  //     { name: 'Омск' },
-  //     { name: 'Самара' },
-  //     { name: 'Ростов-на-Дону' },
-  //     { name: 'Уфа' },
-  //     { name: 'Красноярск' },
-  //     { name: 'Пермь' },
-  //     { name: 'Воронеж' },
-  //     { name: 'Волгоград' },
-  //   ],
-  // })
 }
 
 main()

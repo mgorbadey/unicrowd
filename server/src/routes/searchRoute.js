@@ -9,17 +9,30 @@ router.get('/', async (req, res) => {
       select: {
         id: true,
         username: true,
-        role: true,
-        // city: true,
         info: true,
         userPic: true,
+        createdAt: true,
+        cityId: true,
       },
     })
-    const categories = await prisma.serviceCategory.findMany({})
+    const categories = await prisma.serviceCategory.findMany({
+      select: {
+        id: true,
+        title: true,
+      },
+    })
+
     res.json({ masters, categories })
   } catch (error) {
     console.log(error.message)
   }
 })
+
+// router.post('/', async (req, res) => {
+//   const { name } = req.body
+//   const masters = await prisma.user.findMany({
+//     where: { role: 'master' },
+//   })
+// })
 
 module.exports = router
