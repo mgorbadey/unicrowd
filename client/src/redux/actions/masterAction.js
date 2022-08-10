@@ -1,4 +1,4 @@
-import masterType from "../types/searchType"
+import masterType from "../types/masterType"
 
 
 export const getWorkingSlots = (arr) => ({
