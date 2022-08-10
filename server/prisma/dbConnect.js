@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 
-exports.dbconnect = async () => {
+exports.dbConnect = async () => {
     try {
       const prisma = new PrismaClient();
     await prisma.$connect();
