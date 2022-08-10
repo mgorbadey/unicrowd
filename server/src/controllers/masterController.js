@@ -6,7 +6,7 @@ exports.getAllWorkingSlots = async (req, res) => {
   //1. нахожу день недели, часы, минуты для отрисовки в компоненте календаря
   const hourDifferance = 3; //встроенный метод JS для извлечения часов из датывремени почему-то делает +3часа
   const calSlot = 12; //столько span в 1 часе
-  const divider = 3600000; //для перевода в чаты
+  const divider = 3600000; //для перевода в часы
   const newData = allWorkingSlots.map((el) => ({
     ...el,
     weekDay:

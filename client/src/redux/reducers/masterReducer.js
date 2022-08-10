@@ -1,10 +1,11 @@
 import initState from '../initState'
+import masterType from '../types/masterType'
 
 //выносим логику, которая работает со стейтом из компонентов - сюда >>>>>>>>
 
 const masterReducer = (state = initState.master, action) => {
   switch (action.type) {
-    case 'WORKINGSLOTS':
+    case masterType.WORKINGSLOTS:
       // console.log('redux', action.payload)
       return action.payload
     default:
