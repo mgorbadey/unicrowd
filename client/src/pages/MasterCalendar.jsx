@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CalendarComponent from "../components/CalendarComponent/CalendarWeekComponent";
+import CalendarComponent from "../components/Calendar/CalendarWeekComponent";
 const axios = require("axios").default;
 
 export default function MasterCalendar() {
@@ -8,7 +8,7 @@ export default function MasterCalendar() {
   //хардкод id мастера
   const masterId = 1;
 
-  const workingSlots = useSelector((store) => store);
+  const workingSlots = useSelector((store) => store.master);
   useEffect(() => {
     axios
       .get(`http://localhost:3600/masters/${masterId}/schedules`)
@@ -23,8 +23,6 @@ export default function MasterCalendar() {
   }, [dispatch]);
 
   return (
-    <>
       <CalendarComponent workingSlots={workingSlots}/>
-    </>
   );
 }
