@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+const { Router } = require('express')
+const router = Router()
 const {getAllWorkingSlots, createWorkingSlot} = require("../controllers/masterController")
 
 router
@@ -7,5 +7,8 @@ router
   .get(getAllWorkingSlots)
   // .post(createWorkingSlot)
 
+router.get('/:id/profile', (req, res) => {
+    res.json({name: 'nikita'})
+})
 
-module.exports = router;
+module.exports = router
