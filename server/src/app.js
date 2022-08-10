@@ -4,6 +4,8 @@ const express = require('express') // подключение  express
 const morgan = require('morgan') // подключение  morgan
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const authRouter = require('./routes/authRoute')
+const errorMiddleware = require('./middlewares/errorMiddleware')
 
 const { PORT, CLIENT_URL } = process.env // получение переменных env
 const { dbConnect } = require('../prisma/dbConnect')
@@ -31,8 +33,10 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.use('/auth', authRouter)
+app.use(errorMiddleware)
 
 app.listen(PORT, () => {
   dbConnect()
-  console.log(`Сервер запущен на порте ${PORT}! `)
+  console.log(`Сервер запущен на порте ${PORT} `)
 })

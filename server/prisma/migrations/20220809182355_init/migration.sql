@@ -1,14 +1,4 @@
 -- CreateTable
-CREATE TABLE "City" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "City_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,7 +11,6 @@ CREATE TABLE "User" (
     "role" TEXT NOT NULL,
     "info" VARCHAR(500),
     "userPic" TEXT,
-    "cityId" INTEGER NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -88,16 +77,13 @@ CREATE TABLE "Event" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "City_name_key" ON "City"("name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Token_userId_key" ON "Token"("userId");
+CREATE UNIQUE INDEX "Token_refreshToken_key" ON "Token"("refreshToken");
 
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Token_userId_key" ON "Token"("userId");
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
