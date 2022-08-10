@@ -1,4 +1,5 @@
 import React from 'react';
+import Layout from './components/Layout/Layout';
 import axios from 'axios'
 import {
   Routes,
@@ -11,8 +12,8 @@ const App = () => {
   return (
     <Routes>
       <Route path='/master/:id/profile' element={ <MasterProfile />}/>
-    </Routes>
+    </Routes><Layout />
   );
-}
+};
 
 export default App;

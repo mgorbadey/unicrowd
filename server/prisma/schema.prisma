@@ -10,13 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model City {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-  user      User[]
-}
+// model City {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   name      String   @unique
+//   user      User[]
+// }
 
 model User {
   id             Int           @id @default(autoincrement())
@@ -30,8 +30,8 @@ model User {
   role           String
   info           String?       @db.VarChar(500)
   userPic        String?
-  city           City          @relation(fields: [cityId], references: [id])
-  cityId         Int
+//  city           City          @relation(fields: [cityId], references: [id])
+//  cityId         Int?          @default(1)
   token          Token?
   schedule       Schedule[]
   eventClient    Event[]       @relation("client")
@@ -43,7 +43,7 @@ model Token {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  refreshToken String
+  refreshToken String   @unique
   user         User     @relation(fields: [userId], references: [id])
   userId       Int      @unique
 }
