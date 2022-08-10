@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client')
 
 exports.dbConnect = async () => {
     try {
@@ -6,6 +6,6 @@ exports.dbConnect = async () => {
     await prisma.$connect();
     console.log('Подключение к базе данных успешно установлено');
   } catch (error) {
-    console.log('ебал я призму:',error.message);
+    console.log('ебал я призму:', error.message)
   }
-};
+}
