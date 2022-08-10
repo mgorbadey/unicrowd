@@ -29,11 +29,13 @@ app.use(express.urlencoded({ extended: true })) // добавление отло
 const masterRoute = require('./src/routes/masterRoute')
 const uploadRoute = require('./src/routes/uploadRoute')
 const authRoute = require('./src/routes/authRoute')
+const searchRoute = require('./src/routes/searchRoute')
 
 app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use('/masters', masterRoute)
 app.use('/auth', authRoute)
 app.use('/api', uploadRoute)
+app.use('/search', searchRoute)
 
 const errorMiddleware = require('./src/middlewares/errorMiddleware')
 
