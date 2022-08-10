@@ -1,44 +1,62 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { getSearchDataThunk } from '../../redux/actions/searchAction'
-import SearchModal from '../SearchModal/SearchModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { Input, Button, Flex, Box } from '@chakra-ui/react'
+import {
+  getSearchDataThunk,
+  sendSearch,
+} from '../../redux/actions/searchAction'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 const SearchForm = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [input, setInput] = useState('')
-  const { masters, categories } = useSelector((store) => store.search)
-  // console.log('masters: ', masters);
-  // console.log('categories: ', categories);
-
-  // const filtredSearch = categories.filter((category) => category.title.includes(input))
-  // console.log('filtredSearch: ', filtredSearch);
 
   useEffect(() => {
     dispatch(getSearchDataThunk())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
+
+  const data = useSelector((store) => store.search)
+  const filtredData = data.filter(
+    (item) =>
+      item?.username?.toLowerCase().includes(input) ||
+      item?.title?.toLowerCase().includes(input)
+  )
 
   return (
-    <div className='flex justify-around'>
-      <div className='mt-1'>
-        <input
+    <Flex>
+      <Box>
+        <Input
+          placeholder='Basic usage'
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          type='text'
-          name='name'
-          id='name'
-          className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full'
-          placeholder='Search'
         />
-        <SearchModal />
-      </div>
-      <button
-        type='button'
-        className='inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+        <Box>
+          {data.length !== filtredData.length &&
+            filtredData.map((search, index) => (
+              <Box
+                key={index}
+                onClick={(e) => {
+                  dispatch(sendSearch(e.target.innerText))
+                  navigate('/search/results', { replace: true })
+                }}
+              >
+                {search?.username || search?.title}
+              </Box>
+            ))}
+        </Box>
+      </Box>
+      <Button
+        colorScheme='blue'
+        onClick={() => {
+          dispatch(sendSearch(input))
+          navigate('/search/results', { replace: true })
+        }}
       >
-        Найти
-      </button>
-    </div>
+        Button
+      </Button>
+      <Outlet />
+    </Flex>
   )
 }
 
