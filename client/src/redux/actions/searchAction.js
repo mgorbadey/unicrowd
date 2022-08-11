@@ -14,3 +14,16 @@ export const getSearchDataThunk = () => async (dispatch) => {
     console.log(error.message)
   }
 }
+
+export const sendSearch = (string) => ({
+  type: searchType.FINDED_DATA,
+  payload: string,
+})
+
+// export const sendSearchThunk = (string) => async (dispatch) => {
+//   try {
+//     const response = await $api.post('/search', {string})
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// }

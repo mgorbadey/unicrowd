@@ -1,61 +1,36 @@
 import React from 'react'
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+} from '@chakra-ui/react'
 
-const SearchModal = () => {
-  const [open, setOpen] = useState(true)
-  const cancelButtonRef = useRef(null)
-
+const SearchModal = ({ isOpen, onOpen, onClose }) => {
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as='div'
-        className='relative z-10'
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
-      >
-        <Transition.Child
-          as={Fragment}
-          enter='ease-out duration-300'
-          enterFrom='opacity-0'
-          enterTo='opacity-100'
-          leave='ease-in duration-200'
-          leaveFrom='opacity-100'
-          leaveTo='opacity-0'
-        >
-          <div className='bg-gray-500 bg-opacity-75 transition-opacity' />
-        </Transition.Child>
+    <>
+      <Button onClick={onOpen}>Open Modal</Button>
 
-        <div className='fixed z-10 inset-0 overflow-y-auto'>
-          <div className='flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0'>
-            <Transition.Child
-              as={Fragment}
-              enter='ease-out duration-300'
-              enterFrom='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
-              enterTo='opacity-100 translate-y-0 sm:scale-100'
-              leave='ease-in duration-200'
-              leaveFrom='opacity-100 translate-y-0 sm:scale-100'
-              leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
-            >
-              <Dialog.Panel className='relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full'>
-                <div className='bg-white px-4 pt-4 pb-4 sm:p-6 sm:pb-4'>
-                  <div className='sm:flex sm:items-start'>
-                    <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-                      <Dialog.Title
-                        as='h3'
-                        className='text-lg leading-6 font-medium text-gray-900'
-                      >
-                        Deactivate account
-                      </Dialog.Title>
-                    </div>
-                  </div>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody></ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant='ghost'>Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 
