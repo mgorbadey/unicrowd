@@ -16,7 +16,8 @@ class UserService {
       if (candidate) {
         throw serverError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`)
       }
-      const hashPassword = await bcrypt.hash(password, 3)                                  // хэшируем пароль
+      
+      const hashPassword = await bcrypt.hash(password, 3)                                 // хэшируем пароль
       const activationLink = uuid.v4()                                                     // генерим уникальную стрингу для ссылки активации
       const user = await prisma.user.create({                                              // создаем нового пользователя
         data: {
