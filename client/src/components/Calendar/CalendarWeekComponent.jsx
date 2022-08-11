@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/solid";
 import { Menu, Transition } from "@headlessui/react";
 import EventCalendarWeekComponent from "./EventCalendarWeekComponent";
+import {getDaysAroundGivenDay} from "../../helpers/calendar"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,59 +17,28 @@ export default function CalendarComponent({ workingSlots }) {
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
+  const monthsArr = ['Январь' , 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь' , 'Октябрь' , 'Ноябрь' , 'Декабрь'];
 
-  console.log('workingSlots',workingSlots);
+  console.log('workingSlots', workingSlots);
 
-  //1. Сначала получаем текущую дату, чтобы отрисовать текущую неделю
-let dt =  new Date();
+  // Сначала получаем текущую дату, чтобы отрисовать текущую неделю. 
+  // От нее жадее происходят все преобразования.
+  let today =  new Date();
+  const [date, setDateOfWeek] = useState(today);
+  // const [month, setCurrentMonth] = useState(date.getMonth())
 
-//2. Затем получаем номер недели в году
-  function getWeekNumber(dt) {
-    let tdt = new Date(dt.valueOf());
-    let dayn = (dt.getDay() + 6) % 7;
-    tdt.setDate(tdt.getDate() - dayn + 3);
-    let firstThursday = tdt.valueOf();
-    tdt.setMonth(0, 1);
-    if (tdt.getDay() !== 4) {
-      tdt.setMonth(0, 1 + ((4 - tdt.getDay() + 7) % 7));
-    }
-    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+  // let displayedMonth = monthsArr[month]
+  // console.log(displayedMonth)
+
+  let wholeWeek = getDaysAroundGivenDay(date)
+
+  function nextWeek() {
+    setDateOfWeek(new Date(date).setDate(new Date(date).getDate() + 7))
   }
 
-  //3. Получаем дни около текущей даты до и после по 6 шт.
-  //И сразу выбираем только те, что в нужной нам неделе
-
-  function getDaysAroundGivenDay(dt) {
-    let daysBefore = [];
-    let daysAfter = [];
-    let startDateWeek = getWeekNumber(new Date(dt));
-    for (let i = 0; i < 7; i++) {
-      let startDate = new Date(dt);
-      let oneDateNext = startDate.setDate(startDate.getDate() + i);
-      let oneDateOnlyDayNumber = new Date(oneDateNext).getDate()
-      let oneDateWeek = getWeekNumber(new Date(oneDateNext))
-      if (oneDateWeek === startDateWeek) {
-        daysAfter.push([oneDateOnlyDayNumber,new Date(oneDateNext)]);
-      }
-    }
-
-    for (let i = 6; i > 0; i--) {
-      let startDate = new Date(dt);
-      let oneDateBefore = startDate.setDate(startDate.getDate() - i);
-      let oneDateOnlyDayNumber = new Date(oneDateBefore).getDate()
-
-      let oneDateWeek = getWeekNumber(new Date(oneDateBefore))
-      if (oneDateWeek === startDateWeek) {
-        daysBefore.push([oneDateOnlyDayNumber, new Date(oneDateBefore)]);
-      }
-    }
-    let allDates = daysBefore.concat(daysAfter);
-    return allDates;
+  function previousWeek() {
+    setDateOfWeek(new Date(date).setDate(new Date(date).getDate() - 7))
   }
-
-  console.log(getDaysAroundGivenDay(dt));
-
-  let wholeWeek = getDaysAroundGivenDay(dt)
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -85,35 +55,37 @@ let dt =  new Date();
     <div className="flex h-full flex-col">
       <header className="relative z-40 flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <h1 className="text-lg font-semibold text-gray-900">
-          <time dateTime="2022-01">January 2022</time>
+          <time dateTime="2022-01"> 2022</time>
         </h1>
         <div className="flex items-center">
           <div className="flex items-center rounded-md shadow-sm md:items-stretch">
             <button
+              onClick={previousWeek}
               type="button"
               className="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
-              <span className="sr-only">Previous month</span>
+              <span className="sr-only">Previous week</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
               type="button"
               className="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
             >
-              Today
+              Неделя
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
+            onClick={nextWeek}
               type="button"
               className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
-              <span className="sr-only">Next month</span>
+              <span className="sr-only">Next week</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
           <div className="hidden md:ml-4 md:flex md:items-center">
             <Menu as="div" className="relative">
-              <Menu.Button
+              {/* <Menu.Button
                 type="button"
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
               >
@@ -122,9 +94,9 @@ let dt =  new Date();
                   className="ml-2 h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
-              </Menu.Button>
+              </Menu.Button> */}
 
-              <Transition
+              {/* <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
                 enterFrom="transform opacity-0 scale-95"
@@ -197,7 +169,7 @@ let dt =  new Date();
                     </Menu.Item>
                   </div>
                 </Menu.Items>
-              </Transition>
+              </Transition> */}
             </Menu>
             <div className="ml-6 h-6 w-px bg-gray-300" />
             <button
@@ -336,7 +308,7 @@ let dt =  new Date();
             ref={containerNav}
             className="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8"
           >
-            <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
+            {/* <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
               <button
                 type="button"
                 className="flex flex-col items-center pt-2 pb-3"
@@ -400,13 +372,13 @@ let dt =  new Date();
                   16
                 </span>
               </button>
-            </div>
+            </div> */}
 
             <div className="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
               <div className="col-end-1 w-14" />
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Mon{" "}
+                  Пн{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[0][0]}
                   </span>
@@ -414,7 +386,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Tue{" "}
+                  Вт{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[1][0]}
                   </span>
@@ -422,7 +394,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span className="flex items-baseline">
-                  Wed{" "}
+                  Ср{" "}
                   <span className="ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">
                   {wholeWeek[2][0]}
                   </span>
@@ -430,7 +402,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Thu{" "}
+                  Чт{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[3][0]}
                   </span>
@@ -438,7 +410,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Fri{" "}
+                  Пт{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[4][0]}
                   </span>
@@ -446,7 +418,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Sat{" "}
+                  Суб{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[5][0]}
                   </span>
@@ -454,7 +426,7 @@ let dt =  new Date();
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Sun{" "}
+                  Вскр{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
                   {wholeWeek[6][0]}
                   </span>

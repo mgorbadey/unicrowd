@@ -1,4 +1,4 @@
-//2.  Функция для получения номера недели в году
+//  Функция для получения номера недели в году
 function getWeekNumber(dt) {
   let tdt = new Date(dt.valueOf());
   let dayn = (dt.getDay() + 6) % 7;
@@ -11,8 +11,8 @@ function getWeekNumber(dt) {
   return 1 + Math.ceil((firstThursday - tdt) / 604800000);
 }
 
-//3. Получаем дни около текущей даты до и после по 6 шт.
-//И сразу выбираем только те, что в нужной нам неделе
+// Получаем дни около даты, которая попадает на вход, до и после по 6 шт.
+//И сразу выбираем только те, что в нужной нам неделе.
 
 function getDaysAroundGivenDay(dt) {
   let daysBefore = [];
@@ -21,19 +21,19 @@ function getDaysAroundGivenDay(dt) {
   for (let i = 0; i < 7; i++) {
     let startDate = new Date(dt);
     let oneDateNext = startDate.setDate(startDate.getDate() + i);
-    let oneDateOnlyDayNumber = new Date(oneDateNext).getDate()
-    let oneDateWeek = getWeekNumber(new Date(oneDateNext))
+    let oneDateOnlyDayNumber = new Date(oneDateNext).getDate();
+    let oneDateWeek = getWeekNumber(new Date(oneDateNext));
     if (oneDateWeek === startDateWeek) {
-      daysAfter.push([oneDateOnlyDayNumber,new Date(oneDateNext)]);
+      daysAfter.push([oneDateOnlyDayNumber, new Date(oneDateNext)]);
     }
   }
 
   for (let i = 6; i > 0; i--) {
     let startDate = new Date(dt);
     let oneDateBefore = startDate.setDate(startDate.getDate() - i);
-    let oneDateOnlyDayNumber = new Date(oneDateBefore).getDate()
+    let oneDateOnlyDayNumber = new Date(oneDateBefore).getDate();
 
-    let oneDateWeek = getWeekNumber(new Date(oneDateBefore))
+    let oneDateWeek = getWeekNumber(new Date(oneDateBefore));
     if (oneDateWeek === startDateWeek) {
       daysBefore.push([oneDateOnlyDayNumber, new Date(oneDateBefore)]);
     }
@@ -42,4 +42,4 @@ function getDaysAroundGivenDay(dt) {
   return allDates;
 }
 
-module.exports = router;
+module.exports = { getDaysAroundGivenDay };
