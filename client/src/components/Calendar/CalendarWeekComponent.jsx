@@ -22,14 +22,15 @@ export default function CalendarComponent({ workingSlots }) {
   console.log('workingSlots', workingSlots);
 
   // Сначала получаем текущую дату, чтобы отрисовать текущую неделю. 
-  // От нее жадее происходят все преобразования.
+  // От нее же далее происходят все преобразования.
   let today =  new Date();
+
   const [date, setDateOfWeek] = useState(today);
-  // const [month, setCurrentMonth] = useState(date.getMonth())
+  let monthNum = new Date(date).getMonth();
+  let monthName = monthsArr[monthNum]
+  let yearNum = new Date(date).getFullYear();
 
-  // let displayedMonth = monthsArr[month]
-  // console.log(displayedMonth)
-
+  //получаем неделю около даты
   let wholeWeek = getDaysAroundGivenDay(date)
 
   function nextWeek() {
@@ -55,7 +56,7 @@ export default function CalendarComponent({ workingSlots }) {
     <div className="flex h-full flex-col">
       <header className="relative z-40 flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
         <h1 className="text-lg font-semibold text-gray-900">
-          <time dateTime="2022-01"> 2022</time>
+          <time dateTime="2022-01">{monthName} {yearNum}</time>
         </h1>
         <div className="flex items-center">
           <div className="flex items-center rounded-md shadow-sm md:items-stretch">
@@ -176,7 +177,7 @@ export default function CalendarComponent({ workingSlots }) {
               type="button"
               className="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Add event
+              Добавить слот
             </button>
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
