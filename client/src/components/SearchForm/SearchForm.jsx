@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Input, Button, Flex, Box } from '@chakra-ui/react'
-import {
-  getSearchDataThunk,
-  sendSearch,
-} from '../../redux/actions/searchAction'
+import { saveSearch } from '../../redux/actions/searchAction'
 import { useNavigate } from 'react-router-dom'
+import $api from '../../http'
 
 const SearchForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [input, setInput] = useState('')
+  const [backData, setBackData] = useState([])
+
+  const getArrayStrings = async () => {
+    try {
+      const response = await $api.get('/search')
+      setBackData(response.data)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   useEffect(() => {
-    dispatch(getSearchDataThunk())
-  }, [dispatch])
+    getArrayStrings()
+  }, [])
 
-  const data = useSelector((store) => store.search)
-  const filtredData = data.filter(
-    (item) =>
-      item?.username?.toLowerCase().includes(input) ||
-      item?.title?.toLowerCase().includes(input)
+  const filteredData = backData.filter((string) =>
+    string?.toLowerCase().includes(input)
   )
 
   return (
@@ -31,18 +36,18 @@ const SearchForm = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        {data.length !== filtredData.length && (
+        {backData.length !== filteredData.length && (
           <Box border='2px dashed grey' borderRadius='5px' px='10px' py='5px'>
-            {filtredData.map((search, index) => (
+            {filteredData.map((string, index) => (
               <Box
                 cursor='pointer'
                 key={index}
                 onClick={(e) => {
-                  dispatch(sendSearch(e.target.innerText))
+                  dispatch(saveSearch(e.target.innerText))
                   navigate('/results', { replace: true })
                 }}
               >
-                {search?.username || search?.title}
+                {string}
               </Box>
             ))}
           </Box>
@@ -52,7 +57,7 @@ const SearchForm = () => {
         ml='30px'
         colorScheme='blue'
         onClick={() => {
-          dispatch(sendSearch(input))
+          dispatch(saveSearch(input))
           navigate('/results', { replace: true })
         }}
       >

@@ -1,26 +1,7 @@
 const router = require('express').Router()
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const { getDataForSearch } = require('../controllers/searchController')
 
-router.get('/', async (req, res) => {
-  try {
-    const masters = await prisma.user.findMany({
-      where: { role: 'master' },
-      select: {
-        username: true,
-      },
-    })
-    const categories = await prisma.serviceCategory.findMany({
-      select: {
-        title: true,
-      },
-    })
-
-    res.json({ masters, categories })
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+router.get('/', getDataForSearch)
 
 // router.post('/', async (req, res) => {
 //   const { name } = req.body

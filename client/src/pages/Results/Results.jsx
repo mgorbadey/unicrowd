@@ -8,19 +8,22 @@ import {
   Select,
   Stack,
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  getSearchDataThunk,
-  sendSearch,
-} from '../../redux/actions/searchAction'
+import { saveSearch } from '../../redux/actions/searchAction'
 import { useNavigate } from 'react-router-dom'
 import List from '../../components/List/List'
+import { getDataThunk } from '../../redux/actions/resultsAction'
 
 const Results = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [input, setInput] = useState('')
+  const string = useSelector((store) => store.search)
+
+  useEffect(() => {
+    dispatch(getDataThunk())
+  }, [])
 
   return (
     <Grid
@@ -36,7 +39,7 @@ const Results = () => {
             <Input
               color='rgb(33, 41, 54)'
               bg='white'
-              placeholder='поиск категории или мастера'
+              placeholder='поиск мастера'
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
@@ -45,7 +48,7 @@ const Results = () => {
             ml='20px'
             colorScheme='blue'
             onClick={() => {
-              dispatch(sendSearch(input))
+              dispatch(saveSearch(input))
               navigate('/results', { replace: true })
             }}
           >
