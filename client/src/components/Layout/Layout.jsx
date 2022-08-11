@@ -14,9 +14,8 @@ const Layout = () => {
         <Header />
         <Main>
           <Routes>
-            <Route path='/search' element={<Search />}>
-              <Route path='results' element={<Results />} />
-            </Route>
+            <Route path='/search' element={<Search />} />
+            <Route path='/results' element={<Results />} />
             {/* <Route path='/' element={<Navigate to={} replace={true} />} /> */}
             <Route path='/masters/:id/schedules' element={<MasterCalendar />} />
             <Route path='/masters/:id/profile' element={<MasterProfile />} />

@@ -5,7 +5,7 @@ import {
   getSearchDataThunk,
   sendSearch,
 } from '../../redux/actions/searchAction'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const SearchForm = () => {
   const dispatch = useDispatch()
@@ -24,38 +24,40 @@ const SearchForm = () => {
   )
 
   return (
-    <Flex>
-      <Box>
+    <Flex h='100%' w='100%' justify='center' align='center'>
+      <Box w='80%'>
         <Input
-          placeholder='Basic usage'
+          placeholder='поиск категории или мастера'
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <Box>
-          {data.length !== filtredData.length &&
-            filtredData.map((search, index) => (
+        {data.length !== filtredData.length && (
+          <Box border='2px dashed grey' borderRadius='5px' px='10px' py='5px'>
+            {filtredData.map((search, index) => (
               <Box
+                cursor='pointer'
                 key={index}
                 onClick={(e) => {
                   dispatch(sendSearch(e.target.innerText))
-                  navigate('/search/results', { replace: true })
+                  navigate('/results', { replace: true })
                 }}
               >
                 {search?.username || search?.title}
               </Box>
             ))}
-        </Box>
+          </Box>
+        )}
       </Box>
       <Button
+        ml='30px'
         colorScheme='blue'
         onClick={() => {
           dispatch(sendSearch(input))
-          navigate('/search/results', { replace: true })
+          navigate('/results', { replace: true })
         }}
       >
-        Button
+        Найти
       </Button>
-      <Outlet />
     </Flex>
   )
 }
