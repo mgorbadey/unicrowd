@@ -7,17 +7,11 @@ router.get('/', async (req, res) => {
     const masters = await prisma.user.findMany({
       where: { role: 'master' },
       select: {
-        id: true,
         username: true,
-        info: true,
-        userPic: true,
-        createdAt: true,
-        cityId: true,
       },
     })
     const categories = await prisma.serviceCategory.findMany({
       select: {
-        id: true,
         title: true,
       },
     })
