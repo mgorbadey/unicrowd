@@ -17,9 +17,13 @@ export default function CalendarComponent({ workingSlots }) {
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
 
-  console.log(workingSlots);
+  console.log('workingSlots',workingSlots);
 
-  function ISO8601_week_no(dt) {
+  //1. Сначала получаем текущую дату, чтобы отрисовать текущую неделю
+let dt =  new Date();
+
+//2. Затем получаем номер недели в году
+  function getWeekNumber(dt) {
     let tdt = new Date(dt.valueOf());
     let dayn = (dt.getDay() + 6) % 7;
     tdt.setDate(tdt.getDate() - dayn + 3);
@@ -31,39 +35,40 @@ export default function CalendarComponent({ workingSlots }) {
     return 1 + Math.ceil((firstThursday - tdt) / 604800000);
   }
 
-  const dt = ISO8601_week_no(new Date())
-  console.log(dt);
+  //3. Получаем дни около текущей даты до и после по 6 шт.
+  //И сразу выбираем только те, что в нужной нам неделе
 
-  // dt = new Date(2015, 10, 1);
-  // console.log(ISO8601_week_no(dt));
+  function getDaysAroundGivenDay(dt) {
+    let daysBefore = [];
+    let daysAfter = [];
+    let startDateWeek = getWeekNumber(new Date(dt));
+    for (let i = 0; i < 7; i++) {
+      let startDate = new Date(dt);
+      let oneDateNext = startDate.setDate(startDate.getDate() + i);
+      let oneDateOnlyDayNumber = new Date(oneDateNext).getDate()
+      let oneDateWeek = getWeekNumber(new Date(oneDateNext))
+      if (oneDateWeek === startDateWeek) {
+        daysAfter.push([oneDateOnlyDayNumber,new Date(oneDateNext)]);
+      }
+    }
 
-  // const week = getNumberOfWeek()
-  // console.log(week)
+    for (let i = 6; i > 0; i--) {
+      let startDate = new Date(dt);
+      let oneDateBefore = startDate.setDate(startDate.getDate() - i);
+      let oneDateOnlyDayNumber = new Date(oneDateBefore).getDate()
 
-  function getDateOfWeek(w, y) {
-    var d = 1 + (w - 1) * 7; // 1st of January + 7 days for each week
-
-    return new Date(y, 0, d);
+      let oneDateWeek = getWeekNumber(new Date(oneDateBefore))
+      if (oneDateWeek === startDateWeek) {
+        daysBefore.push([oneDateOnlyDayNumber, new Date(oneDateBefore)]);
+      }
+    }
+    let allDates = daysBefore.concat(daysAfter);
+    return allDates;
   }
 
-  console.log(getDateOfWeek(dt, 2022))
+  console.log(getDaysAroundGivenDay(dt));
 
-  //   function getDaysArray(year, month) {
-  //     let numDaysInMonth, daysInWeek, daysIndex, index, i, l, daysArray;
-
-  //     numDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  //     daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  //     daysIndex = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
-  //     index = daysIndex[(new Date(year, month - 1, 1)).toString().split(' ')[0]];
-  //     daysArray = [];
-
-  //     for (i = 0, l = numDaysInMonth[month - 1]; i < l; i++) {
-  //         daysArray.push((i + 1) + '. ' + daysInWeek[index++]);
-  //         if (index == 7) index = 0;
-  //     }
-
-  //     return daysArray;
-  // }
+  let wholeWeek = getDaysAroundGivenDay(dt)
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -403,7 +408,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Mon{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    10
+                  {wholeWeek[0][0]}
                   </span>
                 </span>
               </div>
@@ -411,7 +416,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Tue{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    11
+                  {wholeWeek[1][0]}
                   </span>
                 </span>
               </div>
@@ -419,7 +424,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span className="flex items-baseline">
                   Wed{" "}
                   <span className="ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">
-                    12
+                  {wholeWeek[2][0]}
                   </span>
                 </span>
               </div>
@@ -427,7 +432,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Thu{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    13
+                  {wholeWeek[3][0]}
                   </span>
                 </span>
               </div>
@@ -435,7 +440,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Fri{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    14
+                  {wholeWeek[4][0]}
                   </span>
                 </span>
               </div>
@@ -443,7 +448,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Sat{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    15
+                  {wholeWeek[5][0]}
                   </span>
                 </span>
               </div>
@@ -451,7 +456,7 @@ export default function CalendarComponent({ workingSlots }) {
                 <span>
                   Sun{" "}
                   <span className="items-center justify-center font-semibold text-gray-900">
-                    16
+                  {wholeWeek[6][0]}
                   </span>
                 </span>
               </div>
