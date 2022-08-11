@@ -33,6 +33,7 @@ async function main() {
       },
     ],
   })
+
   const user = await prisma.user.create({
     data: {
       username: 'Вася Васин',
@@ -41,6 +42,36 @@ async function main() {
       activationLink: 'http://localhost:3500/auth/activate/',
       role: 'master',
     },
+  })
+
+  const schedule = await prisma.schedule.createMany({
+    data: [
+      {
+        startDateTime: new Date('2022-08-09 09:00:00.000'),
+        endDateTime: new Date('2022-08-09 14:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-09 15:00:00.000'),
+        endDateTime: new Date('2022-08-09 17:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-14 09:00:00.000'),
+        endDateTime: new Date('2022-08-14 15:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-10 10:00:00.000'),
+        endDateTime: new Date('2022-08-10 14:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-07 10:30:00.000'),
+        endDateTime: new Date('2022-08-07 12:30:00.000'),
+        masterId: 1,
+      },
+    ]
   })
 }
 

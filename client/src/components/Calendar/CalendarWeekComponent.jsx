@@ -1,31 +1,80 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import { Menu, Transition } from '@headlessui/react'
-import EventCalendarWeekComponent from './EventCalendarWeekComponent'
+import { Fragment, useEffect, useRef } from "react";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DotsHorizontalIcon,
+} from "@heroicons/react/solid";
+import { Menu, Transition } from "@headlessui/react";
+import EventCalendarWeekComponent from "./EventCalendarWeekComponent";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
-export default function CalendarComponent({workingSlots}) {
-  const container = useRef(null)
-  const containerNav = useRef(null)
-  const containerOffset = useRef(null)
+export default function CalendarComponent({ workingSlots }) {
+  const container = useRef(null);
+  const containerNav = useRef(null);
+  const containerOffset = useRef(null);
 
-  console.log(workingSlots)
+  console.log(workingSlots);
 
-  // const [today, setCounter] = useState(new Date()); 
-  
-  // console.log(today)
+  function ISO8601_week_no(dt) {
+    let tdt = new Date(dt.valueOf());
+    let dayn = (dt.getDay() + 6) % 7;
+    tdt.setDate(tdt.getDate() - dayn + 3);
+    let firstThursday = tdt.valueOf();
+    tdt.setMonth(0, 1);
+    if (tdt.getDay() !== 4) {
+      tdt.setMonth(0, 1 + ((4 - tdt.getDay() + 7) % 7));
+    }
+    return 1 + Math.ceil((firstThursday - tdt) / 604800000);
+  }
+
+  const dt = ISO8601_week_no(new Date())
+  console.log(dt);
+
+  // dt = new Date(2015, 10, 1);
+  // console.log(ISO8601_week_no(dt));
+
+  // const week = getNumberOfWeek()
+  // console.log(week)
+
+  function getDateOfWeek(w, y) {
+    var d = 1 + (w - 1) * 7; // 1st of January + 7 days for each week
+
+    return new Date(y, 0, d);
+  }
+
+  console.log(getDateOfWeek(dt, 2022))
+
+  //   function getDaysArray(year, month) {
+  //     let numDaysInMonth, daysInWeek, daysIndex, index, i, l, daysArray;
+
+  //     numDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  //     daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  //     daysIndex = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+  //     index = daysIndex[(new Date(year, month - 1, 1)).toString().split(' ')[0]];
+  //     daysArray = [];
+
+  //     for (i = 0, l = numDaysInMonth[month - 1]; i < l; i++) {
+  //         daysArray.push((i + 1) + '. ' + daysInWeek[index++]);
+  //         if (index == 7) index = 0;
+  //     }
+
+  //     return daysArray;
+  // }
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
-    const currentMinute = new Date().getHours() * 60
+    const currentMinute = new Date().getHours() * 60;
     container.current.scrollTop =
-      ((container.current.scrollHeight - containerNav.current.offsetHeight - containerOffset.current.offsetHeight) *
+      ((container.current.scrollHeight -
+        containerNav.current.offsetHeight -
+        containerOffset.current.offsetHeight) *
         currentMinute) /
-      1440
-  }, [])
+      1440;
+  }, []);
 
   return (
     <div className="flex h-full flex-col">
@@ -64,7 +113,10 @@ export default function CalendarComponent({workingSlots}) {
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
               >
                 Week view
-                <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                <ChevronDownIcon
+                  className="ml-2 h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
               </Menu.Button>
 
               <Transition
@@ -83,8 +135,10 @@ export default function CalendarComponent({workingSlots}) {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Day view
@@ -96,8 +150,10 @@ export default function CalendarComponent({workingSlots}) {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Week view
@@ -109,8 +165,10 @@ export default function CalendarComponent({workingSlots}) {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Month view
@@ -122,8 +180,10 @@ export default function CalendarComponent({workingSlots}) {
                         <a
                           href="#"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block px-4 py-2 text-sm'
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
                           )}
                         >
                           Year view
@@ -164,8 +224,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Create event
@@ -179,8 +241,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Go to today
@@ -194,8 +258,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Day view
@@ -207,8 +273,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Week view
@@ -220,8 +288,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Month view
@@ -233,8 +303,10 @@ export default function CalendarComponent({workingSlots}) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          active
+                            ? "bg-gray-100 text-gray-900"
+                            : "text-gray-700",
+                          "block px-4 py-2 text-sm"
                         )}
                       >
                         Year view
@@ -247,36 +319,81 @@ export default function CalendarComponent({workingSlots}) {
           </Menu>
         </div>
       </header>
-      <div ref={container} className="flex flex-auto flex-col overflow-auto bg-white">
-        <div style={{ width: '165%' }} className="flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full">
+      <div
+        ref={container}
+        className="flex flex-auto flex-col overflow-auto bg-white"
+      >
+        <div
+          style={{ width: "165%" }}
+          className="flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full"
+        >
           <div
             ref={containerNav}
             className="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8"
           >
             <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                M <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">10</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                M{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  10
+                </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                T <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">11</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                T{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  11
+                </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                W{' '}
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                W{" "}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">
                   12
                 </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                T <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">13</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                T{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  13
+                </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                F <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">14</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                F{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  14
+                </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                S <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">15</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                S{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  15
+                </span>
               </button>
-              <button type="button" className="flex flex-col items-center pt-2 pb-3">
-                S <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">16</span>
+              <button
+                type="button"
+                className="flex flex-col items-center pt-2 pb-3"
+              >
+                S{" "}
+                <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-gray-900">
+                  16
+                </span>
               </button>
             </div>
 
@@ -284,17 +401,23 @@ export default function CalendarComponent({workingSlots}) {
               <div className="col-end-1 w-14" />
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Mon <span className="items-center justify-center font-semibold text-gray-900">10</span>
+                  Mon{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    10
+                  </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Tue <span className="items-center justify-center font-semibold text-gray-900">11</span>
+                  Tue{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    11
+                  </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
                 <span className="flex items-baseline">
-                  Wed{' '}
+                  Wed{" "}
                   <span className="ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">
                     12
                   </span>
@@ -302,22 +425,34 @@ export default function CalendarComponent({workingSlots}) {
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Thu <span className="items-center justify-center font-semibold text-gray-900">13</span>
+                  Thu{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    13
+                  </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Fri <span className="items-center justify-center font-semibold text-gray-900">14</span>
+                  Fri{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    14
+                  </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Sat <span className="items-center justify-center font-semibold text-gray-900">15</span>
+                  Sat{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    15
+                  </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
                 <span>
-                  Sun <span className="items-center justify-center font-semibold text-gray-900">16</span>
+                  Sun{" "}
+                  <span className="items-center justify-center font-semibold text-gray-900">
+                    16
+                  </span>
                 </span>
               </div>
             </div>
@@ -328,7 +463,7 @@ export default function CalendarComponent({workingSlots}) {
               {/* Horizontal lines */}
               <div
                 className="col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100"
-                style={{ gridTemplateRows: 'repeat(48, minmax(3.5rem, 1fr))' }}
+                style={{ gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))" }}
               >
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
                 <div>
@@ -492,16 +627,68 @@ export default function CalendarComponent({workingSlots}) {
               {/* Events */}
               <ol
                 className="col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8"
-                style={{ gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto' }}
+                style={{
+                  gridTemplateRows: "1.75rem repeat(288, minmax(0, 1fr)) auto",
+                }}
               >
-                {workingSlots && workingSlots.map((workingSlot)=>{
-                  return <EventCalendarWeekComponent key={workingSlot.id} workingSlot={workingSlot}/>
-                })}
+                {workingSlots &&
+                  workingSlots.map((workingSlot) => {
+                    return (
+                      <EventCalendarWeekComponent
+                        key={workingSlot.id}
+                        workingSlot={workingSlot}
+                      />
+                    );
+                  })}
+                {/* <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '8 / span 12' }}>
+                  <a
+                    href="#"
+                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
+                  >
+                    <p className="order-1 font-semibold text-blue-700">Breakfast</p>
+                    <p className="text-blue-500 group-hover:text-blue-700">
+                      <time dateTime="2022-01-12T06:00">ddd</time>
+                    </p>
+                  </a>
+                </li>
+                <li className="relative mt-px flex sm:col-start-7" style={{ gridRow: '92 / span 12' }}>
+                  <a
+                    href="#"
+                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
+                  >
+                    <p className="order-1 font-semibold text-pink-700">Flight to Paris</p>
+                    <p className="text-pink-500 group-hover:text-pink-700">
+                      <time dateTime="2022-01-12T07:30">7:30 AM</time>
+                    </p>
+                  </a>
+                </li>
+                <li className="relative mt-px flex sm:col-start-7" style={{ gridRow: '110 / span 30' }}>
+                  <a
+                    href="#"
+                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-pink-100"
+                  >
+                    <p className="order-1 font-semibold text-pink-700">Flight to Paris</p>
+                    <p className="text-pink-500 group-hover:text-pink-700">
+                      <time dateTime="2022-01-12T07:30">7:30 AM</time>
+                    </p>
+                  </a>
+                </li>
+                <li className="relative mt-px hidden sm:col-start-6 sm:flex" style={{ gridRow: '122 / span 24' }}>
+                  <a
+                    href="#"
+                    className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-100 p-2 text-xs leading-5 hover:bg-gray-200"
+                  >
+                    <p className="order-1 font-semibold text-gray-700">Meeting with design team at Disney</p>
+                    <p className="text-gray-500 group-hover:text-gray-700">
+                      <time dateTime="2022-01-15T10:00">10:00 AM</time>
+                    </p>
+                  </a>
+                </li> */}
               </ol>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
