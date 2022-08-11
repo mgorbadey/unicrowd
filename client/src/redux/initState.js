@@ -1,5 +1,6 @@
 const initState = {
-  search: [],
+  search: '',
+  results: [],
   master: [],
 }
 
