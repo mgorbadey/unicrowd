@@ -25,7 +25,7 @@ model User {
   username       String
   email          String        @unique
   password       String
-  activationLink String
+  activationLink String        @unique
   isActivated    Boolean       @default(false)
   role           String
   info           String?       @db.VarChar(500)
