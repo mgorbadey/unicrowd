@@ -16,7 +16,7 @@ exports.getDataForSearch = async (req, res) => {
     })
 
     const strings = [...masters, ...categories].map(
-      (string) => string.username || string.title
+      (string) => string.username || string.title || string.name
     )
 
     res.json(strings)

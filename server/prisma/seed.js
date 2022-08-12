@@ -109,6 +109,13 @@ async function main() {
   const items = await prisma.serviceItem.createMany({
     data: [
       {
+        title: 'Массаж экспресс',
+        duration: 30,
+        price: 500,
+        masterId: 6,
+        serviceCategoryId: 9,
+      },
+      {
         title: 'Макияж быстрый',
         duration: 30,
         price: 500,
