@@ -1,8 +1,8 @@
+import $api from "../http/"
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CalendarComponent from "../components/Calendar/CalendarWeekComponent";
 import { getWorkingSlots } from "../redux/actions/masterAction";
-const axios = require("axios").default;
 
 export default function MasterCalendar() {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ export default function MasterCalendar() {
 
   const workingSlots = useSelector((store) => store.master);
   useEffect(() => {
-    axios
+    $api
       .get(`http://localhost:3500/masters/${masterId}/schedules`)
       .then((response) => {
         const workingSlotsData = response.data;

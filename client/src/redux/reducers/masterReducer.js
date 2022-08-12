@@ -6,7 +6,8 @@ import masterType from '../types/masterType'
 const masterReducer = (state = initState.master, action) => {
   switch (action.type) {
     case masterType.WORKINGSLOTS:
-      // console.log('redux', action.payload)
+      return action.payload
+    case masterType.DISPLAYEDWEEK:
       return action.payload
     default:
       return state //сохраняет состояние в память к-ра
