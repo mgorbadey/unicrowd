@@ -19,7 +19,14 @@ const Results = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [input, setInput] = useState('')
+  const [category, setCategory] = useState({})
+  const [item, setItem] = useState({})
+  const [master, setmaster] = useState({})
+  const [city, setCity] = useState({})
   const string = useSelector((store) => store.search)
+  const { categories, items, masters, cities } = useSelector(
+    (store) => store.results
+  )
 
   useEffect(() => {
     dispatch(getDataThunk())
@@ -49,7 +56,7 @@ const Results = () => {
             colorScheme='blue'
             onClick={() => {
               dispatch(saveSearch(input))
-              navigate('/results', { replace: true })
+              setInput('')
             }}
           >
             Найти
@@ -61,13 +68,25 @@ const Results = () => {
             size='md'
             color='rgb(33, 41, 54)'
             bg='white'
-          />
+          >
+            {cities?.map((city) => (
+              <option key={city.id} value={city.name}>
+                {city.name}
+              </option>
+            ))}
+          </Select>
           <Select
             placeholder='Категория'
             size='md'
             color='rgb(33, 41, 54)'
             bg='white'
-          />
+          >
+            {categories?.map((category) => (
+              <option key={category.id} value={category.title}>
+                {category.title}
+              </option>
+            ))}
+          </Select>
           <Select
             placeholder='Услуга'
             size='md'
@@ -79,13 +98,21 @@ const Results = () => {
             size='md'
             color='rgb(33, 41, 54)'
             bg='white'
-          />
+          >
+            <option value='30'>30 минут</option>
+            <option value='60'>60 минут</option>
+            <option value='90'>90 минут</option>
+            <option value='120'>120 минут</option>
+          </Select>
           <Select
             placeholder='Цена'
             size='md'
             color='rgb(33, 41, 54)'
             bg='white'
-          />
+          >
+            <option value='cheap'>Сначала дешевле</option>
+            <option value='expensive'>Сначала дороже</option>
+          </Select>
         </Stack>
       </GridItem>
       <GridItem colSpan={4} bg='white' borderRightRadius='8px'>

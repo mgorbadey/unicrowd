@@ -9,7 +9,7 @@ export const getData = (data) => ({
 export const getDataThunk = () => async (dispatch) => {
   try {
     const response = await $api.get('/results')
-    console.log('response: ', response)
+    dispatch(getData(response.data))
   } catch (error) {
     console.log(error.message)
   }
