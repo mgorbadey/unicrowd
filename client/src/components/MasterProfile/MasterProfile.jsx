@@ -2,14 +2,16 @@ import React from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useClipboard } from 'use-clipboard-copy';
-import { MailIcon, PhoneIcon } from '@heroicons/react/solid'
+import $api from '../../http/index';
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { CalendarIcon, LocationMarkerIcon, UsersIcon } from '@heroicons/react/solid'
+import { data } from 'autoprefixer';
 
 export default function MasterProfile() {
-    const [img, setImg] = React.useState(null)
-    const [avatar, setAvatar] = React.useState(null)
-    const [info, setInfo] = React.useState({})
+    const [img, setImg] = useState(null)
+    const [avatar, setAvatar] = useState(null)
+    const [info, setInfo] = useState({})
     const [open, setOpen] = useState(false)
     const [modalItem, setModalItem] = useState(false)
     const [modalCity, setModalCity] = useState(false)
@@ -19,9 +21,12 @@ export default function MasterProfile() {
     const [itemTitle, setItemTitle] = useState('')
     const [itemDuration, setItemDuration] = useState('')
     const [itemPrice, setItemPrice] = useState('')
-    // const [cityChange, setCityChange] = useState(null)
-    // const [save, setSave] = useState(false)
     const [textarea, setTextarea] = useState(null)
+    const [render, setRender] = useState(true)
+    const [cityName, setCityName] = useState(null)
+    const [service, setService] = useState([])
+    const [itemChange, setItemChange] = useState(false)
+    const [itemId, setItemId] = useState(null)
 
     const clipboard = useClipboard();
     const params = useParams()
@@ -32,12 +37,11 @@ export default function MasterProfile() {
             data.append('avatar', img)
             data.append('id', params.id)
 
-            const res = await axios.post('http://localhost:3500/api/upload', data, {
+            const res = await $api.post('http://localhost:3500/api/upload', data, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
             })
-
             setAvatar(res.data.path)
 
         } catch (error) {
@@ -45,25 +49,15 @@ export default function MasterProfile() {
         }
     }, [img])
 
-    // const updateProfileInfo = async (e) => {
-
-    //     try {
-    //         const res = await axios.post(`http://localhost:3500/masters/updateProfile`, { id: params.id, textarea })
-    //         console.log(res)
-    //     } catch (error) {
-    //         console.log(error.message)
-    //     }
-    // }
-
     const modalTextUpdate = async (e) => {
+        setOpen(false)
+
         try {
-            const res = await axios.post(`http://localhost:3500/masters/modalTextUpdate`, { id: params.id, textarea })
-            console.log(res)
+            const res = await $api.post(`http://localhost:3500/masters/modalTextUpdate`, { id: params.id, textarea })
+            setRender((prev) => !prev)
         } catch (error) {
             console.log(error.message)
         }
-
-        setOpen(false)
     }
 
     const onChangeHandler = (e) => {
@@ -71,56 +65,111 @@ export default function MasterProfile() {
         const el = e.target.childNodes[index]
         const option = el.getAttribute('id');
 
+        city.data.city.forEach((el) => {
+            if (el.id === option) {
+                setCityName(el.name)
+            }
+        })
+
         setSelect(option)
     }
 
+    const serviceItemChange = (id) => {
+        setItemChange(true)
+        setItemId(id)
+    }
+
+
     const cityUpdate = async (e) => {
+        setModalCity(false)
+
         try {
-            const res = await axios.post(`http://localhost:3500/masters/cityUpdate`, { id: params.id, city: select })
+            const res = await $api.post(`http://localhost:3500/masters/cityUpdate`, { id: params.id, city: select })
+            setRender((prev) => !prev)
         } catch (error) {
             console.log(error.message)
         }
-
-        setModalCity(false)
     }
 
     const itemCreate = async (e) => {
+        setModalItem(false)
+
+        const item = { masterId: params.id, categoryId: select, title: itemTitle, duration: itemDuration, price: itemPrice, createdAt: Date.now()}
+        
         try {
-            const res = await axios.post(`http://localhost:3500/masters/createItem`, { masterId: params.id, categoryId: select, title: itemTitle, duration: itemDuration, price: itemPrice})
+            const res = await $api.post(`http://localhost:3500/masters/createItem`, item)
+        } catch (error) {
+            console.log(error.message)
+        }
+        
+        try {
+            const serviceItemInfo = await $api.get(`http://localhost:3500/masters/${params.id}/serviceItemInfo`)
+            setService(serviceItemInfo.data.serviceItem)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    const itemUpdate = async (e) => {
+        setItemChange(false)
+        const item = { masterId: params.id, categoryId: select, title: itemTitle, duration: itemDuration, price: itemPrice, createdAt: Date.now(), itemId}
+
+        try {
+            const res = await $api.post(`http://localhost:3500/masters/updateItem`, item)
         } catch (error) {
             console.log(error.message)
         }
 
-        setModalItem(false)
+        try {
+            const serviceItemInfo = await $api.get(`http://localhost:3500/masters/${params.id}/serviceItemInfo`)
+            setService(serviceItemInfo.data.serviceItem)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    const itemDelete = async () => {
+        setItemChange(false)
+        
+        const item = {itemId}
+
+        try {
+            const res = await $api.post(`http://localhost:3500/masters/deleteItem`, item)
+        } catch (error) {
+            console.log(error.message)
+        }
+
+        try {
+            const serviceItemInfo = await $api.get(`http://localhost:3500/masters/${params.id}/serviceItemInfo`)
+            setService(serviceItemInfo.data.serviceItem)
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     const getUserInfo = async (e) => {
-        const userInfo = await axios.get(
-            `http://localhost:3500/masters/${params.id}/profile`
-        )
+        const userInfo = await $api.get(`http://localhost:3500/masters/${params.id}/profile`)
+        const cityInfo = await $api.get(`http://localhost:3500/masters/cityInfo`)
+        const categoryInfo = await $api.get(`http://localhost:3500/masters/categoryInfo`)
+        const serviceItemInfo = await $api.get(`http://localhost:3500/masters/${params.id}/serviceItemInfo`)
 
-        const cityInfo = await axios.get(`http://localhost:3500/masters/cityInfo`)
-        const categoryInfo = await axios.get(`http://localhost:3500/masters/categoryInfo`)
-        console.log(cityInfo, '///// city information')
-        console.log(userInfo, '///// user information')
-        console.log(categoryInfo, '///// category information')
+        setService(serviceItemInfo.data.serviceItem)
         setCity(cityInfo)
         setInfo(userInfo)
+        setCityName(userInfo.data.city.name)
         setCategoryInfo(categoryInfo)
     }
 
     React.useEffect(() => {
         getUserInfo()
-    }, [avatar]);
+    }, [avatar, render]);
 
     return (
         <>
             <div className='bg-white px-4 py-5 border-b border-gray-200 sm:px-6'>
                 <div className='-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap'>
                     <div className='ml-4 mt-4'>
-
                         <div className='flex items-center'>
-
                             <div className='flex-shrink-0'>
                                 {info?.data?.userPic ? (
                                     <img
@@ -135,22 +184,14 @@ export default function MasterProfile() {
                                         alt=''
                                     />
                                 )}
-
-
                             </div>
 
                             <div className='ml-4'>
                                 <h3 className='text-lg leading-6 font-medium text-gray-900'>
                                     {info?.data?.username}
                                 </h3>
-
                             </div>
-
-
                         </div>
-
-
-
                     </div>
                     <div className="ml-4 mt-2 flex-shrink-0">
                         <button
@@ -158,7 +199,7 @@ export default function MasterProfile() {
                             className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             onClick={() => setModalItem(true)}
                         >
-                            Create new job
+                            Создать услугу
                         </button>
                     </div>
                 </div>
@@ -307,7 +348,7 @@ export default function MasterProfile() {
                                             type='email'
                                             disabled
                                             autoComplete='email'
-                                            defaultValue={info?.data?.city?.name}
+                                            value={cityName}
                                             className='block max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
                                         />
                                         <button
@@ -338,6 +379,53 @@ export default function MasterProfile() {
                     </div>
                 </div>
             </form>
+
+            <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+                <div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
+                    <div className="ml-4 mt-2">
+                        <h3 className="text-lg leading-6 font-medium text-gray-900">Мои услуги</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                <ul role="list" className="divide-y divide-gray-200">
+                    {service && service.map((position) => (
+                        <li key={position.id}>
+                            <a onClick={() => serviceItemChange(position.id)} className="block hover:bg-gray-50">
+                                <div className="px-4 py-4 sm:px-6">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm font-medium text-indigo-600 truncate">{position.title}</p>
+                                        <div className="ml-2 flex-shrink-0 flex">
+                                            <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                {position.price}₽
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-2 sm:flex sm:justify-between">
+                                        <div className="sm:flex">
+                                            <p className="flex items-center text-sm text-gray-500">
+                                                <UsersIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                {position.serviceCategory.title}
+                                            </p>
+                                            <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                                <LocationMarkerIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                Продолжительность: {position.duration} минут
+                                            </p>
+                                        </div>
+                                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                            <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            <p>
+                                                Создано {position.createdAt.slice(0,10)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
             {/* Модалка для изменения информации о себе */}
             <Transition.Root show={open} as={Fragment}>
@@ -469,22 +557,21 @@ export default function MasterProfile() {
                                         </div>
 
                                         <div className="mt-1">
-                                            <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
-                                                Продолжительность услуги
+                                            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                                                Продолжительность услуги в минутах
                                             </label>
-                                            <div className="mt-1 flex rounded-md shadow-sm">
-                                                <input
-                                                    type="text"
-                                                    name="company-website"
-                                                    id="company-website"
-                                                    className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
-                                                    placeholder="от 30 до 120 минут"
-                                                    onChange={(e) => setItemDuration(e.target.value)}
-                                                />
-                                                <span className="inline-flex items-center px-3 border border-r-10 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                                                    минут
-                                                </span>
-                                            </div>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                                defaultValue="Canada"
+                                                onChange={(e) => setItemDuration(e.target.value)}
+                                            >
+                                                <option>30</option>
+                                                <option>60</option>
+                                                <option>90</option>
+                                                <option>120</option>
+                                            </select>
                                         </div>
 
                                         <div className="mt-1">
@@ -519,7 +606,7 @@ export default function MasterProfile() {
                                             className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                                             onClick={itemCreate}
                                         >
-                                            Создать
+                                            Сохранить
                                         </button>
                                     </div>
                                 </Dialog.Panel>
@@ -566,10 +653,11 @@ export default function MasterProfile() {
                                                     name='country'
                                                     autoComplete='country-name'
                                                     onChange={onChangeHandler}
+                                                    defaultValue={cityName}
                                                     className='max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
                                                 >
                                                     {city?.data?.city.map((el) => (
-                                                        <option key={el.id} id={el.id}>{el.name}</option>
+                                                        <option key={el.id} id={el.id} value={el.name} >{el.name}</option>
                                                     ))}
                                                 </select>
                                             </div>
@@ -582,6 +670,139 @@ export default function MasterProfile() {
                                             onClick={cityUpdate}
                                         >
                                             Сохранить
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
+
+             {/* Модалка для изменения удаления айтема */}
+            <Transition.Root show={itemChange} as={Fragment}>
+                <Dialog as='div' className='relative z-10' onClose={setItemChange}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed z-10 inset-0 overflow-y-auto">
+                        <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-sm sm:w-full sm:p-6">
+                                    <div>
+                                        <div className="mt-3 text-center sm:mt-5">
+                                            <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                                                Измените свою услугу
+                                            </Dialog.Title>
+                                        </div>
+                                    </div>
+                                    <div className="mt-2">
+                                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                                            Название услуги
+                                        </label>
+                                        <div className="mt-1">
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                id="title"
+                                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                                placeholder="Массаж простаты"
+                                                onChange={(e) => setItemTitle(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="mt-1">
+                                            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                                                Категория услуги
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                                defaultValue="Canada"
+                                                onChange={onChangeHandler}
+                                            >
+                                                {categoryInfo?.data?.category.map((item) => (
+                                                    <option key={item.id} id={item.id}>{item.title}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="mt-1">
+                                            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                                                Продолжительность услуги в минутах
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                                defaultValue="Canada"
+                                                onChange={(e) => setItemDuration(e.target.value)}
+                                            >
+                                                <option>30</option>
+                                                <option>60</option>
+                                                <option>90</option>
+                                                <option>120</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="mt-1">
+                                            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                                                Цена услуги
+                                            </label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <span className="text-gray-500 sm:text-sm">₽</span>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    name="price"
+                                                    id="price"
+                                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                                                    placeholder="0.00"
+                                                    aria-describedby="price-currency"
+                                                    onChange={(e) => setItemPrice(e.target.value)}
+                                                />
+                                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                    <span className="text-gray-500 sm:text-sm" id="price-currency">
+                                                        RUB
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="mt-5 sm:mt-6">
+                                        <button
+                                            type="button"
+                                            className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                                            onClick={itemUpdate}
+                                        >
+                                            Сохранить
+                                        </button>
+                                        <div></div>
+                                        <button
+                                            type="button"
+                                            className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                                            onClick={itemDelete}
+                                        >
+                                            Удалить услугу
                                         </button>
                                     </div>
                                 </Dialog.Panel>
