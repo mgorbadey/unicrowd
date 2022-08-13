@@ -9,50 +9,72 @@ import { Menu, Transition } from "@headlessui/react";
 import EventCalendarWeekComponent from "./EventCalendarWeekComponent";
 import {getDaysAroundGivenDay} from "../../helpers/calendar"
 import { getWorkingSlots } from "../../redux/actions/masterAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import $api from "../../http"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function CalendarComponent({ workingSlots }) {
+export default function CalendarComponent() {
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
   const monthsArr = ['Январь' , 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь' , 'Октябрь' , 'Ноябрь' , 'Декабрь'];
 
-  console.log('workingSlots', workingSlots);
   const styles = {
     weekSpanCurrentDate: 'flex items-baseline',
     daySpanCurrentDate: 'ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white',
     weekSpanNotCurrentDate: '',
     daySpanNotCurrentDate: 'items-center justify-center font-semibold text-gray-900',
   }
-
+  
   // Сначала получаем текущую дату, чтобы отрисовать текущую неделю. 
   // От нее же далее происходят все преобразования.
   let today =  new Date();
   let todayNum = today.getDate()
-
+  let todayMonthNum = today.getMonth();
+  
   const [date, setDateOfWeek] = useState(today);
+  //высчитываем месяц и год для даты из стейта, чтобы отрисовать в интерфейсе
   let monthNum = new Date(date).getMonth();
   let monthName = monthsArr[monthNum];
   let yearNum = new Date(date).getFullYear();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  
   //получаем неделю около даты
   let wholeWeek = getDaysAroundGivenDay(date)
-
+  
   function nextWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() + 7))
   }
-
+  
   function previousWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() - 7))
   }
-
-  //рисуем рабочие слоты
   
+  //РИСУЕМ РАБОЧИЕ СЛОТЫ------>
+  
+  //хардкод id мастера
+  const masterId = 1;
+  
+  const workingSlots = useSelector((store) => store.master);
+  useEffect(() => {
+    $api
+    .get(`http://localhost:3500/masters/${masterId}/schedules?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`)
+    .then((response) => {
+      const workingSlotsData = response.data;
+      dispatch(getWorkingSlots(workingSlotsData));
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error);
+    });
+  }, [date]);
+
+  console.log('workingSlots', workingSlots);
+  //<------ЗАКОНЧИЛИ РИСОВАТЬ РАБОЧИЕ СЛОТЫ
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -392,57 +414,57 @@ export default function CalendarComponent({ workingSlots }) {
             <div className="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
               <div className="col-end-1 w-14" />
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[0][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[0][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Пн{" "}
-                  <span className={todayNum===wholeWeek[0][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                  <span className={todayNum===wholeWeek[0][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[0][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[1][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[1][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Вт{" "}
-                  <span className={todayNum===wholeWeek[1][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                  <span className={todayNum===wholeWeek[1][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[1][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[2][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[2][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Ср{" "}
-                  <span className={todayNum===wholeWeek[2][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                  <span className={todayNum===wholeWeek[2][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[2][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[3][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[3][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Чт{" "}
-                  <span className={todayNum===wholeWeek[3][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                  <span className={todayNum===wholeWeek[3][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[3][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[4][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[4][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Пт{" "}
-                  <span className={todayNum===wholeWeek[4][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                  <span className={todayNum===wholeWeek[4][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[4][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[5][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
-                  Суб{" "}
-                  <span className={todayNum===wholeWeek[5][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[5][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                  Сб{" "}
+                  <span className={todayNum===wholeWeek[5][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[5][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[6][0] ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
-                  Вскр{" "}
-                  <span className={todayNum===wholeWeek[6][0] ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
+                <span className={todayNum===wholeWeek[6][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                  Вс{" "}
+                  <span className={todayNum===wholeWeek[6][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
                   {wholeWeek[6][0]}
                   </span>
                 </span>
@@ -460,145 +482,145 @@ export default function CalendarComponent({ workingSlots }) {
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12AM
+                    00:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1AM
+                    01:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2AM
+                    02:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3AM
+                    03:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4AM
+                    04:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5AM
+                    05:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6AM
+                    06:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7AM
+                    07:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8AM
+                    08:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9AM
+                    09:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10AM
+                    10:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11AM
+                    11:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12PM
+                    12:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1PM
+                    13:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2PM
+                    14:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3PM
+                    15:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4PM
+                    16:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5PM
+                    17:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6PM
+                    18:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7PM
+                    19:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8PM
+                    20:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9PM
+                    21:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10PM
+                    22:00
                   </div>
                 </div>
                 <div />
                 <div>
                   <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11PM
+                    23:00
                   </div>
                 </div>
                 <div />
