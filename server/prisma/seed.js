@@ -62,6 +62,7 @@ async function main() {
         password: 'password',
         activationLink: 'http://localhost:3500/auth/activate/',
         role: 'master',
+        cityId: 1,
       },
       {
         username: 'Петя Петин',
@@ -103,20 +104,44 @@ async function main() {
         role: 'master',
         cityId: 6,
       },
+      {
+        username: 'Алевтина',
+        email: 'alya@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'client',
+        cityId: 1,
+      },
+      {
+        username: 'Галина',
+        email: 'galina@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'client',
+        cityId: 1,
+      },
+      {
+        username: 'Катерина',
+        email: 'kate-star@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'client',
+        cityId: 2,
+      },
     ],
   })
 
   const items = await prisma.serviceItem.createMany({
     data: [
       {
-        title: 'Макияж быстрый',
+        title: 'Макияж дневной',
         duration: 30,
         price: 500,
         masterId: 6,
         serviceCategoryId: 6,
       },
       {
-        title: 'Макияж медленный',
+        title: 'Макияж вечерний',
         duration: 60,
         price: 1000,
         masterId: 6,
@@ -151,14 +176,14 @@ async function main() {
         serviceCategoryId: 1,
       },
       {
-        title: 'Педикюр',
+        title: 'Педикюр аппаратный',
         duration: 90,
         price: 7000,
         masterId: 3,
         serviceCategoryId: 2,
       },
       {
-        title: 'Второй педикюр',
+        title: 'Педикюр обрезной',
         duration: 30,
         price: 2500,
         masterId: 3,
@@ -172,13 +197,116 @@ async function main() {
         serviceCategoryId: 5,
       },
       {
-        title: 'Брови и ресницы',
+        title: 'Окрашивание бровей',
         duration: 60,
         price: 2000,
         masterId: 2,
         serviceCategoryId: 5,
       },
+      {
+        title: 'Окрашивание ресниц',
+        duration: 60,
+        price: 2000,
+        masterId: 2,
+        serviceCategoryId: 5,
+      },
+      {
+        title: 'Покрытие шеллаком',
+        duration: 30,
+        price: 1000,
+        masterId: 1,
+        serviceCategoryId: 1,
+      },
+      {
+        title: 'Снятие шеллака',
+        duration: 30,
+        price: 500,
+        masterId: 1,
+        serviceCategoryId: 1,
+      },
+      {
+        title: 'Окрашивание бровей',
+        duration: 60,
+        price: 2000,
+        masterId: 1,
+        serviceCategoryId: 5,
+      },
+      {
+        title: 'Окрашивание ресниц',
+        duration: 60,
+        price: 2000,
+        masterId: 1,
+        serviceCategoryId: 5,
+      },
+      {
+        title: 'Ламинирование бровей',
+        duration: 60,
+        price: 2000,
+        masterId: 1,
+        serviceCategoryId: 5,
+      },
+      {
+        title: 'Ламинирование ресниц',
+        duration: 60,
+        price: 2000,
+        masterId: 1,
+        serviceCategoryId: 5,
+      },
     ],
+  })
+
+  const event = await prisma.event.createMany({
+    data: [
+      {
+        startDateTime: new Date('2022-08-14 10:00:00.000'),
+        status: '',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 12,
+      },
+      {
+        startDateTime: new Date('2022-08-14 12:00:00.000'),
+        status: 'без статуса',
+        clientId: 2,
+        masterId: 1,
+        serviceItemId: 13,
+      },
+      {
+        startDateTime: new Date('2022-08-15 12:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 14,
+      },
+      {
+        startDateTime: new Date('2022-08-15 14:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 15,
+      },
+      {
+        startDateTime: new Date('2022-08-15 17:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 2,
+        serviceItemId: 10,
+      },
+      {
+        startDateTime: new Date('2022-08-18 13:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 17,
+      },
+      {
+        startDateTime: new Date('2022-08-17 11:00:00.000'),
+        status: 'без статуса',
+        clientId: 2,
+        masterId: 1,
+        serviceItemId: 14,
+      },
+    ]
   })
 
   const schedule = await prisma.schedule.createMany({
@@ -208,6 +336,61 @@ async function main() {
         endDateTime: new Date('2022-08-07 12:30:00.000'),
         masterId: 1,
       },
+      {
+        startDateTime: new Date('2022-08-09 10:00:00.000'),
+        endDateTime: new Date('2022-08-09 12:30:00.000'),
+        masterId: 2,
+      },
+      {
+        startDateTime: new Date('2022-08-17 07:00:00.000'),
+        endDateTime: new Date('2022-08-17 18:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-06 10:00:00.000'),
+        endDateTime: new Date('2022-08-06 19:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-15 10:00:00.000'),
+        endDateTime: new Date('2022-08-15 19:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-16 10:00:00.000'),
+        endDateTime: new Date('2022-08-16 15:30:00.000'),
+        masterId: 2,
+      },
+      {
+        startDateTime: new Date('2022-08-15 07:00:00.000'),
+        endDateTime: new Date('2022-08-15 18:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-16 10:00:00.000'),
+        endDateTime: new Date('2022-08-16 15:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-16 17:00:00.000'),
+        endDateTime: new Date('2022-08-16 19:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-18 08:00:00.000'),
+        endDateTime: new Date('2022-08-18 14:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-19 09:00:00.000'),
+        endDateTime: new Date('2022-08-19 17:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-20 10:00:00.000'),
+        endDateTime: new Date('2022-08-20 18:30:00.000'),
+        masterId: 1,
+      }
     ],
   })
 }
