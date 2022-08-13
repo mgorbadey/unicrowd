@@ -4,31 +4,35 @@ const prisma = new PrismaClient()
 
 router.get('/', async (req, res) => {
   try {
-    const data = await prisma.serviceCategory.findMany({
-      include: {
-        serviceItem: {
-          include: {
-            master: {
-              include: {
-                city: true,
-              },
-            },
-          },
-        },
+    const categories = await prisma.serviceCategory.findMany({
+      select: {
+        id: true,
+        title: true,
       },
     })
-    console.log('data: ', data)
-    res.json(data)
+    const items = await prisma.serviceItem.findMany({})
+    const cities = await prisma.city.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    })
+    const masters = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        role: true,
+        info: true,
+        userPic: true,
+        cityId: true,
+        email: true,
+        createdAt: true,
+      },
+    })
+    res.json({ categories, items, masters, cities })
   } catch (error) {
     console.log(error.message)
   }
 })
-
-// router.post('/', async (req, res) => {
-//   const { name } = req.body
-//   const masters = await prisma.user.findMany({
-//     where: { role: 'master' },
-//   })
-// })
 
 module.exports = router
