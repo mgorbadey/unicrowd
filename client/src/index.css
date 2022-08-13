@@ -14,3 +14,15 @@ body {
 .h-96 {
   height: 39rem;
 }
+
+.py-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-style {
+    margin-top: 1.5rem;
+}
+
+.text-area {
+    padding-left: 0.5rem;
+}

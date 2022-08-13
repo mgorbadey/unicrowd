@@ -9,7 +9,6 @@ router.post('/upload', fileMiddleware.single('avatar') , async (req, res) => {
     try {
         if(req.file) {
             const { id } = req.body
-            console.log(req.file.path)
 
             const updateUser = await prisma.user.update({
                 where: {
