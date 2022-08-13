@@ -255,13 +255,13 @@ export default function MasterProfile() {
                                 >
                                     О себе
                                 </label>
-                                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center'>
+                                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center '>
                                     <textarea
                                         id='about'
                                         name='about'
                                         rows={3}
                                         disabled
-                                        className='max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md'
+                                        className='max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-area'
                                         defaultValue={info?.data?.info}
                                     />
 
@@ -402,18 +402,18 @@ export default function MasterProfile() {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="mt-2 sm:flex sm:justify-between">
+                                    <div className="mt-2 mt-style sm:flex sm:justify-between">
                                         <div className="sm:flex">
                                             <p className="flex items-center text-sm text-gray-500">
                                                 <UsersIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                                 {position.serviceCategory.title}
                                             </p>
-                                            <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                            <p className="mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
                                                 <LocationMarkerIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                                 Продолжительность: {position.duration} минут
                                             </p>
                                         </div>
-                                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                        <div className="mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0">
                                             <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                             <p>
                                                 Создано {position.createdAt.slice(0,10)}
@@ -462,7 +462,7 @@ export default function MasterProfile() {
                                             >
                                                 О себе
                                             </Dialog.Title>
-                                            <div className='mt-2'>
+                                            <div className='mt-2 mt-style'>
                                                 <textarea
                                                     id='about'
                                                     name='about'
@@ -525,7 +525,7 @@ export default function MasterProfile() {
                                             </Dialog.Title>
                                         </div>
                                     </div>
-                                    <div className="mt-2">
+                                    <div className="mt-2 mt-style">
                                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                                             Название услуги
                                         </label>
@@ -648,7 +648,7 @@ export default function MasterProfile() {
                                             <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
                                                 Выберите свой город
                                             </Dialog.Title>
-                                            <div className="mt-2">
+                                            <div className="mt-2 mt-style">
                                                 <select
                                                     name='country'
                                                     autoComplete='country-name'
@@ -713,7 +713,7 @@ export default function MasterProfile() {
                                             </Dialog.Title>
                                         </div>
                                     </div>
-                                    <div className="mt-2">
+                                    <div className="mt-2 mt-style">
                                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                                             Название услуги
                                         </label>
