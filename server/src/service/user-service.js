@@ -16,7 +16,7 @@ class UserService {
       if (candidate) {
         throw serverError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`)
       }
-      
+
       const hashPassword = await bcrypt.hash(password, 3)                                 // хэшируем пароль
       const activationLink = uuid.v4()                                                     // генерим уникальную стрингу для ссылки активации
       const user = await prisma.user.create({                                              // создаем нового пользователя
@@ -39,6 +39,28 @@ class UserService {
       console.log(error);
     }
   }
+
+  // функция логина
+  async login(email, password) {
+    try {
+      const user = await prisma.user.findUnique({ where: { email } })
+      if (!user) {
+        throw serverError.BadRequest('Пользователь с таким email не найден')
+      }
+      const isPassEquals = await bcrypt.compare(password, user.password)
+      if (!isPassEquals) {
+        throw serverError.BadRequest('Неверный пароль')
+      }
+      const userDto = new UserDto(user)
+
+      const tokens = tokenService.generateTokens({ ...userDto })
+      await tokenService.saveToken(userDto.id, tokens.refreshToken)
+      return { ...tokens, user: userDto }
+    } catch (error) {
+      throw serverError.BadRequest('Ошибка входа')
+    }
+  }
+
   // функция активации аккаунта 
   async activate(link) {
     try {
@@ -59,43 +81,22 @@ class UserService {
     }
   }
 
-    // функция логина
-    async login(email, password) {
-      try {
-        const user = await prisma.user.findUnique({ where: { email } })
-        if (!user) {
-          throw serverError.BadRequest('Пользователь с таким email не найден')
-        }
-        const isPassEquals = await bcrypt.compare(password, user.password)
-        if (!isPassEquals) {
-          throw serverError.BadRequest('Неверный пароль')
-        }
-        const userDto = new UserDto(user)
-  
-        const tokens = tokenService.generateTokens({ ...userDto })
-        await tokenService.saveToken(userDto.id, tokens.refreshToken)
-        return { ...tokens, user: userDto }
-      } catch (error) {
-        throw serverError.BadRequest('Ошибка входа')
-      }
+  // функция логаута
+  async logout(refreshToken) {
+    try {
+      const token = await tokenService.removeToken(refreshToken)
+      return token
+    } catch (error) {
+      throw serverError.BadRequest('Ошибка выхода')
     }
+  }
 
-    // функция логаута
-    async logout(refreshToken) {
-      try {
-        const token = await tokenService.removeToken(refreshToken)
-        return token
-      } catch (error) {
-        throw serverError.BadRequest('Ошибка выхода')
+  // функция обновления токена
+  async refresh(refreshToken) {
+    try {
+      if (!refreshToken) {
+        throw serverError.UnauthorizedError()
       }
-    }
-
-    // функция обновления токена
-    async refresh(refreshToken) {
-      try {
-        if (!refreshToken) {
-          throw serverError.UnauthorizedError()
-        }
       const userData = tokenService.validateRefreshToken(refreshToken)
       const tokenFromDb = await tokenService.findToken(refreshToken)
       if (!userData || !tokenFromDb) {
@@ -107,10 +108,10 @@ class UserService {
 
       await tokenService.saveToken(userDto.id, tokens.refreshToken)
       return { ...tokens, user: userDto }
-      } catch (error) {
-        throw serverError.BadRequest('Ошибка обновления токена')
-      }
+    } catch (error) {
+      throw serverError.BadRequest('Ошибка обновления токена')
     }
+  }
 
 }
 

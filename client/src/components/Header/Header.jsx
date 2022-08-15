@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
+import $api from '../../http/index';
 
 const user = {
   name: 'Tom Cook',
@@ -9,11 +10,25 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 
+const logout = () => {
+  console.log('logout');
+  $api.post('http://localhost:3500/auth/logout', {})
+  .then(function () {
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('user');
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 const userNavigation = [
   { name: 'Профиль', href: '#' },
   { name: 'Расписание', href: '#' },
-  { name: 'Выйти', href: '#' },
+  { name: 'Выйти', href: '#', func: logout },
 ]
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -70,6 +85,7 @@ const Header = () => {
                                   active ? 'bg-gray-100' : '',
                                   'block px-4 py-2 text-sm text-gray-700'
                                 )}
+                                onClick={item.func}
                               >
                                 {item.name}
                               </a>

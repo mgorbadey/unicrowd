@@ -1,6 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { LockClosedIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { useState, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import $api from '../../http/index';
 
 const roles = [
@@ -15,12 +16,13 @@ function classNames(...classes) {
 
 export default function Example() {
 
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [selected, setSelected] = useState(roles[0])
 
-  const login = (e) => {
+  const registration = (e) => {
     e.preventDefault();
     $api.post('http://localhost:3500/auth/registration', {
       username,
@@ -29,7 +31,8 @@ export default function Example() {
       role: selected.role
     })
       .then(function (response) {
-        window.localStorage.setItem('token', response.data.userData.accessToken);
+        window.localStorage.setItem('accessToken', response.data.accessToken);
+        window.localStorage.setItem('user', JSON.stringify(response.data.user));
       })
       .catch(function (error) {
         console.log(error);
@@ -51,7 +54,7 @@ export default function Example() {
           <form className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
-            <div>
+              <div>
                 <label htmlFor="email-address" className="sr-only">
                   Ваше имя
                 </label>
@@ -164,7 +167,10 @@ export default function Example() {
               <button
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={login}
+                onClick={(e) => {
+                  registration(e)
+                  navigate('/search', { replace: true })
+                }}
               >
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
