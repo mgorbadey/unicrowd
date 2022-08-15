@@ -59,7 +59,8 @@ const ResultSelect = ({
         ))}
       </Select>
       <Select //CATEGORIES
-        // placeholder='Категория'
+        placeholder='Категория'
+        // defaultValue={category.title === string ? true : false}
         size='md'
         color='rgb(33, 41, 54)'
         bg='white'
@@ -70,7 +71,6 @@ const ResultSelect = ({
             {category.title}
           </option>
         ))}
-        <option value=''>Категория</option>
       </Select>
       <Select // ITEMS
         placeholder='Услуга'

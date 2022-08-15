@@ -6,6 +6,7 @@ import {
 import React from 'react'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 // перевод месяцев на русский
 const changeMonthLanguage = (date) => {
@@ -30,6 +31,7 @@ const changeMonthLanguage = (date) => {
 }
 
 const ListChildren = ({ selectedMasters, selectedItem }) => {
+  const navigate = useNavigate()
   const { categories, items, cities } = useSelector((store) => store.results)
 
   return (
@@ -37,10 +39,7 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
       <ul className='divide-y divide-gray-200'>
         {selectedMasters?.map((selectedMaster) => (
           <li key={selectedMaster.id}>
-            <a
-              href={`/masters/${selectedMaster.id}/profile`}
-              className='block hover:bg-gray-50'
-            >
+            <div className='block hover:bg-gray-50'>
               <div className='flex items-center px-4 py-4 sm:px-6'>
                 <div className='min-w-0 flex-1 flex items-center'>
                   <div className='flex-shrink-0'>
@@ -141,14 +140,20 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
                     </div>
                   </div>
                 </div>
-                <div>
+                <div
+                  onClick={() =>
+                    navigate(`/masters/${selectedMaster.id}/profile`, {
+                      replace: true,
+                    })
+                  }
+                >
                   <ChevronRightIcon
                     className='h-5 w-5 text-gray-400'
                     aria-hidden='true'
                   />
                 </div>
               </div>
-            </a>
+            </div>
           </li>
         ))}
       </ul>
