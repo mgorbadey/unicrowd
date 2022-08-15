@@ -16,10 +16,10 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
       >
         <a
           href={`/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`}
-          className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-pink-100'
+          className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100'
         >
-          <p className='order-1 font-semibold text-pink-700'>Рабочий слот</p>
-          <p className='text-pink-500 group-hover:text-pink-700'>
+          <p className='order-1 font-semibold text-gray-700'>Рабочий слот</p>
+          <p className='text-gray-500 group-hover:text-gray-700'>
             <time dateTime={workingSlot.startDateTime}>{HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-{HoursCalDisp.endHours}:{HoursCalDisp.endMinutes}</time>
           </p>
         </a>

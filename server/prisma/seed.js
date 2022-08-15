@@ -258,85 +258,92 @@ async function main() {
   const event = await prisma.event.createMany({
     data: [
       {
-        startDateTime: new Date('2022-08-14 10:00:00.000'),
-        status: 'без статуса',
+        startDateTime: new Date('2022-08-13 10:00:00.000'),
+        status: 'new',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 12,
+      },
+      {
+        startDateTime: new Date('2022-08-13 13:00:00.000'),
+        status: 'new',
         clientId: 1,
         masterId: 1,
         serviceItemId: 12,
       },
       {
         startDateTime: new Date('2022-08-14 12:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 2,
         masterId: 1,
         serviceItemId: 13,
       },
       {
         startDateTime: new Date('2022-08-15 12:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 1,
         masterId: 1,
         serviceItemId: 14,
       },
       {
         startDateTime: new Date('2022-08-15 14:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 1,
         masterId: 1,
         serviceItemId: 15,
       },
       {
         startDateTime: new Date('2022-08-15 17:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 1,
         masterId: 2,
         serviceItemId: 10,
       },
       {
         startDateTime: new Date('2022-08-18 13:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 1,
         masterId: 1,
         serviceItemId: 17,
       },
       {
         startDateTime: new Date('2022-08-17 11:00:00.000'),
-        status: 'без статуса',
+        status: 'approved',
         clientId: 2,
         masterId: 1,
         serviceItemId: 14,
       },
       {
         startDateTime: new Date('2022-08-21 11:00:00.000'),
-        status: 'без статуса',
+        status: 'approved',
         clientId: 1,
         masterId: 1,
         serviceItemId: 14,
       },
       {
         startDateTime: new Date('2022-08-20 11:30:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 2,
         masterId: 1,
         serviceItemId: 13,
       },
       {
         startDateTime: new Date('2022-08-19 11:00:00.000'),
-        status: 'без статуса',
+        status: 'approved',
         clientId: 1,
         masterId: 1,
         serviceItemId: 15,
       },
       {
         startDateTime: new Date('2022-08-18 14:00:00.000'),
-        status: 'без статуса',
+        status: 'approved',
         clientId: 1,
         masterId: 1,
         serviceItemId: 13,
       },
       {
         startDateTime: new Date('2022-08-17 16:00:00.000'),
-        status: 'без статуса',
+        status: 'new',
         clientId: 2,
         masterId: 1,
         serviceItemId: 14,
@@ -387,19 +394,9 @@ async function main() {
         masterId: 1,
       },
       {
-        startDateTime: new Date('2022-08-15 10:00:00.000'),
-        endDateTime: new Date('2022-08-15 19:30:00.000'),
-        masterId: 1,
-      },
-      {
         startDateTime: new Date('2022-08-16 10:00:00.000'),
         endDateTime: new Date('2022-08-16 15:30:00.000'),
         masterId: 2,
-      },
-      {
-        startDateTime: new Date('2022-08-15 07:00:00.000'),
-        endDateTime: new Date('2022-08-15 18:30:00.000'),
-        masterId: 1,
       },
       {
         startDateTime: new Date('2022-08-16 10:00:00.000'),
@@ -413,7 +410,7 @@ async function main() {
       },
       {
         startDateTime: new Date('2022-08-18 08:00:00.000'),
-        endDateTime: new Date('2022-08-18 14:30:00.000'),
+        endDateTime: new Date('2022-08-18 17:30:00.000'),
         masterId: 1,
       },
       {
@@ -425,7 +422,32 @@ async function main() {
         startDateTime: new Date('2022-08-20 10:00:00.000'),
         endDateTime: new Date('2022-08-20 18:30:00.000'),
         masterId: 1,
-      }
+      },
+      {
+        startDateTime: new Date('2022-08-21 09:00:00.000'),
+        endDateTime: new Date('2022-08-21 17:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-15 12:00:00.000'),
+        endDateTime: new Date('2022-08-15 16:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-22 10:00:00.000'),
+        endDateTime: new Date('2022-08-22 18:30:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-23 09:00:00.000'),
+        endDateTime: new Date('2022-08-23 17:00:00.000'),
+        masterId: 1,
+      },
+      {
+        startDateTime: new Date('2022-08-24 12:00:00.000'),
+        endDateTime: new Date('2022-08-24 16:30:00.000'),
+        masterId: 1,
+      },
     ],
   })
 }
