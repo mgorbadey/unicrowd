@@ -7,6 +7,7 @@ import Header from '../Header/Header'
 import LoginForm from '../LoginForm/LoginForm'
 import Main from '../Main/Main'
 import MasterProfile from '../MasterProfile/MasterProfile'
+import ClientProfile from '../ClientProfile/ClientProfile'
 import RegistrationForm from '../RegistrationForm/RegistrationForm'
 
 const Layout = () => {
@@ -21,6 +22,7 @@ const Layout = () => {
             {/* <Route path='/' element={<Navigate to={} replace={true} />} /> */}
             <Route path='/masters/:id/schedules' element={<MasterCalendar />} />
             <Route path='/masters/:id/profile' element={<MasterProfile />} />
+            <Route path='/client/:id/profile' element={<ClientProfile />} />
             <Route path='/auth/login' element={<LoginForm />} />
             <Route path='/auth/registration' element={<RegistrationForm />} />
           </Routes>
