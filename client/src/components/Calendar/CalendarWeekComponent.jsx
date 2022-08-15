@@ -67,7 +67,7 @@ export default function CalendarComponent() {
   function previousWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() - 7))
   }
-
+  
   //РИСУЕМ РАБОЧИЕ СЛОТЫ------>
 
   //хардкод id мастера
@@ -682,6 +682,7 @@ export default function CalendarComponent() {
                       />
                     );
                   })}
+
                 {clientSlots &&
                   clientSlots.map((clientSlot) => {
                     return (
@@ -691,6 +692,7 @@ export default function CalendarComponent() {
                       />
                     );
                   })}
+                  
 
                 {/* <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '8 / span 12' }}>
                   <a

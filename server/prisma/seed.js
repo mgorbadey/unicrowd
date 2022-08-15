@@ -306,6 +306,41 @@ async function main() {
         masterId: 1,
         serviceItemId: 14,
       },
+      {
+        startDateTime: new Date('2022-08-21 11:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 14,
+      },
+      {
+        startDateTime: new Date('2022-08-20 11:30:00.000'),
+        status: 'без статуса',
+        clientId: 2,
+        masterId: 1,
+        serviceItemId: 13,
+      },
+      {
+        startDateTime: new Date('2022-08-19 11:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 15,
+      },
+      {
+        startDateTime: new Date('2022-08-18 14:00:00.000'),
+        status: 'без статуса',
+        clientId: 1,
+        masterId: 1,
+        serviceItemId: 13,
+      },
+      {
+        startDateTime: new Date('2022-08-17 16:00:00.000'),
+        status: 'без статуса',
+        clientId: 2,
+        masterId: 1,
+        serviceItemId: 14,
+      },
     ]
   })
 

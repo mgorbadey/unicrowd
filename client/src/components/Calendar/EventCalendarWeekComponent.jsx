@@ -11,7 +11,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   return (
     <>
       <li
-        className={`relative mt-px flex sm:col-start-${workingSlot.weekDay}`}
+        className={`relative mt-px flex col-start-${workingSlot.weekDay}`}
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
       >
         <a
