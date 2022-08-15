@@ -40,7 +40,6 @@ const ListBody = ({
   }, [])
   // фильтрую мастеров по селектам
   const selectedMasters = filteredMasters
-
     // по городам
     ?.reduce((acc, master) => {
       if (selectedCity) {
