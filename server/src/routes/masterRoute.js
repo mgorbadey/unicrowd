@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const router = Router()
-const {getAllWorkingSlots, createWorkingSlot, getAllEvents} = require("../controllers/masterController")
+const {getAllWorkingSlots, createWorkingSlot, getAllClientEvents} = require("../controllers/masterController")
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -162,7 +162,7 @@ router
 
 router
   .route('/:id/events')
-  .get(getAllEvents)
+  .get(getAllClientEvents)
   // .post(createWorkingSlot)
 
 router.get('/:id/profile', async (req, res) => {

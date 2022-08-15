@@ -30,17 +30,20 @@ exports.getAllWorkingSlots = async (req, res) => {
 };
 
 //получаем все записи мастера
-exports.getAllEvents = async (req, res) => {
-  let masterId = 1;
+exports.getAllClientEvents = async (req, res) => {
+  let masterId = req.params.id;
+  let startDate = new Date(req.query.startDate);
+  let endDate = new Date(req.query.endDate);
+  console.log(startDate,endDate )
 
-  const min = '1 minute'
-  const result = await prisma.$queryRawUnsafe(`select e."id" as "id", e."startDateTime" as "startDateTime", (e."startDateTime" + (si."duration"||' minutes')::interval) as "endDateTime", e."status" as "status", e."clientId" as "clientId", u."username" as "clientName", e."masterId" as "masterId", sc."title" as "serviceCategoryTitle", si."title" as "serviceItemTitle", si."duration" as "serviceItemDuration" from "Event" e left join "ServiceItem" si on e."serviceItemId" = si.id left join "ServiceCategory" sc on sc.id = si."serviceCategoryId" left join "User" u on u.id = e."clientId" where e."masterId" = ${masterId}`)
+  const result = await prisma.$queryRawUnsafe(`select e."id" as "id", e."startDateTime" as "startDateTime", (e."startDateTime" + (si."duration"||' minutes')::interval) as "endDateTime", e."status" as "status", e."clientId" as "clientId", u."username" as "clientName", e."masterId" as "masterId", sc."title" as "serviceCategoryTitle", si."title" as "serviceItemTitle", si."duration" as "serviceItemDuration" from "Event" e left join "ServiceItem" si on e."serviceItemId" = si.id left join "ServiceCategory" sc on sc.id = si."serviceCategoryId" left join "User" u on u.id = e."clientId" where e."masterId" = ${masterId} `)
 
-  // console.log('resultresultresultresultresult',result)
+  const test = await prisma.$queryRawUnsafe(`select * from "Event" where "startDateTime" > '2022-08-18'`)
+  console.log('testtesttesttest',test)
 
   let allClientEvents = eventPositionInCal(result)
 
-  console.log(allClientEvents)
+  // console.log(allClientEvents)
   
   res.json(allClientEvents);
 };

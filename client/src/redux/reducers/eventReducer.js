@@ -1,15 +1,15 @@
 import initState from '../initState'
-import masterType from '../types/masterType'
+import eventType from '../types/eventType'
 
 //выносим логику, которая работает со стейтом из компонентов - сюда >>>>>>>>
 
-const masterReducer = (state = initState.master, action) => {
+const eventReducer = (state = initState.event, action) => {
   switch (action.type) {
-    case masterType.WORKINGSLOTS:
+    case eventType.CLIENTSLOTS:
       return action.payload
     default:
       return state //сохраняет состояние в память к-ра
   }
 }
 
-export default masterReducer
+export default eventReducer

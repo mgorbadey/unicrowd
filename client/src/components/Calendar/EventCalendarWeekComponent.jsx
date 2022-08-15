@@ -15,7 +15,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
       >
         <a
-          href='#'
+          href={`/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`}
           className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-pink-100'
         >
           <p className='order-1 font-semibold text-pink-700'>Рабочий слот</p>
