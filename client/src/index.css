@@ -26,3 +26,11 @@ body {
 .text-area {
     padding-left: 0.5rem;
 }
+
+.photo-area {
+    padding-right: 7.5rem;
+}
+
+.alert-area {
+    margin-top: 10rem;
+}

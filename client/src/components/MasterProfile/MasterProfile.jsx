@@ -10,7 +10,6 @@ import {
   LocationMarkerIcon,
   UsersIcon,
 } from '@heroicons/react/solid'
-import { data } from 'autoprefixer'
 
 export default function MasterProfile() {
   const [img, setImg] = useState(null)
