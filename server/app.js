@@ -32,6 +32,7 @@ const uploadRoute = require('./src/routes/uploadRoute')
 const authRoute = require('./src/routes/authRoute')
 const searchRoute = require('./src/routes/searchRoute')
 const resultsRoute = require('./src/routes/resultsRoute')
+const eventsRoute = require('./src/routes/eventRoute')
 
 app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use('/masters', masterRoute)
@@ -40,6 +41,7 @@ app.use('/auth', authRoute)
 app.use('/api', uploadRoute)
 app.use('/search', searchRoute)
 app.use('/results', resultsRoute)
+app.use('/events', eventsRoute)
 
 const errorMiddleware = require('./src/middlewares/errorMiddleware')
 

@@ -7,10 +7,11 @@ import {
 } from "@heroicons/react/solid";
 import { Menu, Transition } from "@headlessui/react";
 import EventCalendarWeekComponent from "./EventCalendarWeekComponent";
-import {getDaysAroundGivenDay} from "../../helpers/calendar"
+import { getDaysAroundGivenDay } from "../../helpers/calendar"
 import { getWorkingSlots } from "../../redux/actions/masterAction";
 import { useDispatch, useSelector } from "react-redux";
 import $api from "../../http"
+import Modal from "../Modal/Modal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -20,7 +21,8 @@ export default function CalendarComponent() {
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
-  const monthsArr = ['Январь' , 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь' , 'Октябрь' , 'Ноябрь' , 'Декабрь'];
+  const monthsArr = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  const [open, setOpen] = useState(false)
 
   const styles = {
     weekSpanCurrentDate: 'flex items-baseline',
@@ -28,13 +30,13 @@ export default function CalendarComponent() {
     weekSpanNotCurrentDate: '',
     daySpanNotCurrentDate: 'items-center justify-center font-semibold text-gray-900',
   }
-  
+
   // Сначала получаем текущую дату, чтобы отрисовать текущую неделю. 
   // От нее же далее происходят все преобразования.
-  let today =  new Date();
+  let today = new Date();
   let todayNum = today.getDate()
   let todayMonthNum = today.getMonth();
-  
+
   const [date, setDateOfWeek] = useState(today);
   //высчитываем месяц и год для даты из стейта, чтобы отрисовать в интерфейсе
   let monthNum = new Date(date).getMonth();
@@ -42,35 +44,35 @@ export default function CalendarComponent() {
   let yearNum = new Date(date).getFullYear();
 
   const dispatch = useDispatch();
-  
+
   //получаем неделю около даты
   let wholeWeek = getDaysAroundGivenDay(date)
-  
+
   function nextWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() + 7))
   }
-  
+
   function previousWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() - 7))
   }
-  
+
   //РИСУЕМ РАБОЧИЕ СЛОТЫ------>
-  
+
   //хардкод id мастера
   const masterId = 1;
-  
+
   const workingSlots = useSelector((store) => store.master);
   useEffect(() => {
     $api
-    .get(`http://localhost:3500/masters/${masterId}/schedules?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`)
-    .then((response) => {
-      const workingSlotsData = response.data;
-      dispatch(getWorkingSlots(workingSlotsData));
-    })
-    .catch((error) => {
-      // handle error
-      console.log(error);
-    });
+      .get(`http://localhost:3500/masters/${masterId}/schedules?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`)
+      .then((response) => {
+        const workingSlotsData = response.data;
+        dispatch(getWorkingSlots(workingSlotsData));
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+      });
   }, [date]);
 
   console.log('workingSlots', workingSlots);
@@ -112,7 +114,7 @@ export default function CalendarComponent() {
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
-            onClick={nextWeek}
+              onClick={nextWeek}
               type="button"
               className="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
@@ -212,9 +214,13 @@ export default function CalendarComponent() {
             <button
               type="button"
               className="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={() => setOpen(true)}
             >
               Добавить слот
             </button>
+
+            <Modal open={open} setOpen={setOpen} />
+
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -414,58 +420,58 @@ export default function CalendarComponent() {
             <div className="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
               <div className="col-end-1 w-14" />
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[0][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[0][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Пн{" "}
-                  <span className={todayNum===wholeWeek[0][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[0][0]}
+                  <span className={todayNum === wholeWeek[0][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[0][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[1][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[1][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Вт{" "}
-                  <span className={todayNum===wholeWeek[1][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[1][0]}
+                  <span className={todayNum === wholeWeek[1][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[1][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[2][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[2][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Ср{" "}
-                  <span className={todayNum===wholeWeek[2][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[2][0]}
+                  <span className={todayNum === wholeWeek[2][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[2][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[3][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[3][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Чт{" "}
-                  <span className={todayNum===wholeWeek[3][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[3][0]}
+                  <span className={todayNum === wholeWeek[3][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[3][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[4][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[4][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Пт{" "}
-                  <span className={todayNum===wholeWeek[4][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[4][0]}
+                  <span className={todayNum === wholeWeek[4][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[4][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[5][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[5][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Сб{" "}
-                  <span className={todayNum===wholeWeek[5][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[5][0]}
+                  <span className={todayNum === wholeWeek[5][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[5][0]}
                   </span>
                 </span>
               </div>
               <div className="flex items-center justify-center py-3">
-                <span className={todayNum===wholeWeek[6][0] & todayMonthNum===monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
+                <span className={todayNum === wholeWeek[6][0] & todayMonthNum === monthNum ? styles.weekSpanCurrentDate : styles.weekSpanNotCurrentDate}>
                   Вс{" "}
-                  <span className={todayNum===wholeWeek[6][0] & todayMonthNum===monthNum ? styles.daySpanCurrentDate: styles.daySpanNotCurrentDate}>
-                  {wholeWeek[6][0]}
+                  <span className={todayNum === wholeWeek[6][0] & todayMonthNum === monthNum ? styles.daySpanCurrentDate : styles.daySpanNotCurrentDate}>
+                    {wholeWeek[6][0]}
                   </span>
                 </span>
               </div>
