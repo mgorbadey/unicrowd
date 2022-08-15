@@ -16,18 +16,18 @@ exports.getDataForResults = async (req, res) => {
         name: true,
       },
     })
-    const masters = await prisma.user.findMany({
+    const mastersFromDB = await prisma.user.findMany({
       where: { role: 'master' },
-      select: {
-        id: true,
-        username: true,
-        role: true,
-        info: true,
-        userPic: true,
-        cityId: true,
-        email: true,
-        createdAt: true,
+      include: {
+        serviceItem: true,
       },
+    })
+    const masters = mastersFromDB.map((master) => {
+      delete master.password
+      delete master.activationLink
+      delete master.isActivated
+      delete master.updatedAt
+      return master
     })
     res.json({ categories, items, masters, cities })
   } catch (error) {
