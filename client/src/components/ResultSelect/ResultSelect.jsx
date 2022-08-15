@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 const ResultSelect = ({
   selectedCategory,
+
   selectedItem,
   setSelectedCity,
   setSelectedCategory,
@@ -11,7 +12,6 @@ const ResultSelect = ({
   setSelectedDuration,
   setSelectedPrice,
 }) => {
-  const string = useSelector((store) => store.search)
   const { categories, items, cities } = useSelector((store) => store.results)
   const [itemsByCategory, setItemsByCategory] = useState([])
 
@@ -41,7 +41,7 @@ const ResultSelect = ({
       setItemsByCategory(items)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory])
+  }, [selectedCategory, categories, items])
 
   return (
     <Stack spacing={3} p='20px'>
@@ -60,14 +60,13 @@ const ResultSelect = ({
       </Select>
       <Select //CATEGORIES
         placeholder='Категория'
-        // defaultValue={category.title === string ? true : false}
         size='md'
         color='rgb(33, 41, 54)'
         bg='white'
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
         {categories?.map((category) => (
-          <option key={category.id} value={category.title} defaultChecked={category.title === string ? true : false}>
+          <option key={category.id} value={category.title}>
             {category.title}
           </option>
         ))}

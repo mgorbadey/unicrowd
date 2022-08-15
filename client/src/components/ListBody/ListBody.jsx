@@ -90,17 +90,19 @@ const ListBody = ({
     }, [])
     // по длительности
     .reduce((acc, master) => {
-      const itemsByDuration = items?.filter(
-        (item) =>
-          item.duration === Number(selectedDuration) &&
-          item.title === selectedItem
-      )
-      if (
-        itemsByDuration.length &&
-        itemsByDuration.find((item) => item.masterId === master.id)
-      ) {
-        acc.push(master)
-      } else if (!itemsByDuration.length) {
+      if (selectedDuration) {
+        const itemsByDuration = items?.filter(
+          (item) =>
+            item.duration === Number(selectedDuration) &&
+            item.title === selectedItem
+        )
+        if (
+          itemsByDuration.length &&
+          itemsByDuration.find((item) => item.masterId === master.id)
+        ) {
+          acc.push(master)
+        }
+      } else {
         acc.push(master)
       }
       return acc
