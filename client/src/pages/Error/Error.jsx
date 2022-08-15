@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +14,7 @@ const Error = () => {
         backgroundSize: 'cover',
       }}
     >
-      <div className='max-w-7xl mx-auto px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:pb-48'>
+      <div className='max-w-7xl mx-auto px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:pb-48 mt-8'>
         <p className='text-base font-semibold text-black text-opacity-50'>
           404
         </p>
@@ -24,12 +25,15 @@ const Error = () => {
           Страница, которую вы ищете, не существует
         </p>
         <div className='mt-6 cursor-default'>
-          <div
+          <Button
+            color='rgb(108, 114, 127)'
+            cursor='pointer'
+            bg='white'
+            size='lg'
             onClick={() => navigate('/search', { replace: true })}
-            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 bg-white sm:hover:bg-opacity-50'
           >
             Вернуться на главную
-          </div>
+          </Button>
         </div>
       </div>
     </main>

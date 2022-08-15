@@ -35,7 +35,10 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
   const { categories, items, cities } = useSelector((store) => store.results)
 
   return (
-    <div className='bg-white shadow overflow-hidden sm:rounded-md'>
+    <div
+      className='shadow overflow-hidden sm:rounded-md'
+      style={{ backgroundColor: 'rgb(255, 255, 255, 0.5)' }}
+    >
       <ul className='divide-y divide-gray-200'>
         {selectedMasters?.map((selectedMaster) => (
           <li key={selectedMaster.id}>
@@ -51,7 +54,10 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
                   </div>
                   <div className='min-w-0 flex-1 items-center px-4 md:grid md:grid-cols-3 md:gap-4'>
                     <div>
-                      <p className='text-sm font-medium text-indigo-600 truncate'>
+                      <p
+                        className='text-base font-medium truncate'
+                        style={{ color: 'rgb(98, 97, 95)' }}
+                      >
                         {selectedMaster.username}
                       </p>
                       <p className='mt-2 flex items-center text-sm text-gray-500'>
@@ -63,7 +69,10 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
                       </p>
                     </div>
                     <div className='flex items-center pl-2'>
-                      <div className='mt-2 flex flex-col items-start text-sm text-indigo-600 truncate'>
+                      <div
+                        className='mt-2 flex flex-col items-start text-sm truncate'
+                        style={{ color: 'rgb(98, 97, 95)' }}
+                      >
                         {selectedItem ? (
                           <>
                             {items?.map((item) => {
@@ -115,7 +124,10 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
 
                     <div className='hidden md:block'>
                       <div>
-                        <p className='text-sm text-indigo-600'>
+                        <p
+                          className='text-sm'
+                          style={{ color: 'rgb(124, 156, 154)' }}
+                        >
                           Работает с{' '}
                           <time dateTime={selectedMaster.createdAt}>
                             {changeMonthLanguage(
@@ -141,6 +153,7 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
                   </div>
                 </div>
                 <div
+                  className='cursor-pointer'
                   onClick={() =>
                     navigate(`/masters/${selectedMaster.id}/profile`, {
                       replace: true,

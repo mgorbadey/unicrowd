@@ -49,7 +49,7 @@ const SearchForm = () => {
               color='rgb(108, 114, 127)'
               size='lg'
               border='2px solid white'
-              focusBorderColor='rgb(159, 196, 194)'
+              focusBorderColor='rgb(140, 175, 174)'
               placeholder='поиск категории или мастера'
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -57,7 +57,7 @@ const SearchForm = () => {
           </Box>
           <Button
             color='rgb(108, 114, 127)'
-            cursor='default'
+            cursor='pointer'
             ml='30px'
             w='100px'
             bg='white'

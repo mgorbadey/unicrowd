@@ -48,7 +48,9 @@ const ResultSelect = ({
       <Select // CITIES
         placeholder='Город'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         onChange={(e) => setSelectedCity(e.target.value)}
       >
@@ -61,7 +63,9 @@ const ResultSelect = ({
       <Select //CATEGORIES
         placeholder='Категория'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
@@ -74,7 +78,9 @@ const ResultSelect = ({
       <Select // ITEMS
         placeholder='Услуга'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedCategory ? false : true}
         onChange={(e) => setSelectedItem(e.target.value)}
@@ -88,7 +94,9 @@ const ResultSelect = ({
       <Select // DURATION
         placeholder='Длительность'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedItem ? false : true}
         onChange={(e) => setSelectedDuration(e.target.value)}
@@ -101,7 +109,9 @@ const ResultSelect = ({
       <Select // PRICES
         placeholder='Цена'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedItem ? false : true}
         onChange={(e) => setSelectedPrice(e.target.value)}

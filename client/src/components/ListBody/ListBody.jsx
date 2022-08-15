@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import ListChildren from '../ListChildren/ListChildren'
@@ -135,8 +135,13 @@ const ListBody = ({
           selectedItem={selectedItem}
         />
       ) : (
-        <Flex justify='center' align='center' minH='100%'>
-          <Box>Мастера по вашему запросу не найдены</Box>
+        <Flex justify='center' align='center' minH='100% '>
+          <h1
+            className='mt-2 text-4xl font-bold tracking-tight sm:text-5xl sm:tracking-tight'
+            style={{ fontSize: '2rem', color: 'rgb(108, 114, 127)' }}
+          >
+            Мастера по вашему запросу не найдены
+          </h1>
         </Flex>
       )}
     </>
