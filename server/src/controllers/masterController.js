@@ -31,37 +31,18 @@ exports.getAllWorkingSlots = async (req, res) => {
 
 //получаем все записи мастера
 exports.getAllEvents = async (req, res) => {
-  // let masterId = req.params.id;
   let masterId = 1;
 
-  // const result = await prisma.$queryRawUnsafe('SELECT * FROM "Schedule" where masterId = +1')
+  const min = '1 minute'
+  const result = await prisma.$queryRawUnsafe(`select e."id" as "id", e."startDateTime" as "startDateTime", (e."startDateTime" + (si."duration"||' minutes')::interval) as "endDateTime", e."status" as "status", e."clientId" as "clientId", u."username" as "clientName", e."masterId" as "masterId", sc."title" as "serviceCategoryTitle", si."title" as "serviceItemTitle", si."duration" as "serviceItemDuration" from "Event" e left join "ServiceItem" si on e."serviceItemId" = si.id left join "ServiceCategory" sc on sc.id = si."serviceCategoryId" left join "User" u on u.id = e."clientId" where e."masterId" = ${masterId}`)
+
   // console.log('resultresultresultresultresult',result)
 
+  let allClientEvents = eventPositionInCal(result)
 
-
-
-  // let startDate = new Date(req.query.startDate);
-  // let endDate = new Date(req.query.endDate);
-  // const allWorkingSlots = await prisma.schedule.findMany({
-  //   where: {
-  //     AND: [
-  //       {
-  //         masterId: +masterId,
-  //       },
-  //       {
-  //         startDateTime: { gte: startDate },
-  //       },
-  //       {
-  //         startDateTime: { lte: endDate },
-  //       },
-  //     ],
-  //   },
-  // });
+  console.log(allClientEvents)
   
-  // //вычисляем инфу о позиционировании блока в календаре и длине блока
-  // let eventsForCal = eventPositionInCal(allWorkingSlots)
-  
-  // res.json(eventsForCal);
+  res.json(allClientEvents);
 };
 
 

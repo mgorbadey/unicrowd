@@ -259,7 +259,7 @@ async function main() {
     data: [
       {
         startDateTime: new Date('2022-08-14 10:00:00.000'),
-        status: '',
+        status: 'без статуса',
         clientId: 1,
         masterId: 1,
         serviceItemId: 12,
