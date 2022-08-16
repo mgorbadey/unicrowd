@@ -42,7 +42,7 @@ export default function Example() {
           <div className='flex justify-center'>
             <h1
               className='mt-2 text-4xl font-bold tracking-tight sm:text-5xl sm:tracking-tight'
-              style={{ fontSize: '2rem', color: 'rgb(108, 114, 127)' }}
+              style={{ fontSize: '2rem', color: 'rgb(98, 97, 95)' }}
             >
               Войдите в свой аккаунт
             </h1>

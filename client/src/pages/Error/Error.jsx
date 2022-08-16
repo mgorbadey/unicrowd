@@ -25,16 +25,19 @@ const Error = () => {
         >
           <p
             className='text-base font-semibold'
-            style={{ color: 'rgb(108, 114, 127)' }}
+            style={{ color: 'rgb(124, 156, 154)' }}
           >
             404
           </p>
-          <h1 className='mt-2 text-4xl font-bold text-white tracking-tight sm:text-5xl sm:tracking-tight'>
+          <h1
+            className='mt-2 text-4xl font-bold text-white tracking-tight sm:text-5xl sm:tracking-tight'
+            style={{ color: 'rgb(98, 97, 95)' }}
+          >
             Похоже, что вы потерялись
           </h1>
           <p
             className='mt-2 text-lg font-medium'
-            style={{ color: 'rgb(108, 114, 127)' }}
+            style={{ color: 'rgb(98, 97, 95)' }}
           >
             Страница, которую вы ищете, не существует
           </p>
