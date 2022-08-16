@@ -10,6 +10,8 @@ import {
   ModalBody,
   Spacer,
   Input,
+  FormControl,
+  FormLabel,
   Select
 } from '@chakra-ui/react'
 import $api from '../../http';
@@ -17,27 +19,28 @@ import $api from '../../http';
 
 const EventModal = ({ open, setOpen }) => {
 
-const [eventDateTime, setEventDateTime] = useState(Date.now())
-const [serviceItem, setServiceItem] = useState('')
+  const [startScheduleDateTime, setStartScheduleDateTime] = useState(Date.now())
+  const [endScheduleDateTime, setEndScheduleDateTime] = useState(Date.now())
+  const [serviceItem, setServiceItem] = useState('')
 
-const createEvent = () => {
+  const user = JSON.parse(localStorage.getItem('user'))
 
-  $api.post('http://localhost:3500/events/create', {
-    startDateTime: eventDateTime,
-    status: 'pending',
-    clientId: 1, //хардкод id клиента
-    masterId: 1, // хародкод id мастера
-    serviceItemId: 1, // хардкод id сервисАйтема
-  })
-    .then(function (response) {
-      console.log(response);
+  const createEvent = () => {
+
+    $api.post('http://localhost:3500/schedules/create', {
+      startDateTime: startScheduleDateTime,
+      endDateTime: endScheduleDateTime,
+      masterId: user.id
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-  setOpen(false)
-}
+    setOpen(false)
+  }
 
 
   return (
@@ -45,16 +48,31 @@ const createEvent = () => {
       <Modal onClose={() => setOpen(false)} isOpen={open} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Создать запись</ModalHeader>
+          <ModalHeader>Добавить слот</ModalHeader>
 
           <ModalBody>
-            <Input
-              placeholder="Выберите дату и время"
-              size="md"
-              type="datetime-local"
-              value={eventDateTime}
-              onChange={e=>setEventDateTime(e.target.value)}
-            />
+            <FormControl isRequired>
+              <FormLabel>Выберите дату и время начала работы</FormLabel>
+              <Input
+                size="md"
+                type="datetime-local"
+                required
+                placeholder="MM/DD/YYYY"
+                value={startScheduleDateTime}
+                onChange={e => setStartScheduleDateTime(e.target.value)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Выберите дату и время конца работы</FormLabel>
+              <Input
+                placeholder="Выберите дату и время конца работы"
+                size="md"
+                type="datetime-local"
+                required
+                value={endScheduleDateTime}
+                onChange={e => setEndScheduleDateTime(e.target.value)}
+              />
+            </FormControl>
             {/* <Select 
             placeholder='Услуга'
             size='md'
@@ -71,7 +89,7 @@ const createEvent = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='teal' onClick={() => createEvent()}>Записаться</Button>
+            <Button colorScheme='teal' onClick={() => createEvent()}>Добавить слот</Button>
             <Spacer />
             <Button colorScheme='red' onClick={() => setOpen(false)}>Закрыть</Button>
           </ModalFooter>
