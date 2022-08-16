@@ -16,7 +16,7 @@ export default function Example() {
       password
     })
       .then(function (response) {
-        window.localStorage.setItem('accessToken', response.data.userData.accessToken);
+        window.localStorage.setItem('accessToken', response.data.accessToken);
         window.localStorage.setItem('user', JSON.stringify(response.data.user));
       })
       .catch(function (error) {
