@@ -7,8 +7,6 @@ const masterReducer = (state = initState.master, action) => {
   switch (action.type) {
     case masterType.WORKINGSLOTS:
       return action.payload
-    case masterType.DISPLAYEDWEEK:
-      return action.payload
     default:
       return state //сохраняет состояние в память к-ра
   }

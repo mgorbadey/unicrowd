@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Error from '../../pages/Error/Error'
-import MasterCalendar from '../../pages/MasterCalendar'
+import MasterCalendar from '../../pages/Calendar/MasterCalendar'
 import Results from '../../pages/Results/Results'
 import Search from '../../pages/Search/Search'
 import Header from '../Header/Header'
