@@ -9,7 +9,7 @@ const masterReducer = (state = initState.master, action) => {
       return action.payload
     case masterType.ADDWORKINGSLOTS:
       console.log(action.payload);
-      return [...state, action.payload]
+      return [...state, ...action.payload]
     default:
       return state //сохраняет состояние в память к-ра
   }
