@@ -86,7 +86,7 @@ export default function CalendarComponent() {
   //РИСУЕМ РАБОЧИЕ СЛОТЫ------>
 
   //хардкод id мастера
-  const masterId = 1
+  const masterId = JSON.parse(localStorage.getItem('user')).id
 
   const workingSlots = useSelector((store) => store.master)
   useEffect(() => {

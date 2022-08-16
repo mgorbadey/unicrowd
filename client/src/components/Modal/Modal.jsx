@@ -15,10 +15,13 @@ import {
   Select
 } from '@chakra-ui/react'
 import $api from '../../http';
+import { useDispatch } from 'react-redux';
+import { addWorkingSlots } from '../../redux/actions/masterAction';
 
 
 const EventModal = ({ open, setOpen }) => {
 
+  const dispatch = useDispatch()
   const [startScheduleDateTime, setStartScheduleDateTime] = useState(Date.now())
   const [endScheduleDateTime, setEndScheduleDateTime] = useState(Date.now())
   const [serviceItem, setServiceItem] = useState('')
@@ -33,7 +36,9 @@ const EventModal = ({ open, setOpen }) => {
       masterId: user.id
     })
       .then(function (response) {
-        console.log(response);
+        console.log("С ФРОНТА",response.data);
+        dispatch(addWorkingSlots(response))
+
       })
       .catch(function (error) {
         console.log(error);
