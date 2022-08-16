@@ -1,28 +1,28 @@
-const { Router } = require('express')
-const router = Router()
+const { Router } = require("express");
+const router = Router();
 const {
   getAllWorkingSlots,
   createWorkingSlot,
   getAllClientEvents,
   changeStatus,
   deleteEvent,
-} = require('../controllers/masterController')
-const { PrismaClient } = require('@prisma/client')
+} = require("../controllers/masterController");
+const { PrismaClient } = require("@prisma/client");
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-router.get('/cityInfo', async (req, res) => {
-  const city = await prisma.city.findMany()
-  res.send({ city })
-})
+router.get("/cityInfo", async (req, res) => {
+  const city = await prisma.city.findMany();
+  res.send({ city });
+});
 
-router.get('/categoryInfo', async (req, res) => {
-  const category = await prisma.serviceCategory.findMany()
-  res.send({ category })
-})
+router.get("/categoryInfo", async (req, res) => {
+  const category = await prisma.serviceCategory.findMany();
+  res.send({ category });
+});
 
-router.post('/updateProfile', async (req, res) => {
-  const { id, city, textarea } = req.body
+router.post("/updateProfile", async (req, res) => {
+  const { id, city, textarea } = req.body;
 
   const updateUser = await prisma.user.update({
     where: {
@@ -31,16 +31,16 @@ router.post('/updateProfile', async (req, res) => {
     data: {
       info: textarea,
     },
-  })
+  });
 
-  res.json({ info: req.body })
-})
+  res.json({ info: req.body });
+});
 
-router.post('/cityUpdate', async (req, res) => {
-  let { id, city } = req.body
+router.post("/cityUpdate", async (req, res) => {
+  let { id, city } = req.body;
 
   if (city === null) {
-    city = '1'
+    city = "1";
   }
 
   const updateUser = await prisma.user.update({
@@ -50,13 +50,13 @@ router.post('/cityUpdate', async (req, res) => {
     data: {
       cityId: Number(city),
     },
-  })
+  });
 
-  res.json({ info: req.body })
-})
+  res.json({ info: req.body });
+});
 
-router.post('/modalTextUpdate', async (req, res) => {
-  const { id, textarea } = req.body
+router.post("/modalTextUpdate", async (req, res) => {
+  const { id, textarea } = req.body;
 
   const updateUser = await prisma.user.update({
     where: {
@@ -65,24 +65,24 @@ router.post('/modalTextUpdate', async (req, res) => {
     data: {
       info: textarea,
     },
-  })
+  });
 
-  res.json({ info: req.body })
-})
+  res.json({ info: req.body });
+});
 
-router.post('/createItem', async (req, res) => {
-  let { masterId, categoryId, title, duration, price } = req.body
+router.post("/createItem", async (req, res) => {
+  let { masterId, categoryId, title, duration, price } = req.body;
 
   if (categoryId === null) {
-    categoryId = 1
+    categoryId = 1;
   }
 
-  if (duration === '') {
-    duration = 30
+  if (duration === "") {
+    duration = 30;
   }
 
-  if (title === '') {
-    title = 'Здесь должно было быть название вашей услуги'
+  if (title === "") {
+    title = "Здесь должно было быть название вашей услуги";
   }
 
   const item = await prisma.serviceItem.create({
@@ -93,24 +93,24 @@ router.post('/createItem', async (req, res) => {
       masterId: Number(masterId),
       price: Number(price),
     },
-  })
+  });
 
-  res.json({ item })
-})
+  res.json({ item });
+});
 
-router.post('/updateItem', async (req, res) => {
-  let { masterId, categoryId, title, duration, price, itemId } = req.body
+router.post("/updateItem", async (req, res) => {
+  let { masterId, categoryId, title, duration, price, itemId } = req.body;
 
   if (categoryId === null) {
-    categoryId = 1
+    categoryId = 1;
   }
 
-  if (duration === '') {
-    duration = 30
+  if (duration === "") {
+    duration = 30;
   }
 
-  if (title === '') {
-    title = 'Здесь должно было быть название вашей услуги'
+  if (title === "") {
+    title = "Здесь должно было быть название вашей услуги";
   }
 
   const item = await prisma.serviceItem.update({
@@ -124,27 +124,27 @@ router.post('/updateItem', async (req, res) => {
       masterId: Number(masterId),
       price: Number(price),
     },
-  })
+  });
 
-  res.json({ item })
-})
+  res.json({ item });
+});
 
-router.post('/deleteItem', async (req, res) => {
-  const { itemId } = req.body
+router.post("/deleteItem", async (req, res) => {
+  const { itemId } = req.body;
 
-  console.log(req.body)
+  console.log(req.body);
 
   const item = await prisma.serviceItem.delete({
     where: {
       id: Number(itemId),
     },
-  })
+  });
 
-  res.json({ item })
-})
+  res.json({ item });
+});
 
-router.get('/:id/profile', async (req, res) => {
-  const { id } = req.params
+router.get("/:id/profile", async (req, res) => {
+  const { id } = req.params;
   // console.log(id)
   // res.json({username: 'Иван Пупкин', email: 'ivan@gmail.com', info: 'Всем привет, делаю массаж простаты', userPic: 'images/2022-08-11T02:53:46.766Z-velomarshruty-v-moskve-4-2048.jpeg'})
 
@@ -156,15 +156,15 @@ router.get('/:id/profile', async (req, res) => {
       include: {
         city: true,
       },
-    })
+    });
 
-  res.json({ username, email, info, userPic, city, role })
-})
+  res.json({ username, email, info, userPic, city, role });
+});
 
-router.get('/:id/events', async (req, res) => {
-  const { id } = req.params
+router.get("/:id/events", async (req, res) => {
+  const { id } = req.params;
 
-  console.log(id)
+  console.log(id);
 
   const eventInfo = await prisma.event.findMany({
     where: {
@@ -173,13 +173,13 @@ router.get('/:id/events', async (req, res) => {
     include: {
       serviceItem: true,
     },
-  })
+  });
 
-  res.json({ eventInfo })
-})
+  res.json({ eventInfo });
+});
 
-router.get('/:id/serviceItemInfo', async (req, res) => {
-  const { id } = req.params
+router.get("/:id/serviceItemInfo", async (req, res) => {
+  const { id } = req.params;
 
   const serviceItem = await prisma.serviceItem.findMany({
     where: {
@@ -188,16 +188,22 @@ router.get('/:id/serviceItemInfo', async (req, res) => {
     include: {
       serviceCategory: true,
     },
-  })
+  });
 
-  res.json({ serviceItem })
-})
+  res.json({ serviceItem });
+});
 
-router.route('/:id/schedules').get(getAllWorkingSlots)
+router
+  .route("/:id/schedules/week")
+  .get(getAllWorkingSlots);
 // .post(createWorkingSlot)
 
-router.route('/:id/events/week').get(getAllClientEvents)
+router
+  .route("/:id/events/week")
+  .get(getAllClientEvents);
 
-router.route('/:id/events/:id').post(changeStatus).delete(deleteEvent)
+router.route("/:id/events/:id")
+  .post(changeStatus)
+  .delete(deleteEvent);
 
-module.exports = router
+module.exports = router;

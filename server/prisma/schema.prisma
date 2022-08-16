@@ -54,6 +54,7 @@ model Schedule {
   updatedAt     DateTime @updatedAt
   startDateTime DateTime
   endDateTime   DateTime
+  startDateForFilter DateTime? @db.Date
   master        User     @relation(fields: [masterId], references: [id])
   masterId      Int
 }
@@ -85,6 +86,7 @@ model Event {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   startDateTime DateTime
+  startDateForFilter DateTime? @db.Date
   status        String
   client        User        @relation("client", fields: [clientId], references: [id])
   clientId      Int
