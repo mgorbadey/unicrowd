@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
 import headerLogo from './headerLogo.png'
 import { Button } from '@chakra-ui/react'
-import $api from '../../http/index';
+import $api from '../../http/index'
 
 const user = {
   name: 'Tom Cook',
@@ -13,15 +13,15 @@ const user = {
 }
 
 const logout = () => {
-  console.log('logout');
-  $api.post('http://localhost:3500/auth/logout', {})
-  .then(function () {
-    window.localStorage.removeItem('accessToken');
-    window.localStorage.removeItem('user');
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  $api
+    .post('http://localhost:3500/auth/logout', {})
+    .then(function () {
+      window.localStorage.removeItem('accessToken')
+      window.localStorage.removeItem('user')
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 }
 
 const userNavigation = [
@@ -30,59 +30,31 @@ const userNavigation = [
   { name: 'Выход', href: '#', func: logout },
 ]
 
-
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 const Header = () => {
   const navigate = useNavigate()
+
+  const authUser = window.localStorage.getItem('user')
+
   return (
     <Disclosure as='nav' className='bg-white'>
       {({ open }) => (
-        <>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-            <div className='flex items-center justify-between h-16'>
-              <div className='flex items-center'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-10 w-10 rounded-full cursor-pointer'
-                    src={headerLogo}
-                    alt='logo'
-                    onClick={() => navigate('/search', { replace: true })}
-                  />
-                </div>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='flex items-center justify-between h-16'>
+            <div className='flex items-center'>
+              <div className='flex-shrink-0'>
+                <img
+                  className='h-10 w-10 rounded-full cursor-pointer'
+                  src={headerLogo}
+                  alt='logo'
+                  onClick={() => navigate('/search', { replace: true })}
+                />
               </div>
-              <div>
-                <Button
-                  color='rgb(168, 163, 157)'
-                  cursor='pointer'
-                  bg='transparent'
-                  size='sm'
-                  _hover='none'
-                  _active='none'
-                  onClick={() => {
-                    navigate('/auth/registration', { replace: true })
-                  }}
-                >
-                  Регистрация
-                </Button>
-                <Button
-                  color='rgb(136, 161, 160)'
-                  cursor='pointer'
-                  bg='transparent'
-                  size='sm'
-                  ml='10px'
-                  _hover='none'
-                  _active='none'
-                  onClick={() => {
-                    navigate('/auth/login', { replace: true })
-                  }}
-                >
-                  Вход
-                </Button>
-              </div>
+            </div>
+            {authUser ? (
               <div className='hidden md:block'>
                 <div className='ml-4 flex items-center md:ml-6'>
                   {/* Profile dropdown */}
@@ -128,39 +100,39 @@ const Header = () => {
                   </Menu>
                 </div>
               </div>
-              <div className='-mr-2 flex md:hidden'>
-                {/* Mobile menu button */}
-                <Disclosure.Button className='inline-flex items-center justify-center p-2'>
-                  <span className='sr-only'>Open main menu</span>
-                  <div className='flex-shrink-0'>
-                    <img
-                      className='h-10 w-10 rounded-full'
-                      src={user.imageUrl}
-                      alt=''
-                    />
-                  </div>
-                </Disclosure.Button>
+            ) : (
+              <div>
+                <Button
+                  color='rgb(168, 163, 157)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/registration', { replace: true })
+                  }}
+                >
+                  Регистрация
+                </Button>
+                <Button
+                  color='rgb(136, 161, 160)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  ml='10px'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/login', { replace: true })
+                  }}
+                >
+                  Вход
+                </Button>
               </div>
-            </div>
+            )}
           </div>
-
-          <Disclosure.Panel className='md:hidden'>
-            <div className='pt-3 pb-3 border-t border-gray-700'>
-              <div className='px-2 space-y-1'>
-                {userNavigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as='a'
-                    href={item.href}
-                    className='block px-3 py-1 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </div>
-          </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   )
