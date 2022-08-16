@@ -13,6 +13,7 @@ import $api from '../../http'
 import Modal from '../Modal/Modal'
 import { getClientSlots } from '../../redux/actions/eventAction'
 import ClientEventCalendarWeekComponent from './ClientEventCalendarWeekComponent'
+const moment = require('moment');
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -61,18 +62,20 @@ export default function CalendarComponent() {
   // Сначала получаем текущую дату, чтобы отрисовать текущую неделю.
   // От нее же далее происходят все преобразования.
   let today = new Date()
+
+  //вычисляем текущее число дня и месяц для отображения сегодня
   let todayNum = today.getDate()
   let todayMonthNum = today.getMonth()
 
   const [date, setDateOfWeek] = useState(today)
-  //высчитываем месяц и год для даты из стейта, чтобы отрисовать в интерфейсе
+  //высчитываем месяц и год для даты из стейта, чтобы отрисовать в интерфейсе слева вверху
   let monthNum = new Date(date).getMonth()
   let monthName = monthsArr[monthNum]
   let yearNum = new Date(date).getFullYear()
 
   const dispatch = useDispatch()
 
-  //получаем неделю около даты
+  //получаем неделю, в которой находится дата из стейта (начинаем с сегодня)
   let wholeWeek = getDaysAroundGivenDay(date)
 
   function nextWeek() {
@@ -92,7 +95,7 @@ export default function CalendarComponent() {
   useEffect(() => {
     $api
       .get(
-        `http://localhost:3500/masters/${masterId}/schedules?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`
+        `http://localhost:3500/masters/${masterId}/schedules/week?startDate=${wholeWeek[0][2]}&endDate=${wholeWeek[6][2]}`
       )
       .then((response) => {
         const workingSlotsData = response.data
@@ -114,7 +117,7 @@ export default function CalendarComponent() {
   useEffect(() => {
     $api
       .get(
-        `http://localhost:3500/masters/${masterId}/events/week?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`
+        `http://localhost:3500/masters/${masterId}/events/week?startDate=${wholeWeek[0][2]}&endDate=${wholeWeek[6][2]}`
       )
       .then((response) => {
         const clientSlotsData = response.data

@@ -53,7 +53,6 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   const getEventInfo = async () => {
 
     const event = await $api.get(`http://localhost:3500/masters/${params.id}/events`)
-    console.log(event)
 
     setEventInfo(event)
 
