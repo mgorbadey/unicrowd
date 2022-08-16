@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
 import headerLogo from './headerLogo.png'
+import { Button } from '@chakra-ui/react'
 
 const user = {
   name: 'Tom Cook',
@@ -13,7 +14,7 @@ const user = {
 const userNavigation = [
   { name: 'Профиль', href: '#' },
   { name: 'Расписание', href: '#' },
-  { name: 'Выйти', href: '#' },
+  { name: 'Выход', href: '#' },
 ]
 
 function classNames(...classes) {
@@ -37,6 +38,35 @@ const Header = () => {
                     onClick={() => navigate('/search', { replace: true })}
                   />
                 </div>
+              </div>
+              <div>
+                <Button
+                  color='rgb(168, 163, 157)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/registration', { replace: true })
+                  }}
+                >
+                  Регистрация
+                </Button>
+                <Button
+                  color='rgb(136, 161, 160)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  ml='10px'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/login', { replace: true })
+                  }}
+                >
+                  Вход
+                </Button>
               </div>
               <div className='hidden md:block'>
                 <div className='ml-4 flex items-center md:ml-6'>
