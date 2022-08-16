@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   DotsHorizontalIcon,
@@ -12,6 +11,8 @@ import { getWorkingSlots } from "../../redux/actions/masterAction";
 import { useDispatch, useSelector } from "react-redux";
 import $api from "../../http"
 import Modal from "../Modal/Modal";
+import { getClientSlots } from "../../redux/actions/eventAction";
+import ClientEventCalendarWeekComponent from "./ClientEventCalendarWeekComponent";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,13 +24,24 @@ export default function CalendarComponent() {
   const containerOffset = useRef(null);
   const monthsArr = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
   const [open, setOpen] = useState(false)
-
+  
   const styles = {
     weekSpanCurrentDate: 'flex items-baseline',
     daySpanCurrentDate: 'ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white',
     weekSpanNotCurrentDate: '',
     daySpanNotCurrentDate: 'items-center justify-center font-semibold text-gray-900',
   }
+  
+  useEffect(() => {
+    // Set the container scroll position based on the current time.
+    const currentMinute = new Date().getHours() * 60;
+    container.current.scrollTop =
+      ((container.current.scrollHeight -
+        containerNav.current.offsetHeight -
+        containerOffset.current.offsetHeight) *
+        currentMinute) /
+      1440;
+  }, []);
 
   // Сначала получаем текущую дату, чтобы отрисовать текущую неделю. 
   // От нее же далее происходят все преобразования.
@@ -55,7 +67,7 @@ export default function CalendarComponent() {
   function previousWeek() {
     setDateOfWeek(new Date(date).setDate(new Date(date).getDate() - 7))
   }
-
+  
   //РИСУЕМ РАБОЧИЕ СЛОТЫ------>
 
   //хардкод id мастера
@@ -78,16 +90,26 @@ export default function CalendarComponent() {
   console.log('workingSlots', workingSlots);
   //<------ЗАКОНЧИЛИ РИСОВАТЬ РАБОЧИЕ СЛОТЫ
 
+  //РИСУЕМ КЛИЕНТСКИЕ ЗАПИСИ------>
+
+
+  const clientSlots = useSelector((store) => store.event);
   useEffect(() => {
-    // Set the container scroll position based on the current time.
-    const currentMinute = new Date().getHours() * 60;
-    container.current.scrollTop =
-      ((container.current.scrollHeight -
-        containerNav.current.offsetHeight -
-        containerOffset.current.offsetHeight) *
-        currentMinute) /
-      1440;
-  }, []);
+    $api
+      .get(`http://localhost:3500/masters/${masterId}/events?startDate=${wholeWeek[0][1]}&endDate=${wholeWeek[6][1]}`)
+      .then((response) => {
+        const clientSlotsData = response.data;
+        dispatch(getClientSlots(clientSlotsData));
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+      });
+  }, [date]);
+
+  console.log('clientSlots', clientSlots);
+  //<------ЗАКОНЧИЛИ РИСОВАТЬ КЛИЕНТСКИЕ ЗАПИСИ
+
 
 
   return (
@@ -660,6 +682,18 @@ export default function CalendarComponent() {
                       />
                     );
                   })}
+
+                {clientSlots &&
+                  clientSlots.map((clientSlot) => {
+                    return (
+                      <ClientEventCalendarWeekComponent
+                        key={clientSlot.id}
+                        clientSlot={clientSlot}
+                      />
+                    );
+                  })}
+                  
+
                 {/* <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '8 / span 12' }}>
                   <a
                     href="#"

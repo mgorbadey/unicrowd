@@ -245,33 +245,6 @@ export default function MasterProfile() {
                   </div>
                 </div>
               </div>
-
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='about'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  О себе
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center '>
-                  <textarea
-                    id='about'
-                    name='about'
-                    rows={3}
-                    disabled
-                    className='max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-area'
-                    defaultValue={info?.data?.info}
-                  />
-
-                  <button
-                    type='button'
-                    className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={() => setOpen(true)}
-                  >
-                    Изменить
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -299,35 +272,6 @@ export default function MasterProfile() {
                     className='max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
                     defaultValue={info?.data?.username}
                   />
-                </div>
-              </div>
-
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='email'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  Почта
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center'>
-                  <input
-                    id='email'
-                    name='email'
-                    type='email'
-                    disabled
-                    autoComplete='email'
-                    ref={clipboard.target}
-                    defaultValue={info?.data?.email}
-                    className='block max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
-                  />
-
-                  <button
-                    type='button'
-                    onClick={clipboard.copy}
-                    className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                  >
-                    Скопировать
-                  </button>
                 </div>
               </div>
 

@@ -196,6 +196,9 @@ export default function MasterProfile() {
       `http://localhost:3500/masters/${params.id}/serviceItemInfo`
     )
 
+    console.log(serviceItemInfo, 'serviceItemInfo')
+    console.log(categoryInfo, 'categoryInfo')
+
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)
     setInfo(userInfo)
@@ -810,7 +813,7 @@ export default function MasterProfile() {
                         name='email'
                         id='title'
                         className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-                        placeholder='Массаж простаты'
+                        defaultValue={categoryInfo?.data?.category}
                         onChange={(e) => setItemTitle(e.target.value)}
                       />
                     </div>
