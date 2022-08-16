@@ -132,8 +132,6 @@ router.post("/updateItem", async (req, res) => {
 router.post("/deleteItem", async (req, res) => {
   const { itemId } = req.body;
 
-  console.log(req.body);
-
   const item = await prisma.serviceItem.delete({
     where: {
       id: Number(itemId),
@@ -163,8 +161,6 @@ router.get("/:id/profile", async (req, res) => {
 
 router.get("/:id/events", async (req, res) => {
   const { id } = req.params;
-
-  console.log(id);
 
   const eventInfo = await prisma.event.findMany({
     where: {

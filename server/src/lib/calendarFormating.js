@@ -34,7 +34,6 @@ function eventPositionInCal(eventsArr) {
         ? el.startHours * calSlot + 8
         : (el.startHours + 1) * calSlot + 2,
   }));
-  console.log('calendDatacalendData', calendData)
   return calendData
 }
 
