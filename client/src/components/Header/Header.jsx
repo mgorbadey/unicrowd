@@ -1,43 +1,41 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
 import headerLogo from './headerLogo.png'
 import { Button } from '@chakra-ui/react'
 import $api from '../../http/index'
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
-const logout = () => {
-  $api
-    .post('http://localhost:3500/auth/logout', {})
-    .then(function () {
-      window.localStorage.removeItem('accessToken')
-      window.localStorage.removeItem('user')
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
-
-const userNavigation = [
-  { name: 'Профиль', href: '#' },
-  { name: 'Расписание', href: '#' },
-  { name: 'Выход', href: '#', func: logout },
-]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getNotAuthRender } from '../../redux/actions/localeStorageAction'
 
 const Header = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [authUser, setAuthUser] = useState({})
+  const render = useSelector((store) => store.localStorage)
 
-  const authUser = window.localStorage.getItem('user')
+  const logout = () => {
+    $api
+      .post('http://localhost:3500/auth/logout', {})
+      .then(function () {
+        window.localStorage.removeItem('accessToken')
+        window.localStorage.removeItem('user')
+        dispatch(getNotAuthRender())
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  const userNavigation = [
+    { name: 'Профиль' },
+    { name: 'Расписание' },
+    { name: 'Выход', func: logout },
+  ]
+
+  useEffect(() => {
+    setAuthUser(JSON.parse(window.localStorage.getItem('user')))
+  }, [render])
 
   return (
     <Disclosure as='nav' className='bg-white'>
@@ -62,11 +60,19 @@ const Header = () => {
                     <div>
                       <Menu.Button className='max-w-xs rounded-full flex items-center text-sm'>
                         <span className='sr-only'>Open user menu</span>
-                        <img
-                          className='h-8 w-8 rounded-full'
-                          src={user.imageUrl}
-                          alt='user'
-                        />
+                        {authUser?.userPic ? (
+                          <img
+                            className='h-8 w-8 rounded-full'
+                            src={`/${authUser.userPic}`}
+                            alt='user'
+                          />
+                        ) : (
+                          <img
+                            className='h-12 w-12 rounded-full'
+                            src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
+                            alt=''
+                          />
+                        )}
                       </Menu.Button>
                     </div>
                     <Transition
@@ -82,16 +88,12 @@ const Header = () => {
                         {userNavigation.map((item) => (
                           <Menu.Item key={item.name}>
                             {({ active }) => (
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  active ? '' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}
+                              <div
+                                className='block px-4 py-2 text-sm text-gray-700 cursor-pointer'
                                 onClick={item.func}
                               >
                                 {item.name}
-                              </a>
+                              </div>
                             )}
                           </Menu.Item>
                         ))}

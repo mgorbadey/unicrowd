@@ -196,8 +196,8 @@ export default function MasterProfile() {
       `http://localhost:3500/masters/${params.id}/serviceItemInfo`
     )
 
-    console.log(serviceItemInfo, 'serviceItemInfo')
-    console.log(categoryInfo, 'categoryInfo')
+    // console.log(serviceItemInfo, 'serviceItemInfo')
+    // console.log(categoryInfo, 'categoryInfo')
 
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)

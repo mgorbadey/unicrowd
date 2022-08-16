@@ -1,9 +1,12 @@
 import { Input, Button, Select } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import $api from '../../http/index'
+import { getAuthRender } from '../../redux/actions/localeStorageAction'
 
 export default function Example() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -22,6 +25,7 @@ export default function Example() {
       .then(function (response) {
         window.localStorage.setItem('accessToken', response.data.accessToken)
         window.localStorage.setItem('user', JSON.stringify(response.data.user))
+        dispatch(getAuthRender())
       })
       .catch(function (error) {
         console.log(error)

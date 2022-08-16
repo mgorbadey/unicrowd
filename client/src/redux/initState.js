@@ -2,7 +2,8 @@ const initState = {
   search: '',
   results: [],
   master: [],
-  event: []
+  event: [],
+  localStorage: false,
 }
 
 export default initState

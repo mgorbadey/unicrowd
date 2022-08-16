@@ -46,11 +46,19 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
               <div className='flex items-center px-4 py-4 sm:px-6'>
                 <div className='min-w-0 flex-1 flex items-center'>
                   <div className='flex-shrink-0'>
-                    <img
-                      className='h-12 w-12 rounded-full'
-                      src={`/${selectedMaster.userPic}`}
-                      alt='master'
-                    />
+                    {selectedMaster?.userPic ? (
+                      <img
+                        className='h-12 w-12 rounded-full'
+                        src={`/${selectedMaster.userPic}`}
+                        alt='master'
+                      />
+                    ) : (
+                      <img
+                        className='h-12 w-12 rounded-full'
+                        src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
+                        alt=''
+                      />
+                    )}
                   </div>
                   <div className='min-w-0 flex-1 items-center px-4 md:grid md:grid-cols-3 md:gap-4'>
                     <div>
