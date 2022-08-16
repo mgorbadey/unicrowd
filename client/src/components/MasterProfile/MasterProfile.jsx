@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useClipboard } from 'use-clipboard-copy'
 import $api from '../../http/index'
@@ -49,13 +48,14 @@ export default function MasterProfile() {
     } catch (error) {
       console.log(error.message)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [img])
 
   const modalTextUpdate = async (e) => {
     setOpen(false)
 
     try {
-      const res = await $api.post(
+      await $api.post(
         `http://localhost:3500/masters/modalTextUpdate`,
         { id: params.id, textarea }
       )
@@ -88,7 +88,7 @@ export default function MasterProfile() {
     setModalCity(false)
 
     try {
-      const res = await $api.post(`http://localhost:3500/masters/cityUpdate`, {
+      await $api.post(`http://localhost:3500/masters/cityUpdate`, {
         id: params.id,
         city: select,
       })
@@ -111,7 +111,7 @@ export default function MasterProfile() {
     }
 
     try {
-      const res = await $api.post(
+      await $api.post(
         `http://localhost:3500/masters/createItem`,
         item
       )
@@ -142,7 +142,7 @@ export default function MasterProfile() {
     }
 
     try {
-      const res = await $api.post(
+      await $api.post(
         `http://localhost:3500/masters/updateItem`,
         item
       )
@@ -166,7 +166,7 @@ export default function MasterProfile() {
     const item = { itemId }
 
     try {
-      const res = await $api.post(
+      await $api.post(
         `http://localhost:3500/masters/deleteItem`,
         item
       )
@@ -208,6 +208,7 @@ export default function MasterProfile() {
 
   React.useEffect(() => {
     getUserInfo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatar, render])
 
   return (

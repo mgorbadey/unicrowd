@@ -61,6 +61,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
 
   useEffect(() => {
     getEventInfo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

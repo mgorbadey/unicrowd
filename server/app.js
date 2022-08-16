@@ -36,7 +36,7 @@ const eventsRoute = require('./src/routes/eventRoute')
 
 app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use('/masters', masterRoute)
-app.use('/client', clientRoute)
+app.use('/clients', clientRoute)
 app.use('/auth', authRoute)
 app.use('/api', uploadRoute)
 app.use('/search', searchRoute)
