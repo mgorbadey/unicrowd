@@ -1,7 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient({
-  log: ['query'],
-});
+const prisma = new PrismaClient();
 const {eventPositionInCal} = require("../lib/calendarFormating")
 const moment = require('moment');
 
@@ -43,29 +41,9 @@ exports.getAllClientEvents = async (req, res) => {
   let startDate = new Date(req.query.startDate);
   let startDateFormatted = moment(startDate).format("YYYY-MM-DD");
 
-  console.log('endDate', endDate)
-  console.log('startDate', startDate)
-
-//   const allClientNotRaw = await prisma.user.findMany({
-//     include: {
-//       serviceItem: {
-//         include: {
-//           serviceCategory: true
-//         }
-//       }
-//     }
-//   });
-
-// console.log(allClientNotRaw)
-
   const result = await prisma.$queryRawUnsafe(`select e."id" as "id", e."startDateTime" as "startDateTime", (e."startDateTime" + (si."duration"||' minutes')::interval) as "endDateTime", e."status" as "status", e."clientId" as "clientId", u."username" as "clientName", e."masterId" as "masterId", sc."title" as "serviceCategoryTitle", si."title" as "serviceItemTitle", si."duration" as "serviceItemDuration" from "Event" e left join "ServiceItem" si on e."serviceItemId" = si.id left join "ServiceCategory" sc on sc.id = si."serviceCategoryId" left join "User" u on u.id = e."clientId" where e."masterId" = ${masterId} and e."startDateTime" >= Date('${startDateFormatted}') and (e."startDateTime" + (si."duration"||' minutes')::interval) <= Date('${endDateFormatted}') + (1||' days')::interval`)
-  
-  // const result = []
-  // console.log(result)
 
   let allClientEvents = eventPositionInCal(result)
-
-  // console.log(allClientEvents)
   
   res.json(allClientEvents);
 };
@@ -84,7 +62,6 @@ exports.changeStatus = async (req, res) => {
 };
 
 exports.deleteEvent = async (req, res) => {
-  console.log('milamilamila', req.params)
   let {id} = req.params;
   const deleteEvent = await prisma.event.delete({
     where: {
