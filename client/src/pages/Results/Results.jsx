@@ -28,7 +28,12 @@ const Results = () => {
       gap={4}
       p='10px'
     >
-      <GridItem rowSpan={1} colSpan={2} bg='rgb(33, 41, 54)' borderRadius='8px'>
+      <GridItem
+        rowSpan={1}
+        colSpan={2}
+        bg='rgb(255, 255, 255, 0.5)'
+        borderRadius='8px'
+      >
         <ResultForm />
         <ResultSelect
           selectedCategory={selectedCategory}
@@ -40,7 +45,12 @@ const Results = () => {
           setSelectedPrice={setSelectedPrice}
         />
       </GridItem>
-      <GridItem colSpan={4} bg='white' borderRightRadius='8px'>
+      <GridItem
+        colSpan={4}
+        bg='rgb(255, 255, 255, 0.5)'
+        borderRadius='8px'
+        overflow='scroll'
+      >
         <ListBody
           selectedCity={selectedCity}
           selectedCategory={selectedCategory}

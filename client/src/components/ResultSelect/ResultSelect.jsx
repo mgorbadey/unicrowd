@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 const ResultSelect = ({
   selectedCategory,
+
   selectedItem,
   setSelectedCity,
   setSelectedCategory,
@@ -11,7 +12,6 @@ const ResultSelect = ({
   setSelectedDuration,
   setSelectedPrice,
 }) => {
-  const string = useSelector((store) => store.search)
   const { categories, items, cities } = useSelector((store) => store.results)
   const [itemsByCategory, setItemsByCategory] = useState([])
 
@@ -41,14 +41,16 @@ const ResultSelect = ({
       setItemsByCategory(items)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory])
+  }, [selectedCategory, categories, items])
 
   return (
     <Stack spacing={3} p='20px'>
       <Select // CITIES
         placeholder='Город'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         onChange={(e) => setSelectedCity(e.target.value)}
       >
@@ -60,14 +62,15 @@ const ResultSelect = ({
       </Select>
       <Select //CATEGORIES
         placeholder='Категория'
-        // defaultValue={category.title === string ? true : false}
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
         {categories?.map((category) => (
-          <option key={category.id} value={category.title} defaultChecked={category.title === string ? true : false}>
+          <option key={category.id} value={category.title}>
             {category.title}
           </option>
         ))}
@@ -75,7 +78,9 @@ const ResultSelect = ({
       <Select // ITEMS
         placeholder='Услуга'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedCategory ? false : true}
         onChange={(e) => setSelectedItem(e.target.value)}
@@ -89,7 +94,9 @@ const ResultSelect = ({
       <Select // DURATION
         placeholder='Длительность'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedItem ? false : true}
         onChange={(e) => setSelectedDuration(e.target.value)}
@@ -102,7 +109,9 @@ const ResultSelect = ({
       <Select // PRICES
         placeholder='Цена'
         size='md'
-        color='rgb(33, 41, 54)'
+        color='rgb(108, 114, 127)'
+        border='2px solid white'
+        focusBorderColor='rgb(140, 175, 174)'
         bg='white'
         disabled={selectedItem ? false : true}
         onChange={(e) => setSelectedPrice(e.target.value)}

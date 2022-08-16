@@ -105,6 +105,46 @@ async function main() {
         cityId: 6,
       },
       {
+        username: 'Миша Мишин',
+        email: 'misha@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'master',
+        cityId: 7,
+      },
+      {
+        username: 'Вова Вовин',
+        email: 'vova@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'master',
+        cityId: 8,
+      },
+      {
+        username: 'Слава Славин',
+        email: 'slava@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'master',
+        cityId: 9,
+      },
+      {
+        username: 'Даня Данин',
+        email: 'danya@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'master',
+        cityId: 10,
+      },
+      {
+        username: 'Сережа Сережин',
+        email: 'serezha@yandex.ru',
+        password: 'password',
+        activationLink: 'http://localhost:3500/auth/activate/',
+        role: 'master',
+        cityId: 11,
+      },
+      {
         username: 'Алевтина',
         email: 'alya@yandex.ru',
         password: 'password',
@@ -133,6 +173,41 @@ async function main() {
 
   const items = await prisma.serviceItem.createMany({
     data: [
+      {
+        title: 'Макияж дневной',
+        duration: 90,
+        price: 4500,
+        masterId: 11,
+        serviceCategoryId: 6,
+      },
+      {
+        title: 'Макияж дневной',
+        duration: 120,
+        price: 7500,
+        masterId: 10,
+        serviceCategoryId: 6,
+      },
+      {
+        title: 'Макияж дневной',
+        duration: 60,
+        price: 2500,
+        masterId: 9,
+        serviceCategoryId: 6,
+      },
+      {
+        title: 'Макияж дневной',
+        duration: 90,
+        price: 5000,
+        masterId: 8,
+        serviceCategoryId: 6,
+      },
+      {
+        title: 'Макияж дневной',
+        duration: 30,
+        price: 1500,
+        masterId: 7,
+        serviceCategoryId: 6,
+      },
       {
         title: 'Макияж дневной',
         duration: 30,
@@ -348,7 +423,7 @@ async function main() {
         masterId: 1,
         serviceItemId: 14,
       },
-    ]
+    ],
   })
 
   const schedule = await prisma.schedule.createMany({

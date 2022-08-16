@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
+import headerLogo from './headerLogo.png'
+import { Button } from '@chakra-ui/react'
 import $api from '../../http/index';
 
 const user = {
@@ -25,7 +27,7 @@ const logout = () => {
 const userNavigation = [
   { name: 'Профиль', href: '#' },
   { name: 'Расписание', href: '#' },
-  { name: 'Выйти', href: '#', func: logout },
+  { name: 'Выход', href: '#', func: logout },
 ]
 
 
@@ -37,7 +39,7 @@ function classNames(...classes) {
 const Header = () => {
   const navigate = useNavigate()
   return (
-    <Disclosure as='nav' className='bg-gray-800'>
+    <Disclosure as='nav' className='bg-white'>
       {({ open }) => (
         <>
           <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -45,24 +47,53 @@ const Header = () => {
               <div className='flex items-center'>
                 <div className='flex-shrink-0'>
                   <img
-                    className='h-8 w-8'
-                    src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
-                    alt='Workflow'
+                    className='h-10 w-10 rounded-full cursor-pointer'
+                    src={headerLogo}
+                    alt='logo'
                     onClick={() => navigate('/search', { replace: true })}
                   />
                 </div>
+              </div>
+              <div>
+                <Button
+                  color='rgb(168, 163, 157)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/registration', { replace: true })
+                  }}
+                >
+                  Регистрация
+                </Button>
+                <Button
+                  color='rgb(136, 161, 160)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  ml='10px'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/auth/login', { replace: true })
+                  }}
+                >
+                  Вход
+                </Button>
               </div>
               <div className='hidden md:block'>
                 <div className='ml-4 flex items-center md:ml-6'>
                   {/* Profile dropdown */}
                   <Menu as='div' className='ml-3 relative'>
                     <div>
-                      <Menu.Button className='max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
+                      <Menu.Button className='max-w-xs rounded-full flex items-center text-sm'>
                         <span className='sr-only'>Open user menu</span>
                         <img
                           className='h-8 w-8 rounded-full'
                           src={user.imageUrl}
-                          alt=''
+                          alt='user'
                         />
                       </Menu.Button>
                     </div>
@@ -82,7 +113,7 @@ const Header = () => {
                               <a
                                 href={item.href}
                                 className={classNames(
-                                  active ? 'bg-gray-100' : '',
+                                  active ? '' : '',
                                   'block px-4 py-2 text-sm text-gray-700'
                                 )}
                                 onClick={item.func}

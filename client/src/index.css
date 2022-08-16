@@ -1,9 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap'); */
 
 html,
 body {
+  font-family: 'Roboto Flex', sans-serif !important;
+  /* font-family: 'Montserrat', sans-serif !important; */
   height: 100%;
 }
 
@@ -16,21 +20,21 @@ body {
 }
 
 .py-2 {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .mt-style {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .text-area {
-    padding-left: 0.5rem;
+  padding-left: 0.5rem;
 }
 
 .photo-area {
-    padding-right: 7.5rem;
+  padding-right: 7.5rem;
 }
 
 .alert-area {
-    margin-top: 10rem;
+  margin-top: 10rem;
 }
