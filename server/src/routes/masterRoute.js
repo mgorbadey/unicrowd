@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const router = Router()
-const {getAllWorkingSlots, createWorkingSlot} = require("../controllers/masterController")
+const {getAllWorkingSlots, createWorkingSlot, getAllClientEvents, changeStatus, deleteEvent} = require("../controllers/masterController")
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -27,22 +27,22 @@ router.get('/:id/profile', async (req, res) => {
     res.json({username, email, info, userPic, city, role})
 })
 
-router.get('/:id/events', async (req, res) => {
-    const { id } = req.params
-
-    console.log(id)
-
-    const eventInfo = await prisma.event.findMany({
-        where: {
-            masterId: Number(id)
-        },
-        include: {
-            serviceItem: true
-        }
-    })
-
-    res.json({eventInfo})
-})
+// router.get('/:id/events', async (req, res) => {
+//     const { id } = req.params
+// 
+//     console.log(id)
+// 
+//     const eventInfo = await prisma.event.findMany({
+//         where: {
+//             masterId: Number(id)
+//         },
+//         include: {
+//             serviceItem: true
+//         }
+//     })
+// 
+//     res.json({eventInfo})
+// })
 
 router.get('/cityInfo', async (req, res) => {
     const city = await prisma.city.findMany()
@@ -191,5 +191,15 @@ router.post('/deleteItem', async (req, res) => {
 
     res.json({item})
 })
+
+router
+  .route('/:id/events')
+  .get(getAllClientEvents)
+
+router
+  .route('/:id/events/:id')
+  .post(changeStatus)
+  .delete(deleteEvent)
+
 
 module.exports = router
