@@ -39,6 +39,7 @@ export default function CalendarComponent() {
     'Декабрь',
   ]
   const [open, setOpen] = useState(false)
+  const [send, setSend] = useState(false)
 
   const styles = {
     weekSpanCurrentDate: 'flex items-baseline',
@@ -55,7 +56,6 @@ export default function CalendarComponent() {
     setAuthUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
 
-  console.log('authUser', authUser)
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -119,7 +119,7 @@ export default function CalendarComponent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date])
 
-  console.log('workingSlots', workingSlots)
+  // console.log('workingSlots', workingSlots)
   //<------ЗАКОНЧИЛИ РИСОВАТЬ РАБОЧИЕ СЛОТЫ
 
   //РИСУЕМ КЛИЕНТСКИЕ ЗАПИСИ------>
@@ -139,9 +139,9 @@ export default function CalendarComponent() {
         console.log(error)
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date])
+  }, [date, send])
 
-  console.log('clientSlots', clientSlots)
+  // console.log('clientSlots', clientSlots)
   //<------ЗАКОНЧИЛИ РИСОВАТЬ КЛИЕНТСКИЕ ЗАПИСИ
 
   return (
@@ -808,6 +808,8 @@ export default function CalendarComponent() {
                   workingSlots.map((workingSlot) => {
                     return (
                       <EventCalendarWeekComponent
+                      send={send}
+                      setSend={setSend}
                         key={workingSlot.id}
                         workingSlot={workingSlot}
                         authUser={authUser}

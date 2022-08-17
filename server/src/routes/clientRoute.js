@@ -110,7 +110,6 @@ router.post('/deleteItem', async (req, res) => {
 
 router.post('/event/schedule', async (req, res) => {
     const {masterId, clientId, serviceItemId, startDateTime, startDateForFilter} = req.body
-    console.log(req.body)
 
     const event = await prisma.event.create({
         data: {
@@ -122,8 +121,10 @@ router.post('/event/schedule', async (req, res) => {
             status: 'new'
         }
     })
+    const item = await prisma.serviceItem.findMany({where: {id: event.serviceItemId}})[0]
+    const formatData = eventPositionInCal([event])
 
-    res.json(eventPositionInCal([event]))
+    res.json()
 
     console.log(event)
 })
