@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useClipboard } from 'use-clipboard-copy'
 import $api from '../../http/index'
 import { Fragment, useState } from 'react'
@@ -14,8 +14,11 @@ import {
   Select,
   Textarea,
 } from '@chakra-ui/react'
+import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 export default function MasterProfile() {
+  const navigate = useNavigate()
+
   const [img, setImg] = useState(null)
   const [avatar, setAvatar] = useState(null)
   const [info, setInfo] = useState({})
@@ -227,6 +230,15 @@ export default function MasterProfile() {
             <div className=' px-4 py-8 sm:px-6'>
               <div className='flex justify-between items-center flex-wrap sm:flex-nowrap'>
                 <div className='flex items-center'>
+                  <div
+                    className='cursor-pointer mr-4'
+                    onClick={() => navigate('/results', { replace: true })}
+                  >
+                    <ChevronLeftIcon
+                      className='h-5 w-5 text-gray-400'
+                      aria-hidden='true'
+                    />
+                  </div>
                   <div className='flex-shrink-0'>
                     {info?.data?.userPic ? (
                       <img
@@ -375,7 +387,7 @@ export default function MasterProfile() {
                   </GridItem>
                   {/* ПЕРС ИНФО */}
                   <GridItem rowSpan={1} colSpan={24} borderRadius='8px'>
-                    <Flex minH='100%' ml='95px' align='center'>
+                    <Flex minH='100%' ml='50px' align='center'>
                       <h3
                         className='text-lg leading-6 font-medium text-gray-900'
                         style={{
