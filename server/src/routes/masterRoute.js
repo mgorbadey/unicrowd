@@ -194,7 +194,6 @@ router.get("/:id/serviceItemInfo", async (req, res) => {
 router
   .route("/:id/schedules/week")
   .get(getAllWorkingSlots)
-// .post(createWorkingSlot)
 
 router
   .route("/:id/schedules/:id")
