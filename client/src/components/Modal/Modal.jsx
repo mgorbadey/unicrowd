@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   Button,
   Modal,
@@ -36,8 +35,7 @@ const EventModal = ({ open, setOpen }) => {
       masterId: user.id
     })
       .then(function (response) {
-        console.log("С ФРОНТА",response.data);
-        dispatch(addWorkingSlots(response))
+        dispatch(addWorkingSlots(response.data))
 
       })
       .catch(function (error) {
