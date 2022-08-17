@@ -143,6 +143,10 @@ router.post("/deleteItem", async (req, res) => {
   res.json({ item });
 });
 
+router
+  .route("/:id/schedules/:id")
+  .delete(deleteWorkingSlot)
+
 router.get("/:id/profile", async (req, res) => {
   const { id } = req.params;
   // console.log(id)
@@ -191,13 +195,11 @@ router.get("/:id/serviceItemInfo", async (req, res) => {
   res.json({ serviceItem });
 });
 
+
 router
   .route("/:id/schedules/week")
   .get(getAllWorkingSlots)
 
-router
-  .route("/:id/schedules/:id")
-  .get(deleteWorkingSlot)
 
 router
   .route("/:id/schedules/:id/status")

@@ -10,6 +10,14 @@ const masterReducer = (state = initState.master, action) => {
     case masterType.ADDWORKINGSLOTS:
       console.log(action.payload);
       return [...state, ...action.payload]
+    case masterType.DELETEWORKINGSLOTS:
+      let result =[];
+      for (let i = 0; i < state.length; i++) {
+        if (state[i].id !== action.payload) {
+          result.push(state[i])
+        }
+      }
+      return result
     default:
       return state //сохраняет состояние в память к-ра
   }

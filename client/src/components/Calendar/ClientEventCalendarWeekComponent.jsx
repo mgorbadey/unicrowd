@@ -3,6 +3,7 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { useDispatch } from "react-redux";
 import { approveClientSlot, deleteClientSlot } from "../../redux/actions/eventAction";
 import $api from "../../http";
+import { Stack } from "@chakra-ui/react";
 
 
 export default function ClientEventCalendarWeekComponent({ clientSlot }) {
@@ -68,7 +69,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot }) {
           <p className={`order-1 font-semibold text-${style[clientSlot.status]}-700`}>
             {clientSlot.clientName}
           </p>
-          <div className="inline-flex">
+          <Stack spacing={1} direction="row" align="right">
           <p className={`text-${style[clientSlot.status]}-500 group-hover:text-${style[clientSlot.status]}-700 py-1`}>
             <time dateTime={clientSlot.startDateTime}>
               {HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-
@@ -95,7 +96,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot }) {
           ):(
             ""
             )}
-            </div>
+            </Stack>
         </a>
       </li>
     </>

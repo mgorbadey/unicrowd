@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 import $api from "../../http/index";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Button, Stack } from "@chakra-ui/react";
+import { deleteClientSlot } from "../../redux/actions/eventAction";
+import { deleteWorkingSlots } from "../../redux/actions/masterAction";
+import { useDispatch } from "react-redux";
 const moment = require("moment");
 // import { Modal, useDisclosure } from '@chakra-ui/react'
 
@@ -72,7 +75,8 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   }, []);
 
   //залогиненный юзер
-  const userRole = JSON.parse(localStorage.getItem("user")).role;
+  const userRole = JSON.parse(localStorage.getItem("user")).role || null;
+  const dispatch = useDispatch();
 
   function getWorkingSlotStatus(e) {
     e.preventDefault();
@@ -103,7 +107,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
       )
       .then((response) => {
         console.log("deleted!!!");
-        // dispatch(deleteClientSlot(clientSlot.id))
+        dispatch(deleteWorkingSlots(workingSlot.id))
       })
       .catch((error) => {
         // handle error
