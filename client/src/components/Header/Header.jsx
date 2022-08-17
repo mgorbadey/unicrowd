@@ -15,6 +15,7 @@ const Header = () => {
   const render = useSelector((store) => store.localStorage)
 
   const logout = () => {
+    navigate('/search', { replace: false })
     $api
       .post('http://localhost:3500/auth/logout', {})
       .then(function () {
@@ -27,11 +28,29 @@ const Header = () => {
       })
   }
 
-  const userNavigation = [
-    { name: 'Профиль' },
-    { name: 'Расписание' },
-    { name: 'Выход', func: logout },
-  ]
+  const getProfile = () => {
+    if (authUser?.role === 'master')
+      navigate(`/masters/${authUser.id}/profile`, { replace: false })
+    if (authUser?.role === 'client')
+      navigate(`/clients/${authUser.id}/profile`, { replace: false })
+  }
+
+  const getSchedule = () => {
+    if (authUser?.role === 'master')
+      navigate(`/masters/${authUser.id}/schedules`, { replace: false })
+  }
+
+  const userNavigation =
+    authUser?.role === 'master'
+      ? [
+          { name: 'Профиль', func: getProfile },
+          { name: 'Расписание', func: getSchedule },
+          { name: 'Выход', func: logout },
+        ]
+      : [
+          { name: 'Профиль', func: getProfile },
+          { name: 'Выход', func: logout },
+        ]
 
   useEffect(() => {
     setAuthUser(JSON.parse(window.localStorage.getItem('user')))
@@ -48,9 +67,23 @@ const Header = () => {
                   className='h-10 w-10 rounded-full cursor-pointer'
                   src={headerLogo}
                   alt='logo'
-                  onClick={() => navigate('/search', { replace: true })}
+                  onClick={() => navigate('/search', { replace: false })}
                 />
               </div>
+              <Button
+                color='rgb(136, 161, 160)'
+                cursor='pointer'
+                bg='transparent'
+                size='sm'
+                ml='10px'
+                _hover='none'
+                _active='none'
+                onClick={() => {
+                  navigate('/results', { replace: false })
+                }}
+              >
+                Поиск
+              </Button>
             </div>
             {authUser ? (
               <div className='hidden md:block'>
@@ -112,7 +145,7 @@ const Header = () => {
                   _hover='none'
                   _active='none'
                   onClick={() => {
-                    navigate('/auth/registration', { replace: true })
+                    navigate('/auth/registration', { replace: false })
                   }}
                 >
                   Регистрация
@@ -126,7 +159,7 @@ const Header = () => {
                   _hover='none'
                   _active='none'
                   onClick={() => {
-                    navigate('/auth/login', { replace: true })
+                    navigate('/auth/login', { replace: false })
                   }}
                 >
                   Вход

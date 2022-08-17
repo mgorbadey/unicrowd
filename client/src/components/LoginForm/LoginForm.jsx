@@ -95,7 +95,7 @@ export default function Example() {
                 size='md'
                 onClick={(e) => {
                   login(e)
-                  navigate('/search', { replace: true })
+                  navigate('/search', { replace: false })
                 }}
               >
                 Войти
