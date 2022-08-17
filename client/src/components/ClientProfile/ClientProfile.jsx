@@ -267,7 +267,7 @@ export default function MasterProfile() {
                       bg='white'
                       w='150px'
                       size='md'
-                      onClick={() => navigate('/results', { replace: true })}
+                      onClick={() => navigate('/results', { replace: false })}
                     >
                       Новая запись
                     </Button>
