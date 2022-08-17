@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const { PrismaClient } = require('@prisma/client')
+const { eventPositionInCal } = require("../lib/calendarFormating")
 const prisma = new PrismaClient()
 
 router.get('/:id/profile', async (req, res) => {
@@ -108,17 +109,21 @@ router.post('/deleteItem', async (req, res) => {
 })
 
 router.post('/event/schedule', async (req, res) => {
-    const {masterId, clientId, serviceItemId, startDateTime} = req.body
+    const {masterId, clientId, serviceItemId, startDateTime, startDateForFilter} = req.body
+    console.log(req.body)
 
     const event = await prisma.event.create({
         data: {
             startDateTime,
+            startDateForFilter,
             masterId: Number(masterId),
             clientId: Number(clientId),
             serviceItemId: Number(serviceItemId),
-            status: 'Not approved'
+            status: 'new'
         }
     })
+
+    res.json(eventPositionInCal([event]))
 
     console.log(event)
 })
