@@ -206,7 +206,7 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser }) {
       <li
         className={`relative mt-px flex col-start-${workingSlot.weekDay}`}
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
-        onClick={userRole === 'master' ? null : () => getWorkingSlotsId(workingSlot.id)}
+        onClick={authUser?.role === 'master' ? null : () => getWorkingSlotsId(workingSlot.id)}
 
       >
         <div className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100">
