@@ -1,6 +1,7 @@
 import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { Select } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import $api from '../../http/index'
 import {
@@ -27,10 +28,25 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [openEvent, setOpenEvent] = useState(false)
-  const [eventInfo, setEventInfo] = useState([])
+  const [serviceInfo, setServiceInfo] = useState([])
   const [categoryTitle, setCategoryTitle] = useState(null)
   const [select, setSelect] = useState(null)
   const [time, setTime] = useState(null)
+  const [slotId, setSlotId] = useState(null)
+  const [slotInfo, setSlotInfo] = useState(null)
+  const [timeSlotInfo, setTimeSlotInfo] = useState(null)
+  const [startTime, setStartTime] = useState(null)
+  const [endTime, setEndTime] = useState(null)
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+  const [duration, setDuration] = useState(1)
+
+  // const HoursCal = {
+  //   startHours: new Date(startDate).getHours(),
+  //   startMinutes: String(new Date(startDate).getMinutes()).padStart(2, "0"),
+  //   endHours: new Date(endDate).getHours(),
+  //   endMinutes: String(new Date(endDate).getMinutes()).padStart(2, "0"),
+  // }
 
   const params = useParams()
 
@@ -39,51 +55,106 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
     const el = e.target.childNodes[index]
     const option = el.getAttribute('id')
 
-    eventInfo.data.eventInfo.forEach((el) => {
-      if (el.id === option) {
-        setCategoryTitle(el.serviceItem.title)
+    setSelect(option)
+
+    serviceInfo?.data?.serviceItem.forEach((el) => {
+      if (el.id === Number(option)) {
+        if (el.duration === 60) {
+          setDuration(1) 
+        }
+        if (el.duration === 90) {
+          setDuration(1.5)
+        }
+        if (el.duration === 120) {
+          setDuration(2)
+        }
       }
     })
 
-    setSelect(option)
+    createDateArray(startTime, endTime, duration)
   }
 
   const onChangeTime = (e) => {
     const index = e.target.selectedIndex
     const el = e.target.childNodes[index]
-    const option = el.getAttribute('id')
+    const option = el.getAttribute('value')
 
-    setTime(option)
+    const newDate = startDate.replace(startDate.slice(11,16), option)
+
+    setTime(newDate)
+  }
+
+  const createDateArray = (startDate, endDate, duration) => {
+    console.log(startDate, endDate)
+    let array = [startDate]
+    const endDateLength = Number(endDate.slice(0,2)) - 1
+
+    for (let i = 0; i < endDateLength; i++) {
+      if (array[i][0] === '0') {
+        let secondDate = +array[i][1] + duration
+        let newDate = array[i].replace(array[i][1], secondDate.toString())
+        if (newDate === '010:00') {
+          newDate = '10:00'
+        }
+        array.push(newDate)
+      } 
+      
+      if (array[i][0] !== '0') {
+        let secondDate = +array[i].slice(0,2) + duration
+        let newDate = array[i].replace(array[i].slice(0,2), secondDate.toString())
+        array.push(newDate)
+      }
+
+      if (array[i] === endDate) {
+        break
+      }
+    }
+
+    setTimeSlotInfo(array)
+  }
+
+  const getWorkingSlotsId = async (id) => {
+    onOpen()
+    setSlotId(id)
+
+    const schedule = await $api.get(`http://localhost:3500/masters/${id}/scheduleInfo`)
+
+    setSlotInfo(schedule.data.scheduleInfo)
+    setStartDate(schedule.data.scheduleInfo.startDateTime)
+    setEndTime(schedule.data.scheduleInfo.endDateTime)
+    setStartTime(schedule.data.scheduleInfo.startDateTime.slice(11,16))
+    setEndTime(schedule.data.scheduleInfo.endDateTime.slice(11,16))
+
   }
 
   const clientCreateEvent = async (id) => {
+    onClose()
     const userId = JSON.parse(localStorage.getItem('user'))
     console.log(userId)
-    // const eventInfo = { masterId: params.id, clientId: userId, serviceItemId: select.id}
+    const eventInfo = { masterId: params.id, clientId: userId.id, serviceItemId: select, startDateTime: time}
 
-    // $api.post('/client/event/schedule', eventInfo)
-
+    $api.post('/client/event/schedule', eventInfo)
   }
 
   const getEventInfo = async () => {
+    const serviceItemInfo = await $api.get(
+      `http://localhost:3500/masters/${params.id}/serviceItemInfo`
+    )
 
-    const event = await $api.get(`http://localhost:3500/masters/${params.id}/events`)
-    console.log(event)
-
-    setEventInfo(event)
+    setServiceInfo(serviceItemInfo)
 
   }
 
   useEffect(() => {
     getEventInfo()
-  }, [])
+  }, [timeSlotInfo])
 
   return (
     <>
       <li
         className={`relative mt-px flex sm:col-start-${workingSlot.weekDay}`}
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
-        onClick={onOpen}
+        onClick={() => getWorkingSlotsId(workingSlot.id)}
       >
         <a
           href='#'
@@ -99,17 +170,28 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Запишитесь на услугу</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            {/* <Lorem count={2} /> */}
+            <Select placeholder='Выберите услугу' onChange={onChangeHandler}>
+              {serviceInfo?.data?.serviceItem.map((el) => (
+                <option id={el.id} value={el.title}>{el.title}</option>
+              ))}
+            </Select>
+
+            {timeSlotInfo ? <Select placeholder='Выберите время' onChange={onChangeTime}>
+              {timeSlotInfo?.map((el) => (
+                <option value={el}>{el}</option>
+              ))}
+            </Select> : null}
+
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
-              Save
+            <Button colorScheme='blue' mr={3} onClick={clientCreateEvent}>
+              Записаться
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>Отмена</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

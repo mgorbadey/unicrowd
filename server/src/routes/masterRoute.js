@@ -27,6 +27,19 @@ router.get('/:id/profile', async (req, res) => {
     res.json({username, email, info, userPic, city, role})
 })
 
+router.get('/:id/scheduleInfo', async (req, res) => {
+    const {id} = req.params
+    console.log(id)
+
+    const scheduleInfo = await prisma.schedule.findFirst({
+        where: {
+            id: Number(id)
+        }
+    })
+
+    res.json({scheduleInfo})
+})
+
 // router.get('/:id/events', async (req, res) => {
 //     const { id } = req.params
 // 
