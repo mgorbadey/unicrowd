@@ -6,7 +6,7 @@ import $api from "../../http";
 import { Stack } from "@chakra-ui/react";
 
 
-export default function ClientEventCalendarWeekComponent({ clientSlot }) {
+export default function ClientEventCalendarWeekComponent({ clientSlot, authUser }) {
   const style = {
     new: 'blue',
     approved: 'pink',
@@ -59,8 +59,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot }) {
         className={`relative mt-px flex col-start-${clientSlot.weekDay}`}
         style={{ gridRow: `${clientSlot.gridRow} / span ${clientSlot.span}` }}
       >
-        <a
-          href={`/masters/${clientSlot.masterId}/events/${clientSlot.id}`}
+        <div
           className={`group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-${style[clientSlot.status]}-50 p-2 text-xs leading-5 hover:bg-${style[clientSlot.status]}-100`}
         >
           <p className={`order-1 font-semibold text-${style[clientSlot.status]}-700`}>
@@ -97,7 +96,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot }) {
             ""
             )}
             </Stack>
-        </a>
+        </div>
       </li>
     </>
   );

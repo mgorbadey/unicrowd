@@ -48,6 +48,14 @@ export default function CalendarComponent() {
       'items-center justify-center font-semibold text-gray-900',
   }
 
+  const [authUser, setAuthUser] = useState({});
+
+  useEffect(() => {
+    setAuthUser(JSON.parse(window.localStorage.getItem("user")));
+  }, []);
+
+  console.log('authUser', authUser)
+
   useEffect(() => {
     // Set the container scroll position based on the current time.
     const currentMinute = new Date().getHours() * 60
@@ -800,6 +808,7 @@ export default function CalendarComponent() {
                       <EventCalendarWeekComponent
                         key={workingSlot.id}
                         workingSlot={workingSlot}
+                        authUser={authUser}
                       />
                     )
                   })}
@@ -810,6 +819,7 @@ export default function CalendarComponent() {
                       <ClientEventCalendarWeekComponent
                         key={clientSlot.id}
                         clientSlot={clientSlot}
+                        authUser={authUser}
                       />
                     )
                   })}
