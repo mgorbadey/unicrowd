@@ -60,7 +60,8 @@ const EventModal = ({ open, setOpen }) => {
                 size="md"
                 type="datetime-local"
                 required
-                placeholder="MM/DD/YYYY"
+                placeholder="MM/DD/YYYYsadasd"
+                defaultValue='sadasdasd'
                 value={startScheduleDateTime}
                 onChange={e => setStartScheduleDateTime(e.target.value)}
               />

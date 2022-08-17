@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 const ResultSelect = ({
   selectedCategory,
-
   selectedItem,
   setSelectedCity,
   setSelectedCategory,
@@ -12,6 +11,7 @@ const ResultSelect = ({
   setSelectedDuration,
   setSelectedPrice,
 }) => {
+  // const string = useSelector((store) => store.search)
   const { categories, items, cities } = useSelector((store) => store.results)
   const [itemsByCategory, setItemsByCategory] = useState([])
 

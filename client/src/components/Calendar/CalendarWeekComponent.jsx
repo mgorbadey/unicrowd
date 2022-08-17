@@ -13,6 +13,7 @@ import $api from '../../http'
 import Modal from '../Modal/Modal'
 import { getClientSlots } from '../../redux/actions/eventAction'
 import ClientEventCalendarWeekComponent from './ClientEventCalendarWeekComponent'
+import {useParams} from 'react-router-dom'
 const moment = require('moment');
 
 function classNames(...classes) {
@@ -90,7 +91,8 @@ export default function CalendarComponent() {
 
   //хардкод id мастера
   // const masterId = JSON.parse(localStorage.getItem('user')).id
-  const masterId=1
+  const params = useParams()
+  const masterId = params.id
 
   const workingSlots = useSelector((store) => store.master)
   useEffect(() => {

@@ -35,22 +35,10 @@ const Header = () => {
       navigate(`/clients/${authUser.id}/profile`, { replace: false })
   }
 
-  const getSchedule = () => {
-    if (authUser?.role === 'master')
-      navigate(`/masters/${authUser.id}/schedules`, { replace: false })
-  }
-
-  const userNavigation =
-    authUser?.role === 'master'
-      ? [
-          { name: 'Профиль', func: getProfile },
-          { name: 'Расписание', func: getSchedule },
-          { name: 'Выход', func: logout },
-        ]
-      : [
-          { name: 'Профиль', func: getProfile },
-          { name: 'Выход', func: logout },
-        ]
+  const userNavigation = [
+    { name: 'Профиль', func: getProfile },
+    { name: 'Выход', func: logout },
+  ]
 
   useEffect(() => {
     setAuthUser(JSON.parse(window.localStorage.getItem('user')))
@@ -70,20 +58,39 @@ const Header = () => {
                   onClick={() => navigate('/search', { replace: false })}
                 />
               </div>
-              <Button
-                color='rgb(136, 161, 160)'
-                cursor='pointer'
-                bg='transparent'
-                size='sm'
-                ml='10px'
-                _hover='none'
-                _active='none'
-                onClick={() => {
-                  navigate('/results', { replace: false })
-                }}
-              >
-                Поиск
-              </Button>
+              {authUser?.role === 'master' ? (
+                <Button
+                  color='rgb(136, 161, 160)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  ml='10px'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate(`/masters/${authUser.id}/schedules`, {
+                      replace: false,
+                    })
+                  }}
+                >
+                  Календарь
+                </Button>
+              ) : (
+                <Button
+                  color='rgb(136, 161, 160)'
+                  cursor='pointer'
+                  bg='transparent'
+                  size='sm'
+                  ml='10px'
+                  _hover='none'
+                  _active='none'
+                  onClick={() => {
+                    navigate('/results', { replace: false })
+                  }}
+                >
+                  Поиск
+                </Button>
+              )}
             </div>
             {authUser ? (
               <div className='hidden md:block'>
