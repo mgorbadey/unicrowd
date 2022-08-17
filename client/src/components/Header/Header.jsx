@@ -1,59 +1,108 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom'
 import headerLogo from './headerLogo.png'
 import { Button } from '@chakra-ui/react'
-import $api from '../../http/index';
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
-const logout = () => {
-  console.log('logout');
-  $api.post('http://localhost:3500/auth/logout', {})
-  .then(function () {
-    window.localStorage.removeItem('accessToken');
-    window.localStorage.removeItem('user');
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
-
-const userNavigation = [
-  { name: 'Профиль', href: '#' },
-  { name: 'Расписание', href: '#' },
-  { name: 'Выход', href: '#', func: logout },
-]
-
-
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import $api from '../../http/index'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { renderAuth } from '../../redux/actions/localeStorageAction'
 
 const Header = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [authUser, setAuthUser] = useState({})
+  const render = useSelector((store) => store.localStorage)
+
+  const logout = () => {
+    $api
+      .post('http://localhost:3500/auth/logout', {})
+      .then(function () {
+        window.localStorage.removeItem('accessToken')
+        window.localStorage.removeItem('user')
+        dispatch(renderAuth())
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  const userNavigation = [
+    { name: 'Профиль' },
+    { name: 'Расписание' },
+    { name: 'Выход', func: logout },
+  ]
+
+  useEffect(() => {
+    setAuthUser(JSON.parse(window.localStorage.getItem('user')))
+  }, [render])
+
   return (
     <Disclosure as='nav' className='bg-white'>
       {({ open }) => (
-        <>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-            <div className='flex items-center justify-between h-16'>
-              <div className='flex items-center'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-10 w-10 rounded-full cursor-pointer'
-                    src={headerLogo}
-                    alt='logo'
-                    onClick={() => navigate('/search', { replace: true })}
-                  />
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='flex items-center justify-between h-16'>
+            <div className='flex items-center'>
+              <div className='flex-shrink-0'>
+                <img
+                  className='h-10 w-10 rounded-full cursor-pointer'
+                  src={headerLogo}
+                  alt='logo'
+                  onClick={() => navigate('/search', { replace: true })}
+                />
+              </div>
+            </div>
+            {authUser ? (
+              <div className='hidden md:block'>
+                <div className='ml-4 flex items-center md:ml-6'>
+                  {/* Profile dropdown */}
+                  <Menu as='div' className='ml-3 relative'>
+                    <div>
+                      <Menu.Button className='max-w-xs rounded-full flex items-center text-sm'>
+                        <span className='sr-only'>Open user menu</span>
+                        {authUser?.userPic ? (
+                          <img
+                            className='h-8 w-8 rounded-full'
+                            src={`/${authUser.userPic}`}
+                            alt='user'
+                          />
+                        ) : (
+                          <img
+                            className='h-12 w-12 rounded-full'
+                            src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
+                            alt=''
+                          />
+                        )}
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter='transition ease-out duration-100'
+                      enterFrom='transform opacity-0 scale-95'
+                      enterTo='transform opacity-100 scale-100'
+                      leave='transition ease-in duration-75'
+                      leaveFrom='transform opacity-100 scale-100'
+                      leaveTo='transform opacity-0 scale-95'
+                    >
+                      <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                        {userNavigation.map((item) => (
+                          <Menu.Item key={item.name}>
+                            {({ active }) => (
+                              <div
+                                className='block px-4 py-2 text-sm text-gray-700 cursor-pointer'
+                                onClick={item.func}
+                              >
+                                {item.name}
+                              </div>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
                 </div>
               </div>
+            ) : (
               <div>
                 <Button
                   color='rgb(168, 163, 157)'
@@ -83,84 +132,9 @@ const Header = () => {
                   Вход
                 </Button>
               </div>
-              <div className='hidden md:block'>
-                <div className='ml-4 flex items-center md:ml-6'>
-                  {/* Profile dropdown */}
-                  <Menu as='div' className='ml-3 relative'>
-                    <div>
-                      <Menu.Button className='max-w-xs rounded-full flex items-center text-sm'>
-                        <span className='sr-only'>Open user menu</span>
-                        <img
-                          className='h-8 w-8 rounded-full'
-                          src={user.imageUrl}
-                          alt='user'
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter='transition ease-out duration-100'
-                      enterFrom='transform opacity-0 scale-95'
-                      enterTo='transform opacity-100 scale-100'
-                      leave='transition ease-in duration-75'
-                      leaveFrom='transform opacity-100 scale-100'
-                      leaveTo='transform opacity-0 scale-95'
-                    >
-                      <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                        {userNavigation.map((item) => (
-                          <Menu.Item key={item.name}>
-                            {({ active }) => (
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  active ? '' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}
-                                onClick={item.func}
-                              >
-                                {item.name}
-                              </a>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                </div>
-              </div>
-              <div className='-mr-2 flex md:hidden'>
-                {/* Mobile menu button */}
-                <Disclosure.Button className='inline-flex items-center justify-center p-2'>
-                  <span className='sr-only'>Open main menu</span>
-                  <div className='flex-shrink-0'>
-                    <img
-                      className='h-10 w-10 rounded-full'
-                      src={user.imageUrl}
-                      alt=''
-                    />
-                  </div>
-                </Disclosure.Button>
-              </div>
-            </div>
+            )}
           </div>
-
-          <Disclosure.Panel className='md:hidden'>
-            <div className='pt-3 pb-3 border-t border-gray-700'>
-              <div className='px-2 space-y-1'>
-                {userNavigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as='a'
-                    href={item.href}
-                    className='block px-3 py-1 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700'
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </div>
-          </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   )

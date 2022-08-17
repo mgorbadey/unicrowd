@@ -334,11 +334,11 @@ export default function MasterProfile() {
       </div>
 
       <div className='bg-white shadow overflow-hidden sm:rounded-md'>
-        <ul role='list' className='divide-y divide-gray-200'>
+        <ul className='divide-y divide-gray-200'>
           {event &&
             event.map((position) => (
               <li key={position.id}>
-                <a
+                <div
                   onClick={() => serviceItemChange(position.id)}
                   className='block hover:bg-gray-50'
                 >
@@ -379,7 +379,7 @@ export default function MasterProfile() {
                       </div>
                     </div>
                   </div>
-                </a>
+                </div>
               </li>
             ))}
         </ul>
