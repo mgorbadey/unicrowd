@@ -164,7 +164,7 @@ const ListChildren = ({ selectedMasters, selectedItem }) => {
                   className='cursor-pointer'
                   onClick={() =>
                     navigate(`/masters/${selectedMaster.id}/profile`, {
-                      replace: true,
+                      replace: false,
                     })
                   }
                 >

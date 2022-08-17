@@ -16,7 +16,7 @@ class ScheduleController {
         data: {
           startDateTime: new Date(`${startDateTime}`),
           endDateTime: new Date(`${endDateTime}`),
-          startDateForFilter: moment(startDateTime).format("YYYY-MM-DD"),
+          startDateForFilter: new Date(moment(startDateTime).format("YYYY-MM-DD")),
           masterId,
         },
       })
