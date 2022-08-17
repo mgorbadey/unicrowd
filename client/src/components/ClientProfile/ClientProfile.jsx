@@ -1,7 +1,6 @@
 import React from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import { useClipboard } from 'use-clipboard-copy'
+// import { useClipboard } from 'use-clipboard-copy'
 import $api from '../../http/index'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -30,7 +29,7 @@ export default function MasterProfile() {
   const [itemChange, setItemChange] = useState(false)
   const [itemId, setItemId] = useState(null)
 
-  const clipboard = useClipboard()
+  // const clipboard = useClipboard()
   const params = useParams()
 
   const sendFile = React.useCallback(async () => {
@@ -48,14 +47,15 @@ export default function MasterProfile() {
     } catch (error) {
       console.log(error.message)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [img])
 
   const modalTextUpdate = async (e) => {
     setOpen(false)
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/client/modalTextUpdate`,
+      await $api.post(
+        `http://localhost:3500/clients/modalTextUpdate`,
         { id: params.id, textarea }
       )
       setRender((prev) => !prev)
@@ -87,7 +87,7 @@ export default function MasterProfile() {
     setModalCity(false)
 
     try {
-      const res = await $api.post(`http://localhost:3500/client/cityUpdate`, {
+      await $api.post(`http://localhost:3500/clients/cityUpdate`, {
         id: params.id,
         city: select,
       })
@@ -110,8 +110,8 @@ export default function MasterProfile() {
     }
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/client/updateItem`,
+      await $api.post(
+        `http://localhost:3500/clients/updateItem`,
         item
       )
     } catch (error) {
@@ -120,7 +120,7 @@ export default function MasterProfile() {
 
     try {
       const events = await $api.get(
-        `http://localhost:3500/client/${params.id}/events`,
+        `http://localhost:3500/clients/${params.id}/events`,
       )
       setEvent(events.data)
     } catch (error) {
@@ -134,8 +134,8 @@ export default function MasterProfile() {
     const item = { itemId }
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/client/deleteItem`,
+      await $api.post(
+        `http://localhost:3500/clients/deleteItem`,
         item
       )
     } catch (error) {
@@ -144,7 +144,7 @@ export default function MasterProfile() {
 
     try {
       const events = await $api.get(
-        `http://localhost:3500/client/${params.id}/events`,
+        `http://localhost:3500/clients/${params.id}/events`,
       )
       setEvent(events.data)
     } catch (error) {
@@ -153,10 +153,10 @@ export default function MasterProfile() {
   }
 
   const getUserInfo = async (e) => {
-    const userInfo = await $api.get(`http://localhost:3500/client/${params.id}/profile`)
-    const cityInfo = await $api.get(`http://localhost:3500/client/cityInfo`)
-    const categoryInfo = await $api.get(`http://localhost:3500/client/categoryInfo`)
-    const events = await $api.get(`http://localhost:3500/client/${params.id}/events`)
+    const userInfo = await $api.get(`http://localhost:3500/clients/${params.id}/profile`)
+    const cityInfo = await $api.get(`http://localhost:3500/clients/cityInfo`)
+    const categoryInfo = await $api.get(`http://localhost:3500/clients/categoryInfo`)
+    const events = await $api.get(`http://localhost:3500/clients/${params.id}/events`)
     console.log(events)
 
     setEvent(events.data)
@@ -168,6 +168,7 @@ export default function MasterProfile() {
 
   React.useEffect(() => {
     getUserInfo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatar, render])
 
   return (
@@ -333,11 +334,11 @@ export default function MasterProfile() {
       </div>
 
       <div className='bg-white shadow overflow-hidden sm:rounded-md'>
-        <ul role='list' className='divide-y divide-gray-200'>
+        <ul className='divide-y divide-gray-200'>
           {event &&
             event.map((position) => (
               <li key={position.id}>
-                <a
+                <div
                   onClick={() => serviceItemChange(position.id)}
                   className='block hover:bg-gray-50'
                 >
@@ -378,7 +379,7 @@ export default function MasterProfile() {
                       </div>
                     </div>
                   </div>
-                </a>
+                </div>
               </li>
             ))}
         </ul>

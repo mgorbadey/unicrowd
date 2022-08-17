@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 //  Функция для получения номера недели в году
 function getWeekNumber(dt) {
   let tdt = new Date(dt.valueOf());
@@ -23,8 +25,10 @@ function getDaysAroundGivenDay(dt) {
     let oneDateNext = startDate.setDate(startDate.getDate() + i);
     let oneDateOnlyDayNumber = new Date(oneDateNext).getDate();
     let oneDateWeek = getWeekNumber(new Date(oneDateNext));
+    let startDateOnly = moment(oneDateNext).format("YYYY-MM-DD");
+
     if (oneDateWeek === startDateWeek) {
-      daysAfter.push([oneDateOnlyDayNumber, new Date(oneDateNext)]);
+      daysAfter.push([oneDateOnlyDayNumber, new Date(oneDateNext), startDateOnly]);
     }
   }
 
@@ -32,10 +36,11 @@ function getDaysAroundGivenDay(dt) {
     let startDate = new Date(dt);
     let oneDateBefore = startDate.setDate(startDate.getDate() - i);
     let oneDateOnlyDayNumber = new Date(oneDateBefore).getDate();
-
     let oneDateWeek = getWeekNumber(new Date(oneDateBefore));
+    let startDateOnly = moment(oneDateBefore).format("YYYY-MM-DD");
+
     if (oneDateWeek === startDateWeek) {
-      daysBefore.push([oneDateOnlyDayNumber, new Date(oneDateBefore)]);
+      daysBefore.push([oneDateOnlyDayNumber, new Date(oneDateBefore), startDateOnly]);
     }
   }
   let allDates = daysBefore.concat(daysAfter);

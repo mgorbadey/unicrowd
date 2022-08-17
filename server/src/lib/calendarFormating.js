@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 //Функция для нахождения начала отображения евента на календаре и длины блока
 
 function eventPositionInCal(eventsArr) {
@@ -20,6 +22,9 @@ function eventPositionInCal(eventsArr) {
   const calendData = newData.map((el) => ({
     ...el,
     span: (Math.round(el.durationHours * 2) / 2) * calSlot,
+    // + добавляю форматированную дату начала и конца рабочего слота
+    startDateOnly: moment(el.startDateTime).format("YYYY-MM-DD"),
+    endDateOnly: moment(el.endDateTime).format("YYYY-MM-DD"),
     gridRow:
       el.startMinutes >= 0 && el.startMinutes <= 30
         ? el.startMinutes >= 0 && el.startMinutes < 15

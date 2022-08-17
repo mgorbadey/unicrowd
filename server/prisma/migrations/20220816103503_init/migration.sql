@@ -44,6 +44,7 @@ CREATE TABLE "Schedule" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "startDateTime" TIMESTAMP(3) NOT NULL,
     "endDateTime" TIMESTAMP(3) NOT NULL,
+    "startDateForFilter" DATE,
     "masterId" INTEGER NOT NULL,
 
     CONSTRAINT "Schedule_pkey" PRIMARY KEY ("id")
@@ -79,6 +80,7 @@ CREATE TABLE "Event" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "startDateTime" TIMESTAMP(3) NOT NULL,
+    "startDateForFilter" DATE,
     "status" TEXT NOT NULL,
     "clientId" INTEGER NOT NULL,
     "masterId" INTEGER NOT NULL,
@@ -92,6 +94,9 @@ CREATE UNIQUE INDEX "City_name_key" ON "City"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_activationLink_key" ON "User"("activationLink");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Token_refreshToken_key" ON "Token"("refreshToken");

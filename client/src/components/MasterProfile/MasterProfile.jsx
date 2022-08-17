@@ -1,15 +1,19 @@
 import React from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useClipboard } from 'use-clipboard-copy'
 import $api from '../../http/index'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
-  CalendarIcon,
-  LocationMarkerIcon,
-  UsersIcon,
-} from '@heroicons/react/solid'
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Input,
+  Select,
+  Textarea,
+} from '@chakra-ui/react'
 
 export default function MasterProfile() {
   const [img, setImg] = useState(null)
@@ -49,16 +53,17 @@ export default function MasterProfile() {
     } catch (error) {
       console.log(error.message)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [img])
 
   const modalTextUpdate = async (e) => {
     setOpen(false)
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/masters/modalTextUpdate`,
-        { id: params.id, textarea }
-      )
+      await $api.post(`http://localhost:3500/masters/modalTextUpdate`, {
+        id: params.id,
+        textarea,
+      })
       setRender((prev) => !prev)
     } catch (error) {
       console.log(error.message)
@@ -88,7 +93,7 @@ export default function MasterProfile() {
     setModalCity(false)
 
     try {
-      const res = await $api.post(`http://localhost:3500/masters/cityUpdate`, {
+      await $api.post(`http://localhost:3500/masters/cityUpdate`, {
         id: params.id,
         city: select,
       })
@@ -111,10 +116,7 @@ export default function MasterProfile() {
     }
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/masters/createItem`,
-        item
-      )
+      await $api.post(`http://localhost:3500/masters/createItem`, item)
     } catch (error) {
       console.log(error.message)
     }
@@ -142,10 +144,7 @@ export default function MasterProfile() {
     }
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/masters/updateItem`,
-        item
-      )
+      await $api.post(`http://localhost:3500/masters/updateItem`, item)
     } catch (error) {
       console.log(error.message)
     }
@@ -166,10 +165,7 @@ export default function MasterProfile() {
     const item = { itemId }
 
     try {
-      const res = await $api.post(
-        `http://localhost:3500/masters/deleteItem`,
-        item
-      )
+      await $api.post(`http://localhost:3500/masters/deleteItem`, item)
     } catch (error) {
       console.log(error.message)
     }
@@ -196,8 +192,8 @@ export default function MasterProfile() {
       `http://localhost:3500/masters/${params.id}/serviceItemInfo`
     )
 
-    console.log(serviceItemInfo, 'serviceItemInfo')
-    console.log(categoryInfo, 'categoryInfo')
+    // console.log(serviceItemInfo, 'serviceItemInfo')
+    // console.log(categoryInfo, 'categoryInfo')
 
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)
@@ -208,286 +204,408 @@ export default function MasterProfile() {
 
   React.useEffect(() => {
     getUserInfo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [avatar, render])
 
   return (
     <>
-      <div className='bg-white px-4 py-5 border-b border-gray-200 sm:px-6'>
-        <div className='-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-nowrap'>
-          <div className='ml-4 mt-4'>
-            <div className='flex items-center'>
-              <div className='flex-shrink-0'>
-                {info?.data?.userPic ? (
-                  <img
-                    className='h-12 w-12 rounded-full'
-                    src={`/${info?.data?.userPic}`}
-                    alt=''
-                  />
-                ) : (
-                  <img
-                    className='h-12 w-12 rounded-full'
-                    src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
-                    alt=''
-                  />
-                )}
+      <Grid
+        h='100%'
+        templateRows='repeat(1, 1fr)'
+        templateColumns='repeat(6, 1fr)'
+        gap={4}
+        p='10px'
+      >
+        <GridItem
+          rowSpan={1}
+          colSpan={4}
+          bg='rgb(255, 255, 255, 0.5)'
+          borderRadius='8px'
+        >
+          <Flex direction='column' justify='space-between' h='100%'>
+            {/* name */}
+            <div className=' px-4 py-8 sm:px-6'>
+              <div className='flex justify-between items-center flex-wrap sm:flex-nowrap'>
+                <div className='flex items-center'>
+                  <div className='flex-shrink-0'>
+                    {info?.data?.userPic ? (
+                      <img
+                        className='h-12 w-12 rounded-full'
+                        src={`/${info?.data?.userPic}`}
+                        alt=''
+                      />
+                    ) : (
+                      <img
+                        className='h-12 w-12 rounded-full'
+                        src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
+                        alt=''
+                      />
+                    )}
+                  </div>
+                  <div className='ml-6'>
+                    <h3
+                      className='text-lg leading-6 font-medium text-gray-900'
+                      style={{ fontSize: '2rem', color: 'rgb(98, 97, 95)' }}
+                    >
+                      {info?.data?.username}
+                    </h3>
+                  </div>
+                </div>
+                <div className='flex items-center'>
+                  <Button
+                    type='button'
+                    color='rgb(108, 114, 127)'
+                    cursor='pointer'
+                    bg='white'
+                    w='150px'
+                    size='md'
+                    onClick={() => setModalItem(true)}
+                  >
+                    Создать услугу
+                  </Button>
+                </div>
               </div>
-
-              <div className='ml-4'>
-                <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                  {info?.data?.username}
+            </div>
+            {/* form */}
+            <Box bg='rgb(255, 255, 255, 0.5)' borderRadius='8px'>
+              <form>
+                <Grid
+                  h='100%'
+                  templateRows='repeat(7, 1fr)'
+                  templateColumns='repeat(24, 1fr)'
+                  gap={2}
+                  p='10px'
+                >
+                  {/* ФОТО */}
+                  <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <label
+                        htmlFor='photo'
+                        className='block text-sm font-medium text-gray-700'
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
+                      >
+                        Фото
+                      </label>
+                    </Flex>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
+                    <div className='flex min-h-full items-center justify-center p-3'>
+                      <Input
+                        pt='3px'
+                        borderRadius='8px'
+                        cursor='pointer'
+                        type='file'
+                        bg='white'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        onChange={(e) => setImg(e.target.files[0])}
+                      />
+                    </div>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <Button
+                        type='button'
+                        color='rgb(108, 114, 127)'
+                        cursor='pointer'
+                        bg='white'
+                        w='100px'
+                        size='sm'
+                        onClick={sendFile}
+                      >
+                        Добавить
+                      </Button>
+                    </Flex>
+                  </GridItem>
+                  {/* О СЕБЕ */}
+                  <GridItem rowSpan={2} colSpan={4} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <label
+                        htmlFor='about'
+                        className='block text-sm font-medium text-gray-700'
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
+                      >
+                        О себе
+                      </label>
+                    </Flex>
+                  </GridItem>
+                  <GridItem rowSpan={2} colSpan={15} borderRadius='8px'>
+                    <div className='flex min-h-full items-center justify-center p-3'>
+                      <Textarea
+                        id='about'
+                        name='about'
+                        rows={4}
+                        disabled
+                        borderRadius='8px'
+                        bg='white'
+                        color='black'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        defaultValue={info?.data?.info}
+                      />
+                    </div>
+                  </GridItem>
+                  <GridItem rowSpan={2} colSpan={5} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <Button
+                        type='button'
+                        color='rgb(108, 114, 127)'
+                        cursor='pointer'
+                        bg='white'
+                        w='100px'
+                        size='sm'
+                        onClick={() => setOpen(true)}
+                      >
+                        Изменить
+                      </Button>
+                    </Flex>
+                  </GridItem>
+                  {/* ПЕРС ИНФО */}
+                  <GridItem rowSpan={1} colSpan={24} borderRadius='8px'>
+                    <Flex minH='100%' ml='95px' align='center'>
+                      <h3
+                        className='text-lg leading-6 font-medium text-gray-900'
+                        style={{
+                          fontSize: '1.5rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
+                      >
+                        Персональная информация
+                      </h3>
+                    </Flex>
+                  </GridItem>
+                  {/* ИМЯ И ФАМИЛИЯ  */}
+                  <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <label
+                        htmlFor='first-name'
+                        className='block text-sm font-medium text-gray-700'
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'rgb(98, 97, 95)',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Имя и Фамилия
+                      </label>
+                    </Flex>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
+                    <div className='flex min-h-full items-center justify-center p-3'>
+                      <Input
+                        name='first-name'
+                        id='first-name'
+                        type='text'
+                        autoComplete='given-name'
+                        disabled
+                        bg='white'
+                        color='black'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        defaultValue={info?.data?.username}
+                      />
+                    </div>
+                  </GridItem>
+                  <GridItem
+                    rowSpan={1}
+                    colSpan={5}
+                    borderRadius='8px'
+                  ></GridItem>
+                  {/* ПОЧТА */}
+                  <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <label
+                        htmlFor='email'
+                        className='block text-sm font-medium text-gray-700'
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
+                      >
+                        Почта
+                      </label>
+                    </Flex>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
+                    <div className='flex min-h-full items-center justify-center p-3'>
+                      <Input
+                        name='email'
+                        id='email'
+                        type='email'
+                        autoComplete='email'
+                        disabled
+                        bg='white'
+                        color='black'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        defaultValue={info?.data?.email}
+                        ref={clipboard.target}
+                      />
+                    </div>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <Button
+                        type='button'
+                        color='rgb(108, 114, 127)'
+                        cursor='pointer'
+                        bg='white'
+                        w='100px'
+                        size='sm'
+                        onClick={clipboard.copy}
+                      >
+                        Скопировать
+                      </Button>
+                    </Flex>
+                  </GridItem>
+                  {/* ГОРОД */}
+                  <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <label
+                        htmlFor='country'
+                        className='block text-sm font-medium text-gray-700'
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
+                      >
+                        Город
+                      </label>
+                    </Flex>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
+                    <div className='flex min-h-full items-center justify-center p-3'>
+                      <Input
+                        name='email'
+                        id='email'
+                        type='email'
+                        autoComplete='email'
+                        disabled
+                        bg='white'
+                        color='black'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        value={cityName}
+                      />
+                    </div>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
+                    <Flex minH='100%' justify='center' align='center'>
+                      <Button
+                        type='button'
+                        color='rgb(108, 114, 127)'
+                        cursor='pointer'
+                        bg='white'
+                        w='100px'
+                        size='sm'
+                        onClick={() => setModalCity(true)}
+                      >
+                        Изменить
+                      </Button>
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </form>
+            </Box>
+          </Flex>
+        </GridItem>
+        <GridItem
+          colSpan={2}
+          bg='rgb(255, 255, 255, 0.5)'
+          borderRadius='8px'
+          overflow='scroll'
+        >
+          {/* items */}
+          <div className='bg-transparent px-4 py-5 sm:px-6'>
+            <div className='-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap'>
+              <div className='ml-4 mt-2'>
+                <h3
+                  className='text-lg leading-6 font-medium text-gray-900'
+                  style={{ fontSize: '2rem', color: 'rgb(98, 97, 95)' }}
+                >
+                  Услуги
                 </h3>
               </div>
             </div>
           </div>
-          <div className='ml-4 mt-2 flex-shrink-0'>
-            <button
-              type='button'
-              className='relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-              onClick={() => setModalItem(true)}
-            >
-              Создать услугу
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <form className='space-y-8 divide-y divide-gray-200'>
-        <div className='space-y-8 divide-y divide-gray-200 sm:space-y-5'>
-          <div>
-            <div className='mt-6 sm:mt-5 space-y-6 sm:space-y-5'>
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='photo'
-                  className='block text-sm font-medium text-gray-700'
-                >
-                  Фото
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2'>
-                  <div className='flex items-center'>
-                    <span className='h-12 w-12 rounded-full overflow-hidden bg-gray-100'>
-                      {info?.data?.userPic ? (
-                        <img
-                          className='h-12 w-12 rounded-full'
-                          src={`/${info?.data?.userPic}`}
-                          alt=''
-                        />
-                      ) : (
-                        <img
-                          className='h-12 w-12 rounded-full'
-                          src='https://secure.gravatar.com/avatar/508388088d9632ab7c5717e619363ec3?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg'
-                          alt=''
-                        />
-                      )}{' '}
-                    </span>
-                    <input
-                      type='file'
-                      className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                      onChange={(e) => setImg(e.target.files[0])}
-                    />
-                    <button
-                      type='button'
-                      className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                      onClick={sendFile}
+          {/* list items */}
+          <div
+            className='bg-white shadow sm:rounded-md cursor-pointer'
+            style={{
+              backgroundColor: 'rgb(255, 255, 255, 0.5)',
+              borderRadius: '8px',
+            }}
+          >
+            <ul className='divide-y divide-gray-200'>
+              {service &&
+                service.map((position) => (
+                  <li key={position.id}>
+                    <div
+                      onClick={() => serviceItemChange(position.id)}
+                      className='block hover:bg-gray-50'
                     >
-                      Добавить
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='about'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  О себе
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center '>
-                  <textarea
-                    id='about'
-                    name='about'
-                    rows={3}
-                    disabled
-                    className='max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-area'
-                    defaultValue={info?.data?.info}
-                  />
-
-                  <button
-                    type='button'
-                    className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    onClick={() => setOpen(true)}
-                  >
-                    Изменить
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='pt-8 space-y-6 sm:pt-10 sm:space-y-5'>
-            <div>
-              <h3 className='text-lg leading-6 font-medium text-gray-900'>
-                Персональная информация
-              </h3>
-            </div>
-            <div className='space-y-6 sm:space-y-5'>
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='first-name'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  Имя и Фамилия
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2 '>
-                  <input
-                    type='text'
-                    name='first-name'
-                    id='first-name'
-                    autoComplete='given-name'
-                    disabled
-                    className='max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
-                    defaultValue={info?.data?.username}
-                  />
-                </div>
-              </div>
-
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='email'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  Почта
-                </label>
-                <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center'>
-                  <input
-                    id='email'
-                    name='email'
-                    type='email'
-                    disabled
-                    autoComplete='email'
-                    ref={clipboard.target}
-                    defaultValue={info?.data?.email}
-                    className='block max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
-                  />
-
-                  <button
-                    type='button'
-                    onClick={clipboard.copy}
-                    className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                  >
-                    Скопировать
-                  </button>
-                </div>
-              </div>
-
-              <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5'>
-                <label
-                  htmlFor='country'
-                  className='block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2'
-                >
-                  Город
-                </label>
-                {info?.data?.city?.name ? (
-                  <div className='mt-1 sm:mt-0 sm:col-span-2 flex items-center'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      disabled
-                      autoComplete='email'
-                      value={cityName}
-                      className='block max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
-                    />
-                    <button
-                      type='button'
-                      className='ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                      onClick={() => setModalCity(true)}
-                    >
-                      Изменить
-                    </button>
-                  </div>
-                ) : (
-                  <div className='mt-1 sm:mt-0 sm:col-span-2'>
-                    <select
-                      id='country'
-                      name='country'
-                      autoComplete='country-name'
-                      onChange={(e) => setCity(e.target.value)}
-                      className='max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
-                    >
-                      <option>Москва</option>
-                      <option>Санкт-Петербург</option>
-                      <option>Казань</option>
-                    </select>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <div className='bg-white px-4 py-5 border-b border-gray-200 sm:px-6'>
-        <div className='-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap'>
-          <div className='ml-4 mt-2'>
-            <h3 className='text-lg leading-6 font-medium text-gray-900'>
-              Мои услуги
-            </h3>
-          </div>
-        </div>
-      </div>
-
-      <div className='bg-white shadow overflow-hidden sm:rounded-md'>
-        <ul role='list' className='divide-y divide-gray-200'>
-          {service &&
-            service.map((position) => (
-              <li key={position.id}>
-                <a
-                  onClick={() => serviceItemChange(position.id)}
-                  className='block hover:bg-gray-50'
-                >
-                  <div className='px-4 py-4 sm:px-6'>
-                    <div className='flex items-center justify-between'>
-                      <p className='text-sm font-medium text-indigo-600 truncate'>
-                        {position.title}
-                      </p>
-                      <div className='ml-2 flex-shrink-0 flex'>
-                        <p className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800'>
-                          {position.price}₽
-                        </p>
+                      <div className='px-4 py-4 sm:px-6'>
+                        <div className='flex items-center justify-between'>
+                          <p
+                            className='text-base font-medium truncate'
+                            style={{ color: 'rgb(98, 97, 95)' }}
+                          >
+                            {position.title}
+                          </p>
+                          <div className='ml-2 flex-shrink-0 flex'>
+                            <p
+                              className='px-2 inline-flex  text-sm truncate'
+                              style={{ color: 'rgb(124, 156, 154)' }}
+                            >
+                              {position.price}₽
+                            </p>
+                          </div>
+                        </div>
+                        <div className='mt-2 mt-style sm:flex sm:justify-between'>
+                          <div className='sm:flex justify-between w-full'>
+                            <p className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0'>
+                              Длительность {position.duration} мин
+                            </p>
+                            <p className='flex items-center text-sm text-gray-500'>
+                              {position.serviceCategory.title}
+                            </p>
+                          </div>
+                          {/* <div className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0  sm:ml-6'
+                          style={{ color: 'rgb(124, 156, 154)' }}
+                          >
+                            <p>Создано {position.createdAt.slice(0, 10)}</p>
+                          </div> */}
+                        </div>
                       </div>
                     </div>
-                    <div className='mt-2 mt-style sm:flex sm:justify-between'>
-                      <div className='sm:flex'>
-                        <p className='flex items-center text-sm text-gray-500'>
-                          <UsersIcon
-                            className='flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400'
-                            aria-hidden='true'
-                          />
-                          {position.serviceCategory.title}
-                        </p>
-                        <p className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6'>
-                          <LocationMarkerIcon
-                            className='flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400'
-                            aria-hidden='true'
-                          />
-                          Продолжительность: {position.duration} минут
-                        </p>
-                      </div>
-                      <div className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0'>
-                        <CalendarIcon
-                          className='flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400'
-                          aria-hidden='true'
-                        />
-                        <p>Создано {position.createdAt.slice(0, 10)}</p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            ))}
-        </ul>
-      </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </GridItem>
+      </Grid>
 
       {/* Модалка для изменения информации о себе */}
       <Transition.Root show={open} as={Fragment}>
@@ -521,29 +639,44 @@ export default function MasterProfile() {
                       <Dialog.Title
                         as='h3'
                         className='text-lg leading-6 font-medium text-gray-900'
+                        style={{
+                          fontSize: '1.5rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
                       >
                         О себе
                       </Dialog.Title>
                       <div className='mt-2 mt-style'>
-                        <textarea
+                        <Textarea
                           id='about'
                           name='about'
-                          rows={3}
-                          onChange={(e) => setTextarea(e.target.value)}
-                          className='max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md'
+                          rows={4}
+                          borderRadius='8px'
+                          bg='white'
+                          color='rgb(108, 114, 127)'
+                          border='2px solid white'
+                          focusBorderColor='rgb(140, 175, 174)'
+                          _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                          _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                          size='md'
                           defaultValue={''}
+                          onChange={(e) => setTextarea(e.target.value)}
                         />
                       </div>
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-6'>
-                    <button
+                  <div className='mt-5 sm:mt-6 w-full flex justify-center'>
+                    <Button
                       type='button'
-                      className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='100px'
+                      size='md'
                       onClick={modalTextUpdate}
                     >
                       Изменить
-                    </button>
+                    </Button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -584,109 +717,108 @@ export default function MasterProfile() {
                       <Dialog.Title
                         as='h3'
                         className='text-lg leading-6 font-medium text-gray-900'
+                        style={{
+                          fontSize: '1.5rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
                       >
-                        Создайте свою услугу
+                        Создать услугу
                       </Dialog.Title>
                     </div>
                   </div>
                   <div className='mt-2 mt-style'>
-                    <label
-                      htmlFor='title'
-                      className='block text-sm font-medium text-gray-700'
-                    >
-                      Название услуги
-                    </label>
                     <div className='mt-1'>
-                      <input
-                        type='email'
+                      <Input
+                        mb='10px'
                         name='email'
                         id='title'
-                        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
+                        type='email'
+                        bg='white'
+                        placeholder='название'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
                         onChange={(e) => setItemTitle(e.target.value)}
                       />
                     </div>
                     <div className='mt-1'>
-                      <label
-                        htmlFor='location'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Категория услуги
-                      </label>
-                      <select
+                      <Select
+                        mb='10px'
                         id='location'
+                        size='md'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        bg='white'
                         name='location'
-                        className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
-                        defaultValue='Canada'
                         onChange={onChangeHandler}
+                        defaultValue='Canada'
                       >
                         {categoryInfo?.data?.category.map((item) => (
                           <option key={item.id} id={item.id}>
                             {item.title}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </div>
 
                     <div className='mt-1'>
-                      <label
-                        htmlFor='location'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Продолжительность услуги в минутах
-                      </label>
-                      <select
+                      <Select
+                        mb='10px'
                         id='location'
+                        size='md'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        bg='white'
                         name='location'
-                        className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
+                        onChange={(e) =>
+                          setItemDuration(e.target.value.split(' ')[0])
+                        }
                         defaultValue='Canada'
-                        onChange={(e) => setItemDuration(e.target.value)}
                       >
-                        <option>30</option>
-                        <option>60</option>
-                        <option>90</option>
-                        <option>120</option>
-                      </select>
+                        <option>30 мин</option>
+                        <option>60 мин</option>
+                        <option>90 мин</option>
+                        <option>120 мин</option>
+                      </Select>
                     </div>
 
                     <div className='mt-1'>
-                      <label
-                        htmlFor='price'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Цена услуги
-                      </label>
                       <div className='mt-1 relative rounded-md shadow-sm'>
-                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                          <span className='text-gray-500 sm:text-sm'>₽</span>
-                        </div>
-                        <input
-                          type='text'
+                        <Input
                           name='price'
                           id='price'
-                          className='focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md'
-                          placeholder='0.00'
+                          type='text'
+                          placeholder='цена ₽'
                           aria-describedby='price-currency'
+                          bg='white'
+                          color='rgb(108, 114, 127)'
+                          border='2px solid white'
+                          focusBorderColor='rgb(140, 175, 174)'
+                          _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                          _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                          size='md'
                           onChange={(e) => setItemPrice(e.target.value)}
                         />
-                        <div className='absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none'>
-                          <span
-                            className='text-gray-500 sm:text-sm'
-                            id='price-currency'
-                          >
-                            RUB
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-6'>
-                    <button
+                  <div className='mt-5 sm:mt-6 w-full flex justify-center'>
+                    <Button
                       type='button'
-                      className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='100px'
+                      size='md'
                       onClick={itemCreate}
                     >
                       Сохранить
-                    </button>
+                    </Button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -727,34 +859,46 @@ export default function MasterProfile() {
                       <Dialog.Title
                         as='h3'
                         className='text-lg leading-6 font-medium text-gray-900'
+                        style={{
+                          fontSize: '1.5rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
                       >
                         Выберите свой город
                       </Dialog.Title>
                       <div className='mt-2 mt-style'>
-                        <select
+                        <Select // DURATION
+                          size='md'
+                          color='rgb(108, 114, 127)'
+                          border='2px solid white'
+                          focusBorderColor='rgb(140, 175, 174)'
+                          bg='white'
                           name='country'
                           autoComplete='country-name'
                           onChange={onChangeHandler}
                           defaultValue={cityName}
-                          className='max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md'
                         >
                           {city?.data?.city.map((el) => (
                             <option key={el.id} id={el.id} value={el.name}>
                               {el.name}
                             </option>
                           ))}
-                        </select>
+                        </Select>
                       </div>
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-6'>
-                    <button
+                  <div className='mt-5 sm:mt-6 w-full flex justify-center'>
+                    <Button
                       type='button'
-                      className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='100px'
+                      size='md'
                       onClick={cityUpdate}
                     >
-                      Сохранить
-                    </button>
+                      Изменить
+                    </Button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -795,118 +939,120 @@ export default function MasterProfile() {
                       <Dialog.Title
                         as='h3'
                         className='text-lg leading-6 font-medium text-gray-900'
+                        style={{
+                          fontSize: '1.5rem',
+                          color: 'rgb(98, 97, 95)',
+                        }}
                       >
-                        Измените свою услугу
+                        Редактировать услугу
                       </Dialog.Title>
                     </div>
                   </div>
                   <div className='mt-2 mt-style'>
-                    <label
-                      htmlFor='title'
-                      className='block text-sm font-medium text-gray-700'
-                    >
-                      Название услуги
-                    </label>
                     <div className='mt-1'>
-                      <input
-                        type='email'
+                      <Input
+                        mb='10px'
                         name='email'
                         id='title'
-                        className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md'
-                        defaultValue={categoryInfo?.data?.category}
+                        type='email'
+                        bg='white'
+                        placeholder='название'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                        size='md'
+                        defaultValue={categoryInfo?.data?.category?.title}
                         onChange={(e) => setItemTitle(e.target.value)}
                       />
                     </div>
                     <div className='mt-1'>
-                      <label
-                        htmlFor='location'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Категория услуги
-                      </label>
-                      <select
+                      <Select
+                        mb='10px'
                         id='location'
+                        size='md'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        bg='white'
                         name='location'
-                        className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
-                        defaultValue='Canada'
                         onChange={onChangeHandler}
+                        defaultValue='Canada'
                       >
                         {categoryInfo?.data?.category.map((item) => (
                           <option key={item.id} id={item.id}>
                             {item.title}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </div>
 
                     <div className='mt-1'>
-                      <label
-                        htmlFor='location'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Продолжительность услуги в минутах
-                      </label>
-                      <select
+                      <Select
+                        mb='10px'
                         id='location'
+                        size='md'
+                        color='rgb(108, 114, 127)'
+                        border='2px solid white'
+                        focusBorderColor='rgb(140, 175, 174)'
+                        bg='white'
                         name='location'
-                        className='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
+                        onChange={(e) =>
+                          setItemDuration(e.target.value.split(' ')[0])
+                        }
                         defaultValue='Canada'
-                        onChange={(e) => setItemDuration(e.target.value)}
                       >
-                        <option>30</option>
-                        <option>60</option>
-                        <option>90</option>
-                        <option>120</option>
-                      </select>
+                        <option>30 мин</option>
+                        <option>60 мин</option>
+                        <option>90 мин</option>
+                        <option>120 мин</option>
+                      </Select>
                     </div>
 
                     <div className='mt-1'>
-                      <label
-                        htmlFor='price'
-                        className='block text-sm font-medium text-gray-700'
-                      >
-                        Цена услуги
-                      </label>
                       <div className='mt-1 relative rounded-md shadow-sm'>
-                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                          <span className='text-gray-500 sm:text-sm'>₽</span>
-                        </div>
-                        <input
-                          type='text'
+                        <Input
                           name='price'
                           id='price'
-                          className='focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md'
-                          placeholder='0.00'
+                          type='text'
+                          placeholder='цена ₽'
                           aria-describedby='price-currency'
+                          bg='white'
+                          color='rgb(108, 114, 127)'
+                          border='2px solid white'
+                          focusBorderColor='rgb(140, 175, 174)'
+                          _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                          _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                          size='md'
                           onChange={(e) => setItemPrice(e.target.value)}
                         />
-                        <div className='absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none'>
-                          <span
-                            className='text-gray-500 sm:text-sm'
-                            id='price-currency'
-                          >
-                            RUB
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-6'>
-                    <button
+                  <div className='mt-5 sm:mt-6 w-full flex justify-around'>
+                    <Button
                       type='button'
-                      className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='100px'
+                      size='md'
                       onClick={itemUpdate}
                     >
                       Сохранить
-                    </button>
-                    <div></div>
-                    <button
+                    </Button>
+                    <Button
                       type='button'
-                      className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='100px'
+                      size='md'
                       onClick={itemDelete}
                     >
-                      Удалить услугу
-                    </button>
+                      Удалить
+                    </Button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

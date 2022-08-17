@@ -38,7 +38,10 @@ const SearchForm = () => {
           >
             unicrowd
           </h1>
-          <p className='mt-2 text-lg font-medium text-black text-opacity-50'>
+          <p
+            className='mt-2 text-lg font-medium text-black text-opacity-50'
+            style={{ color: 'rgb(98, 97, 95)' }}
+          >
             Объединяем лучших
           </p>
         </div>

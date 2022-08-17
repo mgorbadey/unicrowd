@@ -1,182 +1,144 @@
-import { Listbox, Transition } from '@headlessui/react'
-import { LockClosedIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid'
-import { useState, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
-import $api from '../../http/index';
-
-const roles = [
-  { id: 1, name: 'Клиент', role: 'client' },
-  { id: 2, name: 'Специалист', role: 'master' },
-]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
+import { Input, Button, Select } from '@chakra-ui/react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import $api from '../../http/index'
+import { renderAuth } from '../../redux/actions/localeStorageAction'
 
 export default function Example() {
-
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [selected, setSelected] = useState(roles[0])
+  const [selected, setSelected] = useState('')
 
   const registration = (e) => {
-    e.preventDefault();
-    $api.post('http://localhost:3500/auth/registration', {
-      username,
-      email,
-      password,
-      role: selected.role
-    })
+    e.preventDefault()
+    $api
+      .post('http://localhost:3500/auth/registration', {
+        username,
+        email,
+        password,
+        role: selected,
+      })
       .then(function (response) {
-        window.localStorage.setItem('accessToken', response.data.accessToken);
-        window.localStorage.setItem('user', JSON.stringify(response.data.user));
+        window.localStorage.setItem('accessToken', response.data.accessToken)
+        window.localStorage.setItem('user', JSON.stringify(response.data.user))
+        dispatch(renderAuth())
       })
       .catch(function (error) {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
   return (
     <>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-              alt="Workflow"
-            />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Регистрация</h2>
+      <div className='min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
+        <div
+          className='max-w-md w-full space-y-8'
+          style={{
+            backgroundColor: 'rgb(255, 255, 255, 0.5)',
+            padding: '20px',
+            borderRadius: '8px',
+          }}
+        >
+          <div className='flex justify-center'>
+            <h1
+              className='mt-2 text-4xl font-bold tracking-tight sm:text-5xl sm:tracking-tight'
+              style={{ fontSize: '2rem', color: 'rgb(98, 97, 95)' }}
+            >
+              Создайте свой аккаунт
+            </h1>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
-            <input type="hidden" name="remember" defaultValue="true" />
-            <div className="rounded-md shadow-sm -space-y-px">
+          <form className='mt-8 space-y-6' action='#' method='POST'>
+            <input type='hidden' name='remember' defaultValue='true' />
+            <div className='rounded-md shadow-sm -space-y-px'>
               <div>
-                <label htmlFor="email-address" className="sr-only">
-                  Ваше имя
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="username"
-                  autoComplete="username"
+                <Input
+                  id='username'
+                  name='username'
+                  type='username'
+                  autoComplete='username'
                   required
+                  bg='white'
+                  mb='10px'
+                  color='rgb(108, 114, 127)'
+                  border='2px solid white'
+                  focusBorderColor='rgb(140, 175, 174)'
+                  size='md'
+                  placeholder='полное имя'
                   value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Ваше имя"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               <div>
-                <label htmlFor="email-address" className="sr-only">
-                  Email
-                </label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                <Input
+                  id='email-address'
+                  name='email'
+                  type='email'
+                  autoComplete='email'
                   required
+                  bg='white'
+                  mb='10px'
+                  color='rgb(108, 114, 127)'
+                  border='2px solid white'
+                  focusBorderColor='rgb(140, 175, 174)'
+                  size='md'
+                  placeholder='почта'
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
-                <label htmlFor="password" className="sr-only">
-                  Пароль
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
+                <Input
+                  id='password'
+                  name='password'
+                  type='password'
+                  autoComplete='current-password'
                   required
+                  bg='white'
+                  color='rgb(108, 114, 127)'
+                  border='2px solid white'
+                  focusBorderColor='rgb(140, 175, 174)'
+                  size='md'
+                  placeholder='пароль'
                   value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Пароль"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div>
-                <Listbox value={selected} onChange={setSelected}>
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">Вы регистрируетесь как:</Listbox.Label>
-                      <div className="mt-1 relative">
-                        <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                          <span className="block truncate">{selected.name}</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </Listbox.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                            {roles.map((person) => (
-                              <Listbox.Option
-                                key={person.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                    'cursor-default select-none relative py-2 pl-3 pr-9'
-                                  )
-                                }
-                                value={person}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                      {person.name}
-                                    </span>
-
-                                    {selected ? (
-                                      <span
-                                        className={classNames(
-                                          active ? 'text-white' : 'text-indigo-600',
-                                          'absolute inset-y-0 right-0 flex items-center pr-4'
-                                        )}
-                                      >
-                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
+                <Select
+                  mt='24px'
+                  placeholder='Вы клиент или специалист'
+                  size='md'
+                  color='rgb(108, 114, 127)'
+                  border='2px solid white'
+                  focusBorderColor='rgb(140, 175, 174)'
+                  bg='white'
+                  onChange={(e) => setSelected(e.target.value)}
+                >
+                  <option value='client'>Клиент</option>
+                  <option value='master'>Специалист</option>
+                </Select>
               </div>
             </div>
 
-            <div>
-              <button
-                type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            <div className='flex justify-center'>
+              <Button
+                type='submit'
+                color='rgb(108, 114, 127)'
+                cursor='pointer'
+                bg='white'
+                w='200px'
+                size='md'
                 onClick={(e) => {
                   registration(e)
                   navigate('/search', { replace: true })
                 }}
               >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
-                </span>
                 Зарегистрироваться
-              </button>
+              </Button>
             </div>
           </form>
         </div>
