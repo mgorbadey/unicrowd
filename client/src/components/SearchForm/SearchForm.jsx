@@ -67,7 +67,7 @@ const SearchForm = () => {
             size='lg'
             onClick={() => {
               dispatch(saveSearch(input))
-              navigate('/results', { replace: true })
+              navigate('/results', { replace: false })
             }}
           >
             Найти
@@ -91,7 +91,7 @@ const SearchForm = () => {
                   key={index}
                   onClick={(e) => {
                     dispatch(saveSearch(e.target.innerText))
-                    navigate('/results', { replace: true })
+                    navigate('/results', { replace: false })
                   }}
                 >
                   {string}

@@ -134,7 +134,7 @@ export default function Example() {
                 size='md'
                 onClick={(e) => {
                   registration(e)
-                  navigate('/search', { replace: true })
+                  navigate('/search', { replace: false })
                 }}
               >
                 Зарегистрироваться

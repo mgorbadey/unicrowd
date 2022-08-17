@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useClipboard } from 'use-clipboard-copy'
 import $api from '../../http/index'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
   Box,
@@ -14,10 +14,15 @@ import {
   Select,
   Textarea,
 } from '@chakra-ui/react'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 export default function MasterProfile() {
   const navigate = useNavigate()
+
+  const [authUser, setAuthUser] = useState({})
+
+  useEffect(() => {
+    setAuthUser(JSON.parse(window.localStorage.getItem('user')))
+  }, [])
 
   const [img, setImg] = useState(null)
   const [avatar, setAvatar] = useState(null)
@@ -230,15 +235,6 @@ export default function MasterProfile() {
             <div className=' px-4 py-8 sm:px-6'>
               <div className='flex justify-between items-center flex-wrap sm:flex-nowrap'>
                 <div className='flex items-center'>
-                  <div
-                    className='cursor-pointer mr-4'
-                    onClick={() => navigate('/results', { replace: true })}
-                  >
-                    <ChevronLeftIcon
-                      className='h-5 w-5 text-gray-400'
-                      aria-hidden='true'
-                    />
-                  </div>
                   <div className='flex-shrink-0'>
                     {info?.data?.userPic ? (
                       <img
@@ -264,17 +260,37 @@ export default function MasterProfile() {
                   </div>
                 </div>
                 <div className='flex items-center'>
-                  <Button
-                    type='button'
-                    color='rgb(108, 114, 127)'
-                    cursor='pointer'
-                    bg='white'
-                    w='150px'
-                    size='md'
-                    onClick={() => setModalItem(true)}
-                  >
-                    Создать услугу
-                  </Button>
+                  {authUser?.role === 'master' ? (
+                    authUser?.id === Number(params.id) && (
+                      <Button
+                        type='button'
+                        color='rgb(108, 114, 127)'
+                        cursor='pointer'
+                        bg='white'
+                        w='150px'
+                        size='md'
+                        onClick={() => setModalItem(true)}
+                      >
+                        Создать услугу
+                      </Button>
+                    )
+                  ) : (
+                    <Button
+                      type='button'
+                      color='rgb(108, 114, 127)'
+                      cursor='pointer'
+                      bg='white'
+                      w='150px'
+                      size='md'
+                      onClick={() =>
+                        navigate(`/masters/${params.id}/schedules`, {
+                          replace: false,
+                        })
+                      }
+                    >
+                      Записаться
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -289,53 +305,57 @@ export default function MasterProfile() {
                   p='10px'
                 >
                   {/* ФОТО */}
-                  <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
-                    <Flex minH='100%' justify='center' align='center'>
-                      <label
-                        htmlFor='photo'
-                        className='block text-sm font-medium text-gray-700'
-                        style={{
-                          fontSize: '1.2rem',
-                          color: 'rgb(98, 97, 95)',
-                        }}
-                      >
-                        Фото
-                      </label>
-                    </Flex>
-                  </GridItem>
-                  <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
-                    <div className='flex min-h-full items-center justify-center p-3'>
-                      <Input
-                        pt='3px'
-                        borderRadius='8px'
-                        cursor='pointer'
-                        type='file'
-                        bg='white'
-                        color='rgb(108, 114, 127)'
-                        border='2px solid white'
-                        focusBorderColor='rgb(140, 175, 174)'
-                        _focus={{ borderColor: 'rgb(140, 175, 174)' }}
-                        _active={{ borderColor: 'rgb(140, 175, 174)' }}
-                        size='md'
-                        onChange={(e) => setImg(e.target.files[0])}
-                      />
-                    </div>
-                  </GridItem>
-                  <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
-                    <Flex minH='100%' justify='center' align='center'>
-                      <Button
-                        type='button'
-                        color='rgb(108, 114, 127)'
-                        cursor='pointer'
-                        bg='white'
-                        w='100px'
-                        size='sm'
-                        onClick={sendFile}
-                      >
-                        Добавить
-                      </Button>
-                    </Flex>
-                  </GridItem>
+                  {authUser?.id === Number(params.id) && (
+                    <>
+                      <GridItem rowSpan={1} colSpan={4} borderRadius='8px'>
+                        <Flex minH='100%' justify='center' align='center'>
+                          <label
+                            htmlFor='photo'
+                            className='block text-sm font-medium text-gray-700'
+                            style={{
+                              fontSize: '1.2rem',
+                              color: 'rgb(98, 97, 95)',
+                            }}
+                          >
+                            Фото
+                          </label>
+                        </Flex>
+                      </GridItem>
+                      <GridItem rowSpan={1} colSpan={15} borderRadius='8px'>
+                        <div className='flex min-h-full items-center justify-center p-3'>
+                          <Input
+                            pt='3px'
+                            borderRadius='8px'
+                            cursor='pointer'
+                            type='file'
+                            bg='white'
+                            color='rgb(108, 114, 127)'
+                            border='2px solid white'
+                            focusBorderColor='rgb(140, 175, 174)'
+                            _focus={{ borderColor: 'rgb(140, 175, 174)' }}
+                            _active={{ borderColor: 'rgb(140, 175, 174)' }}
+                            size='md'
+                            onChange={(e) => setImg(e.target.files[0])}
+                          />
+                        </div>
+                      </GridItem>
+                      <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
+                        <Flex minH='100%' justify='center' align='center'>
+                          <Button
+                            type='button'
+                            color='rgb(108, 114, 127)'
+                            cursor='pointer'
+                            bg='white'
+                            w='100px'
+                            size='sm'
+                            onClick={sendFile}
+                          >
+                            Добавить
+                          </Button>
+                        </Flex>
+                      </GridItem>
+                    </>
+                  )}
                   {/* О СЕБЕ */}
                   <GridItem rowSpan={2} colSpan={4} borderRadius='8px'>
                     <Flex minH='100%' justify='center' align='center'>
@@ -372,17 +392,19 @@ export default function MasterProfile() {
                   </GridItem>
                   <GridItem rowSpan={2} colSpan={5} borderRadius='8px'>
                     <Flex minH='100%' justify='center' align='center'>
-                      <Button
-                        type='button'
-                        color='rgb(108, 114, 127)'
-                        cursor='pointer'
-                        bg='white'
-                        w='100px'
-                        size='sm'
-                        onClick={() => setOpen(true)}
-                      >
-                        Изменить
-                      </Button>
+                      {authUser?.id === Number(params.id) && (
+                        <Button
+                          type='button'
+                          color='rgb(108, 114, 127)'
+                          cursor='pointer'
+                          bg='white'
+                          w='100px'
+                          size='sm'
+                          onClick={() => setOpen(true)}
+                        >
+                          Изменить
+                        </Button>
+                      )}
                     </Flex>
                   </GridItem>
                   {/* ПЕРС ИНФО */}
@@ -525,17 +547,19 @@ export default function MasterProfile() {
                   </GridItem>
                   <GridItem rowSpan={1} colSpan={5} borderRadius='8px'>
                     <Flex minH='100%' justify='center' align='center'>
-                      <Button
-                        type='button'
-                        color='rgb(108, 114, 127)'
-                        cursor='pointer'
-                        bg='white'
-                        w='100px'
-                        size='sm'
-                        onClick={() => setModalCity(true)}
-                      >
-                        Изменить
-                      </Button>
+                      {authUser?.id === Number(params.id) && (
+                        <Button
+                          type='button'
+                          color='rgb(108, 114, 127)'
+                          cursor='pointer'
+                          bg='white'
+                          w='100px'
+                          size='sm'
+                          onClick={() => setModalCity(true)}
+                        >
+                          Изменить
+                        </Button>
+                      )}
                     </Flex>
                   </GridItem>
                 </Grid>
@@ -564,7 +588,11 @@ export default function MasterProfile() {
           </div>
           {/* list items */}
           <div
-            className='bg-white shadow sm:rounded-md cursor-pointer'
+            className={`bg-white shadow sm:rounded-md ${
+              authUser?.id === Number(params.id)
+                ? 'cursor-pointer'
+                : 'cursor-default'
+            }`}
             style={{
               backgroundColor: 'rgb(255, 255, 255, 0.5)',
               borderRadius: '8px',
@@ -575,7 +603,10 @@ export default function MasterProfile() {
                 service.map((position) => (
                   <li key={position.id}>
                     <div
-                      onClick={() => serviceItemChange(position.id)}
+                      onClick={() =>
+                        authUser?.id === Number(params.id) &&
+                        serviceItemChange(position.id)
+                      }
                       className='block hover:bg-gray-50'
                     >
                       <div className='px-4 py-4 sm:px-6'>
