@@ -75,13 +75,11 @@ exports.deleteEvent = async (req, res) => {
 
 exports.deleteWorkingSlot = async (req, res) => {
   let {id} = req.params;
-  console.log('idLALALAL', id)
-  console.log('deleteWorkingSlot', deleteWorkingSlot)
-  // const deleteWorkingSlot = await prisma.schedule.delete({
-  //   where: {
-  //     id: +id,
-  //   },
-  // })
+  const deleteWorkingSlot = await prisma.schedule.delete({
+    where: {
+      id: +id,
+    },
+  })
   res.sendStatus(200)
 };
 
