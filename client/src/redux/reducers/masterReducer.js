@@ -8,8 +8,8 @@ const masterReducer = (state = initState.master, action) => {
     case masterType.WORKINGSLOTS:
       return action.payload
     case masterType.ADDWORKINGSLOTS:
-      console.log(action.payload);
-      return [...state, ...action.payload]
+      state.push(action.payload[0])
+      return state
     default:
       return state //сохраняет состояние в память к-ра
   }
