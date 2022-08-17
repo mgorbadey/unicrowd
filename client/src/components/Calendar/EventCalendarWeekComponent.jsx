@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -21,23 +22,25 @@ import {
   Stack,
   FormControl
 } from '@chakra-ui/react'
+import ButtonsEditDeleteWorkingSlot from "../ButtonsEditDeleteWorkingSlot/ButtonsEditDeleteWorkingSlot";
+import InputWorkingSlotEdit from "../InputWorkingSlotEdit/InputWorkingSlotEdit";
 
 const moment = require('moment')
-// import { Modal, useDisclosure } from '@chakra-ui/react'
 
-export default function EventCalendarWeekComponent({ workingSlot }) {
+export default function EventCalendarWeekComponent({ workingSlot, authUser }) {
   // const { isOpen, onOpen, onClose } = useDisclosure()
   const HoursCalDisp = {
     startHours: new Date(workingSlot.startDateTime).getHours(),
     startMinutes: String(
       new Date(workingSlot.startDateTime).getMinutes()
-    ).padStart(2, '0'),
+    ).padStart(2, "0"),
     endHours: new Date(workingSlot.endDateTime).getHours(),
     endMinutes: String(new Date(workingSlot.endDateTime).getMinutes()).padStart(
       2,
-      '0'
+      "0"
     ),
-  }
+  };
+
 
   const [openEvent, setOpenEvent] = useState(false)
   const [eventInfo, setEventInfo] = useState([])
@@ -57,12 +60,13 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   const [duration, setDuration] = useState(1)
   const [hoursCal, setHoursCal] = useState({})
 
-  const params = useParams()
+
+  const params = useParams();
 
   const onChangeHandler = (e) => {
-    const index = e.target.selectedIndex
-    const el = e.target.childNodes[index]
-    const option = el.getAttribute('id')
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+    const option = el.getAttribute("id");
 
     setSelect(option)
 
@@ -77,23 +81,21 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
         if (el.duration === 120) {
           setDuration(2)
         }
-      }
-    })
 
+      }
+    });
     createDateArray(hoursCal.startHours, hoursCal.endHours, duration)
   }
+
+
 
   const onChangeTime = (e) => {
     const index = e.target.selectedIndex
     const el = e.target.childNodes[index]
     const option = el.getAttribute('value')
 
-    // const newDate = startDate.replace(startDate.slice(11, 16), option)
-
-    console.log(option)
-
-    setTime(option)
-  }
+    setTime(option);
+  };
 
   const createDateArray = (hoursCalStart, hoursCalEnd, duration) => {
     console.log(hoursCalStart, hoursCalEnd)
@@ -188,48 +190,11 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
     setServiceInfo(serviceItemInfo)
   }
 
-  //залогиненный юзер
-  const userRole = JSON.parse(localStorage.getItem('user')).role || null
-  const dispatch = useDispatch()
+  const [inputOpen, setInputOpen] = useState(false);
 
-  function getWorkingSlotStatus(e) {
-    e.preventDefault()
-    console.log('hehehe')
-    let startDateOnly = moment(workingSlot.startDateForFilter).format(
-      'YYYY-MM-DD'
-    )
-    $api
-      .get(
-        `http://localhost:3500/masters/${workingSlot.masterId}/schedules/${workingSlot.id}/status?date=${startDateOnly}`
-      )
-      .then((response) => {
-        response.data
-          ? deleteWorkingSlot()
-          : alert('Нельзя удалить рабочий слот с записями клиентов')
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error)
-      })
+  function handleInputOpen() {
+    setInputOpen(!inputOpen)
   }
-
-  function deleteWorkingSlot() {
-    // e.preventDefault();
-    $api
-      .delete(
-        `http://localhost:3500/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`
-      )
-      .then((response) => {
-        console.log("deleted!!!");
-        dispatch(deleteWorkingSlots(workingSlot.id))
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error)
-      })
-  }
-
-  function getWorkingSlotsOptions(e) {}
 
   useEffect(() => {
     getEventInfo()
@@ -242,40 +207,27 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
         className={`relative mt-px flex col-start-${workingSlot.weekDay}`}
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
         onClick={userRole === 'master' ? null : () => getWorkingSlotsId(workingSlot.id)}
+
       >
-        <div
-          className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100'
-        >
-          <p className='order-1 font-semibold text-gray-700'>Рабочий слот</p>
-          <Stack spacing={9} direction='row' align='center'>
-            <p className='text-gray-500 group-hover:text-gray-700'>
-              <time dateTime={workingSlot.startDateTime}>
-                {HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-
-                {HoursCalDisp.endHours}:{HoursCalDisp.endMinutes}
-              </time>
-            </p>
-            {userRole === 'master' ? (
-              <div>
-                <Button
-                  colorScheme='white'
-                  size='xxs'
-                  onClick={(e) => getWorkingSlotStatus(e)}
-                >
-                  <DeleteIcon w={4} h={3} color='gray.500' />
-                </Button>
-                <Button
-                  colorScheme='white'
-                  size='xxs'
-                  onClick={(e) => getWorkingSlotsOptions(e)}
-                >
-                  <EditIcon w={4} h={3} color='gray.500' />
-                </Button>
-              </div>
-            ) : (
-              ''
-            )}
-            
-          </Stack>
+        <div className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100">
+          <p className="order-1 font-semibold text-gray-700">Рабочий слот</p>
+          {!inputOpen ? (
+            <Stack spacing={9} direction="row" align="center">
+              <p className="text-gray-500 group-hover:text-gray-700">
+                <time dateTime={workingSlot.startDateTime}>
+                  {HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-
+                  {HoursCalDisp.endHours}:{HoursCalDisp.endMinutes}
+                </time>
+              </p>
+              {authUser.role === "master" ? (
+                <ButtonsEditDeleteWorkingSlot workingSlot={workingSlot} handleInputOpen={handleInputOpen}/>
+              ) : (
+                ""
+              )}
+            </Stack>
+          ) : (
+            <InputWorkingSlotEdit handleInputOpen={handleInputOpen} HoursCalDisp={HoursCalDisp}/>
+          )}
         </div>
       </li>
 
@@ -307,6 +259,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
     </>
-  )
+  );
 }

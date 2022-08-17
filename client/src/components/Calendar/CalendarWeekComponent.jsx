@@ -13,6 +13,7 @@ import $api from '../../http'
 import Modal from '../Modal/Modal'
 import { getClientSlots } from '../../redux/actions/eventAction'
 import ClientEventCalendarWeekComponent from './ClientEventCalendarWeekComponent'
+import {useParams} from 'react-router-dom'
 const moment = require('moment');
 
 function classNames(...classes) {
@@ -47,6 +48,14 @@ export default function CalendarComponent() {
     daySpanNotCurrentDate:
       'items-center justify-center font-semibold text-gray-900',
   }
+
+  const [authUser, setAuthUser] = useState({});
+
+  useEffect(() => {
+    setAuthUser(JSON.parse(window.localStorage.getItem("user")));
+  }, []);
+
+  console.log('authUser', authUser)
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -90,7 +99,8 @@ export default function CalendarComponent() {
 
   //хардкод id мастера
   // const masterId = JSON.parse(localStorage.getItem('user')).id
-  const masterId=1
+  const params = useParams()
+  const masterId = params.id
 
   const workingSlots = useSelector((store) => store.master)
   useEffect(() => {
@@ -800,6 +810,7 @@ export default function CalendarComponent() {
                       <EventCalendarWeekComponent
                         key={workingSlot.id}
                         workingSlot={workingSlot}
+                        authUser={authUser}
                       />
                     )
                   })}
@@ -810,6 +821,7 @@ export default function CalendarComponent() {
                       <ClientEventCalendarWeekComponent
                         key={clientSlot.id}
                         clientSlot={clientSlot}
+                        authUser={authUser}
                       />
                     )
                   })}
