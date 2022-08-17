@@ -115,14 +115,6 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
       })
   }
 
-<<<<<<< HEAD
-  function getWorkingSlotsOptions(e) {
-    
-  }
-=======
-  function getWorkingSlotsOptions(e) {}
->>>>>>> dev
-
   function getWorkingSlotsOptions(e) {}
 
   return (
@@ -132,9 +124,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
         style={{ gridRow: `${workingSlot.gridRow} / span ${workingSlot.span}` }}
         onClick={userRole === 'master' ? null : () => setOpenEvent(true)}
       >
-        {/* <Modal onClose={onClose} isOpen={isOpen} isCentered/> */}
-        <a
-          href={`/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`}
+        <div
           className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100'
         >
           <p className='order-1 font-semibold text-gray-700'>Рабочий слот</p>
@@ -167,7 +157,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
             )}
             
           </Stack>
-        </a>
+        </div>
       </li>
 
       <Transition.Root show={openEvent} as={Fragment}>

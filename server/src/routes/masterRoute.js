@@ -210,7 +210,7 @@ router
 
 router
   .route("/:id/schedules/:id")
-  .get(deleteWorkingSlot)
+  .delete(deleteWorkingSlot)
 
 router
   .route("/:id/schedules/:id/status")
