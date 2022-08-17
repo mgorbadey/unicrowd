@@ -6,6 +6,8 @@ const {
   getAllClientEvents,
   changeStatus,
   deleteEvent,
+  deleteWorkingSlot,
+  getAvailabilityStatus
 } = require("../controllers/masterController");
 const { PrismaClient } = require("@prisma/client");
 
@@ -191,14 +193,23 @@ router.get("/:id/serviceItemInfo", async (req, res) => {
 
 router
   .route("/:id/schedules/week")
-  .get(getAllWorkingSlots);
+  .get(getAllWorkingSlots)
 // .post(createWorkingSlot)
+
+router
+  .route("/:id/schedules/:id")
+  .get(deleteWorkingSlot)
+
+router
+  .route("/:id/schedules/:id/status")
+  .get(getAvailabilityStatus)
 
 router
   .route("/:id/events/week")
   .get(getAllClientEvents);
 
-router.route("/:id/events/:id")
+router
+  .route("/:id/events/:id")
   .post(changeStatus)
   .delete(deleteEvent);
 

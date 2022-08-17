@@ -153,7 +153,7 @@ export default function CalendarComponent() {
             </button>
             <button
               type='button'
-              className='hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block'
+              className='hidden border-t border-b border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block'
             >
               Неделя
             </button>
