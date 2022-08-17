@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import $api from '../../http/index'
-import { getAuthRender } from '../../redux/actions/localeStorageAction'
+import { renderAuth } from '../../redux/actions/localeStorageAction'
 
 export default function Example() {
   const dispatch = useDispatch()
@@ -25,7 +25,7 @@ export default function Example() {
       .then(function (response) {
         window.localStorage.setItem('accessToken', response.data.accessToken)
         window.localStorage.setItem('user', JSON.stringify(response.data.user))
-        dispatch(getAuthRender())
+        dispatch(renderAuth())
       })
       .catch(function (error) {
         console.log(error)

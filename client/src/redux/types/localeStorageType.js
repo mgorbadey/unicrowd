@@ -1,6 +1,5 @@
 const localStorageType = {
-  SAVE_TO_STORAGE: 'SAVE_TO_STORAGE',
-  DELETE_FROM_STORAGE: 'DELETE_FROM_STORAGE',
+  CHANGE_STATUS_LC: 'CHANGE_STATUS_LC',
 }
 
 export default localStorageType

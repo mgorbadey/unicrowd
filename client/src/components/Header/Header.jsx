@@ -6,7 +6,7 @@ import { Button } from '@chakra-ui/react'
 import $api from '../../http/index'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getNotAuthRender } from '../../redux/actions/localeStorageAction'
+import { renderAuth } from '../../redux/actions/localeStorageAction'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -20,7 +20,7 @@ const Header = () => {
       .then(function () {
         window.localStorage.removeItem('accessToken')
         window.localStorage.removeItem('user')
-        dispatch(getNotAuthRender())
+        dispatch(renderAuth())
       })
       .catch(function (error) {
         console.log(error)
