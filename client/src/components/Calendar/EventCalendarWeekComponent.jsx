@@ -77,6 +77,7 @@ export default function EventCalendarWeekComponent({ workingSlot }) {
   //залогиненный юзер
   const userRole = JSON.parse(localStorage.getItem("user")).role || null;
   const dispatch = useDispatch();
+  
 
   function getWorkingSlotStatus(e) {
     e.preventDefault();
