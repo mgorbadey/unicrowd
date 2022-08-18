@@ -13,8 +13,9 @@ import $api from '../../http'
 import Modal from '../Modal/Modal'
 import { getClientSlots } from '../../redux/actions/eventAction'
 import ClientEventCalendarWeekComponent from './ClientEventCalendarWeekComponent'
-import {useParams} from 'react-router-dom'
-const moment = require('moment');
+import { useParams } from 'react-router-dom'
+import { Button } from '@chakra-ui/react'
+const moment = require('moment')
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -44,18 +45,17 @@ export default function CalendarComponent() {
   const styles = {
     weekSpanCurrentDate: 'flex items-baseline',
     daySpanCurrentDate:
-      'ml-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white',
+      'ml-1.5 flex h-6 w-7 items-center justify-center rounded-full bg-uni-green font-semibold text-white',
     weekSpanNotCurrentDate: '',
     daySpanNotCurrentDate:
-      'items-center justify-center font-semibold text-gray-900',
+      'items-center justify-center font-semibold text-uni-brown',
   }
 
-  const [authUser, setAuthUser] = useState({});
+  const [authUser, setAuthUser] = useState({})
 
   useEffect(() => {
-    setAuthUser(JSON.parse(window.localStorage.getItem("user")));
-  }, []);
-
+    setAuthUser(JSON.parse(window.localStorage.getItem('user')))
+  }, [])
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -145,42 +145,47 @@ export default function CalendarComponent() {
   //<------ЗАКОНЧИЛИ РИСОВАТЬ КЛИЕНТСКИЕ ЗАПИСИ
 
   return (
-    <div className='flex h-full flex-col'>
-      <header className='relative z-40 flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6'>
-        <h1 className='text-lg font-semibold text-gray-900'>
-          <time dateTime='2022-01'>
-            {monthName} {yearNum}
-          </time>
-        </h1>
-        <div className='flex items-center'>
-          <div className='flex items-center rounded-md shadow-sm md:items-stretch'>
-            <button
-              onClick={previousWeek}
-              type='button'
-              className='flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50'
-            >
-              <span className='sr-only'>Previous week</span>
-              <ChevronLeftIcon className='h-5 w-5' aria-hidden='true' />
-            </button>
-            <button
-              type='button'
-              className='hidden border-t border-b border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block'
-            >
-              Неделя
-            </button>
-            <span className='relative -mx-px h-5 w-px bg-gray-300 md:hidden' />
-            <button
-              onClick={nextWeek}
-              type='button'
-              className='flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50'
-            >
-              <span className='sr-only'>Next week</span>
-              <ChevronRightIcon className='h-5 w-5' aria-hidden='true' />
-            </button>
-          </div>
-          <div className='hidden md:ml-4 md:flex md:items-center'>
-            <Menu as='div' className='relative'>
-              {/* <Menu.Button
+    <div className='flex h-full flex-col' style={{ padding: '10px' }}>
+      <div className='flex h-full flex-col rounded-t-lg bg-white bg-opacity-50'>
+        <header className='relative z-40 flex flex-none items-center justify-between py-4 px-6'>
+          <h1
+            className='text-lg font-semibold text-gray-900 pl-5'
+            style={{ fontSize: '2rem', color: 'rgb(98, 97, 95)' }}
+          >
+            <time dateTime='2022-01'>
+              {monthName} {yearNum}
+            </time>
+          </h1>
+          <div className='flex items-center'>
+            <div className='flex items-center rounded-md md:items-stretch'>
+              <button
+                onClick={previousWeek}
+                type='button'
+                className='flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 focus:relative md:w-9 md:px-2 mb-2'
+              >
+                <span className='sr-only'>Previous week</span>
+                <ChevronLeftIcon className='h-5 w-5' aria-hidden='true' />
+              </button>
+              <button
+                type='button'
+                className='hidden border-t border-b border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 cursor-default focus:relative md:block mb-2'
+                style={{ color: 'rgb(108, 114, 127)' }}
+              >
+                Неделя
+              </button>
+              <span className='relative -mx-px h-5 w-px bg-gray-300 md:hidden' />
+              <button
+                onClick={nextWeek}
+                type='button'
+                className='flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 focus:relative md:w-9 md:px-2 mb-2'
+              >
+                <span className='sr-only'>Next week</span>
+                <ChevronRightIcon className='h-5 w-5' aria-hidden='true' />
+              </button>
+            </div>
+            <div className='hidden md:ml-4 md:flex md:items-center'>
+              <Menu as='div' className='relative'>
+                {/* <Menu.Button
                 type="button"
                 className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
               >
@@ -191,7 +196,7 @@ export default function CalendarComponent() {
                 />
               </Menu.Button> */}
 
-              {/* <Transition
+                {/* <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
                 enterFrom="transform opacity-0 scale-95"
@@ -265,148 +270,152 @@ export default function CalendarComponent() {
                   </div>
                 </Menu.Items>
               </Transition> */}
+              </Menu>
+              <div className='ml-6 h-6 w-px bg-gray-300' />
+              <Button
+                type='button'
+                color='rgb(108, 114, 127)'
+                cursor='pointer'
+                bg='white'
+                w='150px'
+                size='md'
+                onClick={() => setOpen(true)}
+              >
+                Добавить слот
+              </Button>
+
+              <Modal open={open} setOpen={setOpen} />
+            </div>
+            <Menu as='div' className='relative ml-6 md:hidden'>
+              <Menu.Button className='-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500'>
+                <span className='sr-only'>Open menu</span>
+                <DotsHorizontalIcon className='h-5 w-5' aria-hidden='true' />
+              </Menu.Button>
+
+              <Transition
+                as={Fragment}
+                enter='transition ease-out duration-100'
+                enterFrom='transform opacity-0 scale-95'
+                enterTo='transform opacity-100 scale-100'
+                leave='transition ease-in duration-75'
+                leaveFrom='transform opacity-100 scale-100'
+                leaveTo='transform opacity-0 scale-95'
+              >
+                <Menu.Items className='absolute right-0 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+                  <div className='py-1'>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Create event
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </div>
+                  <div className='py-1'>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Go to today
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </div>
+                  <div className='py-1'>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Day view
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Week view
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Month view
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a
+                          href='#'
+                          className={classNames(
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm'
+                          )}
+                        >
+                          Year view
+                        </a>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
             </Menu>
-            <div className='ml-6 h-6 w-px bg-gray-300' />
-            <button
-              type='button'
-              className='ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-              onClick={() => setOpen(true)}
-            >
-              Добавить слот
-            </button>
-
-            <Modal open={open} setOpen={setOpen} />
           </div>
-          <Menu as='div' className='relative ml-6 md:hidden'>
-            <Menu.Button className='-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500'>
-              <span className='sr-only'>Open menu</span>
-              <DotsHorizontalIcon className='h-5 w-5' aria-hidden='true' />
-            </Menu.Button>
-
-            <Transition
-              as={Fragment}
-              enter='transition ease-out duration-100'
-              enterFrom='transform opacity-0 scale-95'
-              enterTo='transform opacity-100 scale-100'
-              leave='transition ease-in duration-75'
-              leaveFrom='transform opacity-100 scale-100'
-              leaveTo='transform opacity-0 scale-95'
-            >
-              <Menu.Items className='absolute right-0 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                <div className='py-1'>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Create event
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-                <div className='py-1'>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Go to today
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-                <div className='py-1'>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Day view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Week view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Month view
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <a
-                        href='#'
-                        className={classNames(
-                          active
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Year view
-                      </a>
-                    )}
-                  </Menu.Item>
-                </div>
-              </Menu.Items>
-            </Transition>
-          </Menu>
-        </div>
-      </header>
-      <div
-        ref={container}
-        className='flex flex-auto flex-col overflow-auto bg-white'
-      >
+        </header>
         <div
-          style={{ width: '165%' }}
-          className='flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full'
+          ref={container}
+          className='flex flex-auto flex-col overflow-auto bg-white'
         >
           <div
-            ref={containerNav}
-            className='sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8'
+            style={{ width: '165%' }}
+            className='flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full'
           >
-            {/* <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
+            <div
+              ref={containerNav}
+              className='sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8'
+            >
+              {/* <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
               <button
                 type="button"
                 className="flex flex-col items-center pt-2 pb-3"
@@ -472,363 +481,445 @@ export default function CalendarComponent() {
               </button>
             </div> */}
 
-            <div className='-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid'>
-              <div className='col-end-1 w-14' />
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[0][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Пн{' '}
+              <div className='-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid'>
+                <div className='col-end-1 w-14' />
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[0][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[0][0]}
+                    Пн{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[0][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[0][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[1][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Вт{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[1][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[1][0]}
+                    Вт{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[1][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[1][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[2][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Ср{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[2][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[2][0]}
+                    Ср{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[2][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[2][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[3][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Чт{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[3][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[3][0]}
+                    Чт{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[3][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[3][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[4][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Пт{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[4][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[4][0]}
+                    Пт{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[4][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[4][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[5][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Сб{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[5][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[5][0]}
+                    Сб{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[5][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[5][0]}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className='flex items-center justify-center py-3'>
-                <span
-                  className={
-                    (todayNum === wholeWeek[6][0]) &
-                    (todayMonthNum === monthNum)
-                      ? styles.weekSpanCurrentDate
-                      : styles.weekSpanNotCurrentDate
-                  }
-                >
-                  Вс{' '}
+                </div>
+                <div className='flex items-center justify-center py-3'>
                   <span
+                  style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[6][0]) &
                       (todayMonthNum === monthNum)
-                        ? styles.daySpanCurrentDate
-                        : styles.daySpanNotCurrentDate
+                        ? styles.weekSpanCurrentDate
+                        : styles.weekSpanNotCurrentDate
                     }
                   >
-                    {wholeWeek[6][0]}
+                    Вс{' '}
+                    <span
+                      className={
+                        (todayNum === wholeWeek[6][0]) &
+                        (todayMonthNum === monthNum)
+                          ? styles.daySpanCurrentDate
+                          : styles.daySpanNotCurrentDate
+                      }
+                    >
+                      {wholeWeek[6][0]}
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='flex flex-auto'>
-            <div className='sticky left-0 z-10 w-14 flex-none bg-white ring-1 ring-gray-100' />
-            <div className='grid flex-auto grid-cols-1 grid-rows-1'>
-              {/* Horizontal lines */}
-              <div
-                className='col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100'
-                style={{ gridTemplateRows: 'repeat(48, minmax(3.5rem, 1fr))' }}
-              >
-                <div ref={containerOffset} className='row-end-1 h-7'></div>
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    00:00
+            <div className='flex flex-auto'>
+              <div className='sticky left-0 z-10 w-14 flex-none bg-white ring-1 ring-gray-100' />
+              <div className='grid flex-auto grid-cols-1 grid-rows-1'>
+                {/* Horizontal lines */}
+                <div
+                  className='col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100'
+                  style={{
+                    gridTemplateRows: 'repeat(48, minmax(3.5rem, 1fr))',
+                  }}
+                >
+                  <div ref={containerOffset} className='row-end-1 h-7'></div>
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      00:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    01:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      01:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    02:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      02:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    03:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      03:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    04:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      04:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    05:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      05:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    06:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      06:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    07:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      07:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    08:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      08:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    09:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      09:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    10:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      10:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    11:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      11:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    12:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      12:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    13:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      13:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    14:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      14:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    15:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      15:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    16:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      16:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    17:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      17:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    18:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      18:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    19:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      19:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    20:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      20:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    21:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      21:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    22:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      22:00
+                    </div>
                   </div>
-                </div>
-                <div />
-                <div>
-                  <div className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'>
-                    23:00
+                  <div />
+                  <div>
+                    <div
+                      style={{ color: 'rgb(108, 114, 127)' }}
+                      className='sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-gray-400'
+                    >
+                      23:00
+                    </div>
                   </div>
+                  <div />
                 </div>
-                <div />
-              </div>
 
-              {/* Vertical lines */}
-              <div className='col-start-1 col-end-2 row-start-1 hidden grid-cols-7 grid-rows-1 divide-x divide-gray-100 sm:grid sm:grid-cols-7'>
-                <div className='col-start-1 row-span-full' />
-                <div className='col-start-2 row-span-full' />
-                <div className='col-start-3 row-span-full' />
-                <div className='col-start-4 row-span-full' />
-                <div className='col-start-5 row-span-full' />
-                <div className='col-start-6 row-span-full' />
-                <div className='col-start-7 row-span-full' />
-                <div className='col-start-8 row-span-full w-8' />
-              </div>
+                {/* Vertical lines */}
+                <div className='col-start-1 col-end-2 row-start-1 hidden grid-cols-7 grid-rows-1 divide-x divide-gray-100 sm:grid sm:grid-cols-7'>
+                  <div className='col-start-1 row-span-full' />
+                  <div className='col-start-2 row-span-full' />
+                  <div className='col-start-3 row-span-full' />
+                  <div className='col-start-4 row-span-full' />
+                  <div className='col-start-5 row-span-full' />
+                  <div className='col-start-6 row-span-full' />
+                  <div className='col-start-7 row-span-full' />
+                  <div className='col-start-8 row-span-full w-8' />
+                </div>
 
-              {/* Events */}
-              <ol
-                className='col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8'
-                style={{
-                  gridTemplateRows: '1.75rem repeat(288, minmax(0, 1fr)) auto',
-                }}
-              >
-                {workingSlots &&
-                  workingSlots.map((workingSlot) => {
-                    return (
-                      <EventCalendarWeekComponent
-                      send={send}
-                      setSend={setSend}
-                        key={workingSlot.id}
-                        workingSlot={workingSlot}
-                        authUser={authUser}
-                      />
-                    )
-                  })}
+                {/* Events */}
+                <ol
+                  className='col-start-1 col-end-2 row-start-1 grid grid-cols-1 sm:grid-cols-7 sm:pr-8'
+                  style={{
+                    gridTemplateRows:
+                      '1.75rem repeat(288, minmax(0, 1fr)) auto',
+                  }}
+                >
+                  {workingSlots &&
+                    workingSlots.map((workingSlot) => {
+                      return (
+                        <EventCalendarWeekComponent
+                          send={send}
+                          setSend={setSend}
+                          key={workingSlot.id}
+                          workingSlot={workingSlot}
+                          authUser={authUser}
+                        />
+                      )
+                    })}
 
-                {clientSlots &&
-                  clientSlots.map((clientSlot) => {
-                    return (
-                      <ClientEventCalendarWeekComponent
-                        key={clientSlot.id}
-                        clientSlot={clientSlot}
-                        authUser={authUser}
-                      />
-                    )
-                  })}
+                  {clientSlots &&
+                    clientSlots.map((clientSlot) => {
+                      return (
+                        <ClientEventCalendarWeekComponent
+                          key={clientSlot.id}
+                          clientSlot={clientSlot}
+                          authUser={authUser}
+                        />
+                      )
+                    })}
 
-                {/* <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '8 / span 12' }}>
+                  {/* <li className="relative mt-px flex sm:col-start-3" style={{ gridRow: '8 / span 12' }}>
                   <a
                     href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
@@ -872,7 +963,8 @@ export default function CalendarComponent() {
                     </p>
                   </a>
                 </li> */}
-              </ol>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
