@@ -1,46 +1,70 @@
-import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Button, FormControl, Input, Select, Stack } from "@chakra-ui/react";
-import React from "react";
-const timeForCal = ['9:00', '10:00', '11:00', '12:00', '13:00'];
+import { CheckIcon } from "@chakra-ui/icons";
+import { Button, Input, Stack } from "@chakra-ui/react";
+import React, { useState } from "react";
+import $api from "../../http";
+const moment = require("moment");
 
-function InputWorkingSlotEdit({handleInputOpen, HoursCalDisp}) {
+function InputWorkingSlotEdit({ handleInputOpen, HoursCalDisp, workingSlot }) {
+  const [startInput, setStartInput] = useState("");
+  const [endInput, setEndInput] = useState("");
 
-  function closeInput() {
-    handleInputOpen()
+  function onChangeHandlerStart(e) {
+    setStartInput(e.target.value);
   }
 
+  function onChangeHandlerEnd(e) {
+    setEndInput(e.target.value);
+  }
+
+  function onSubmitHandler(e) {
+    e.preventDefault();
+    handleInputOpen();
+    let startDateOnly = moment(workingSlot.startDateForFilter).format(
+      "YYYY-MM-DD"
+    );
+    let newStartDateTime = `${startDateOnly} ${startInput}`;
+    let newEndDateTime = `${startDateOnly} ${endInput}`;
+    let ISOnewStartDateTime = moment(newStartDateTime).toISOString();
+    let ISOnewEndDateTime = moment(newEndDateTime).toISOString();
+    console.log(ISOnewStartDateTime, ISOnewEndDateTime);
+    $api
+      .post(
+        `http://localhost:3500/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`,
+        {
+          startDateTime: ISOnewStartDateTime,
+          endDateTime: ISOnewEndDateTime
+        }
+      )
+      .then((response) => {
+        // dispatch(renderAuth())
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
-    <Stack spacing={1} direction="row" align="center">
-      {/* <FormControl>
-        <Select size="xs" placeholder={`${HoursCalDisp.startHours}:${HoursCalDisp.startMinutes}`}>
-        {timeForCal.map((el) => <option>{el}</option>)}
-        </Select>
-      </FormControl>
-      <FormControl>
-        <Select size="xs" placeholder={`${HoursCalDisp.endHours}:${HoursCalDisp.endMinutes}`}>
-          <option>United Arab Emirates</option>
-          <option>Nigeria</option>
-        </Select>
-      </FormControl> */}
-      <Input
-     placeholder="Select Date and Time"
-     size="xs"
-     type="time"
-    />
-          <Input
-     placeholder="Select Date and Time"
-     size="xs"
-     type="time"
-    />
-      <Button
-        colorScheme="white"
-        size="xxs"
-        onClick={closeInput}
-      >
-        <CheckIcon w={4} h={3} color="gray.500" />
-      </Button>
-    </Stack>
+    <form onSubmit={onSubmitHandler}>
+      <Stack spacing={1} direction="row" align="center">
+        <Input
+          placeholder="Select Date and Time"
+          size="xs"
+          type="time"
+          value={`${HoursCalDisp.startHours}:${HoursCalDisp.startMinutes}`}
+          onChange={(e) => onChangeHandlerStart(e)}
+        />
+        <Input
+          placeholder="Select Date and Time"
+          size="xs"
+          type="time"
+          value={`${HoursCalDisp.endHours}:${HoursCalDisp.endMinutes}`}
+          onChange={onChangeHandlerEnd}
+        />
+        <Button colorScheme="white" size="xxs" type="submit">
+          <CheckIcon w={4} h={3} color="gray.500" />
+        </Button>
+      </Stack>
+    </form>
   );
 }
 export default InputWorkingSlotEdit;

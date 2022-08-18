@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
@@ -30,11 +29,11 @@ const moment = require('moment')
 export default function EventCalendarWeekComponent({ workingSlot, authUser }) {
   // const { isOpen, onOpen, onClose } = useDisclosure()
   const HoursCalDisp = {
-    startHours: new Date(workingSlot.startDateTime).getHours(),
+    startHours: String(new Date(workingSlot.startDateTime).getHours()).padStart(2, "0"),
     startMinutes: String(
       new Date(workingSlot.startDateTime).getMinutes()
     ).padStart(2, "0"),
-    endHours: new Date(workingSlot.endDateTime).getHours(),
+    endHours: String(new Date(workingSlot.endDateTime).getHours()).padStart(2, "0"),
     endMinutes: String(new Date(workingSlot.endDateTime).getMinutes()).padStart(
       2,
       "0"
@@ -226,7 +225,7 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser }) {
               )}
             </Stack>
           ) : (
-            <InputWorkingSlotEdit handleInputOpen={handleInputOpen} HoursCalDisp={HoursCalDisp}/>
+            <InputWorkingSlotEdit handleInputOpen={handleInputOpen} workingSlot={workingSlot} HoursCalDisp={HoursCalDisp}/>
           )}
         </div>
       </li>
