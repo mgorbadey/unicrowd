@@ -13,6 +13,26 @@ class MailService {
     });
   }
 
+  async sendNotificationMail(to, clientName, serviceItem, dateTime) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: 'Уведомление о новой записи на UniCrowd',
+      text: '',
+      html:
+        `
+            <div>
+              <h1>У вас новая запись:</h1>
+              <ul>
+              <li>Клиент: ${clientName}</li>
+              <li>Процедура: ${serviceItem}</li>
+              <li>Дата и время: ${dateTime}</li>
+              </ul>
+            </div>
+          `,
+    });
+  }
+
   async sendActivationMail(to, link) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
@@ -20,7 +40,7 @@ class MailService {
       subject: 'Активация вашего аккаунта на UniCrowd',
       text: '',
       html:
-          `
+        `
             <div>
               <hi>Для активации вашего аккаунта пройдите по ссылке</hi>
               <a href=${link}>${link}</a>
@@ -28,6 +48,7 @@ class MailService {
           `,
     });
   }
+
 }
 
 module.exports = new MailService();
