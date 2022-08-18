@@ -98,17 +98,26 @@ exports.editWorkingSlot = async (req, res) => {
   console.log("achived!", id)
   let {startDateTime, endDateTime} = req.body
   console.log(req.body)
-  // console.log('startDateTime', startDateTime)
-  // console.log('endDateTime', endDateTime)
-  // const updateWorkingSlot = await prisma.schedule.update({
-  //   where: {
-  //     id: id
-  //   },
-  //   data: {
-  //     startDateTime: startDateTime,
-  //     endDateTime: endDateTime
-  //   },
-  // })
-  res.sendStatus(200)
+  const updateWorkingSlot = await prisma.schedule.update({
+    where: {
+      id: +id
+    },
+    data: {
+      startDateTime: new Date(startDateTime),
+      endDateTime: new Date(endDateTime)
+    },
+  })
+
+  const wholeUpdatedObj = await prisma.schedule.findMany({
+    where: {
+      id: +id
+    }
+  })
+
+  //вычисляем инфу о позиционировании блока в календаре и длине блока
+  let eventUpdForCal = eventPositionInCal(wholeUpdatedObj)
+  
+
+  res.send(eventUpdForCal)
 
 }

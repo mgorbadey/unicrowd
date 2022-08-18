@@ -1,12 +1,7 @@
 import React from 'react'
-import { Fragment, useState, useEffect } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import $api from '../../http/index'
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { deleteClientSlot } from '../../redux/actions/eventAction'
-import { deleteWorkingSlots } from '../../redux/actions/masterAction'
-import { useDispatch } from 'react-redux'
 import {
   Modal,
   ModalOverlay,
