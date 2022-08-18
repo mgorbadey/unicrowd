@@ -21,12 +21,24 @@ import InputWorkingSlotEdit from '../InputWorkingSlotEdit/InputWorkingSlotEdit'
 
 const moment = require('moment')
 
-export default function EventCalendarWeekComponent({ workingSlot, authUser, send, setSend }) {
-
+export default function EventCalendarWeekComponent({
+  workingSlot,
+  authUser,
+  send,
+  setSend,
+}) {
   const HoursCalDisp = {
-    startHours: String(new Date(workingSlot.startDateTime).getHours()).padStart(2, "0"),
-    startMinutes: String(new Date(workingSlot.startDateTime).getMinutes()).padStart(2, "0"),
-    endHours: String(new Date(workingSlot.endDateTime).getHours()).padStart(2, "0"),
+    startHours: String(new Date(workingSlot.startDateTime).getHours()).padStart(
+      2,
+      '0'
+    ),
+    startMinutes: String(
+      new Date(workingSlot.startDateTime).getMinutes()
+    ).padStart(2, '0'),
+    endHours: String(new Date(workingSlot.endDateTime).getHours()).padStart(
+      2,
+      '0'
+    ),
     endMinutes: String(new Date(workingSlot.endDateTime).getMinutes()).padStart(
       2,
       '0'
@@ -50,7 +62,6 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
   const [endDate, setEndDate] = useState(null)
   const [duration, setDuration] = useState(0)
   const [hoursCal, setHoursCal] = useState({})
-
 
   const params = useParams()
 
@@ -158,11 +169,13 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
       clientId: authUser.id,
       serviceItemId: select,
       durationHours: duration,
-      startDateTime: new Date(startDate.toString().replace(startDate.toString().slice(16, 21), time)),
+      startDateTime: new Date(
+        startDate.toString().replace(startDate.toString().slice(16, 21), time)
+      ),
       startDateForFilter: new Date(
-        moment(startDate.toString().replace(startDate.toString().slice(16, 21), time)).format(
-          'YYYY-MM-DD'
-        )
+        moment(
+          startDate.toString().replace(startDate.toString().slice(16, 21), time)
+        ).format('YYYY-MM-DD')
       ),
     }
 
@@ -204,7 +217,12 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
         <div className='group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-50 p-2 text-xs leading-5 hover:bg-gray-100'>
           <p className='order-1 font-semibold text-gray-700'>Рабочее время</p>
           {!inputOpen ? (
-            <Stack spacing={9} direction='row' justify='space-between' align='center'>
+            <Stack
+              spacing={9}
+              direction='row'
+              justify='space-between'
+              align='center'
+            >
               <p className='text-gray-500 group-hover:text-gray-700'>
                 <time dateTime={workingSlot.startDateTime}>
                   {HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-
@@ -221,8 +239,11 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
               )}
             </Stack>
           ) : (
-
-            <InputWorkingSlotEdit handleInputOpen={handleInputOpen} workingSlot={workingSlot} HoursCalDisp={HoursCalDisp}/>
+            <InputWorkingSlotEdit
+              handleInputOpen={handleInputOpen}
+              workingSlot={workingSlot}
+              HoursCalDisp={HoursCalDisp}
+            />
           )}
         </div>
       </li>
@@ -230,10 +251,27 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Запишитесь на услугу</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <Select placeholder='Выберите услугу' onChange={onChangeHandler}>
+          <ModalHeader
+            textAlign='center'
+            mt='20px'
+            style={{
+              fontSize: '1.5rem',
+              color: 'rgb(98, 97, 95)',
+            }}
+          >
+            Запишитесь на услугу
+          </ModalHeader>
+          <ModalBody>
+            <Select
+              mb='10px'
+              size='md'
+              color='rgb(108, 114, 127)'
+              border='2px solid white'
+              focusBorderColor='rgb(140, 175, 174)'
+              bg='white'
+              placeholder='Выберите услугу'
+              onChange={onChangeHandler}
+            >
               {serviceInfo?.data?.serviceItem.map((el) => (
                 <option id={el.id} key={el.id} value={el.title}>
                   {el.title}
@@ -241,13 +279,18 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
               ))}
             </Select>
             <Select
+              size='md'
+              color='rgb(108, 114, 127)'
+              border='2px solid white'
+              focusBorderColor='rgb(140, 175, 174)'
+              bg='white'
               placeholder='Выберите время'
               disabled={timeSlotInfo?.length ? false : true}
               onChange={onChangeTime}
             >
               {timeSlotInfo?.map((el) => (
                 <option
-                key={el}
+                  key={el}
                   value={
                     Number.isInteger(el)
                       ? el < 10
@@ -270,11 +313,25 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
             </Select>
           </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={clientCreateEvent}>
+          <ModalFooter justifyContent='space-around'>
+            <Button
+              type='button'
+              color='rgb(108, 114, 127)'
+              cursor='pointer'
+              bg='white'
+              w='100px'
+              size='md'
+              onClick={clientCreateEvent}
+            >
               Записаться
             </Button>
             <Button
+              type='button'
+              color='rgb(108, 114, 127)'
+              cursor='pointer'
+              bg='white'
+              w='100px'
+              size='md'
               onClick={(e) => {
                 onClose(e)
                 setTimeSlotInfo([])
@@ -288,4 +345,3 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
     </>
   )
 }
-
