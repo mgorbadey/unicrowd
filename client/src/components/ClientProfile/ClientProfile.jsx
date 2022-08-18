@@ -13,6 +13,31 @@ import {
   Input,
   Select,
 } from '@chakra-ui/react'
+import { CheckIcon, SpinnerIcon } from '@chakra-ui/icons'
+import moment from 'moment'
+
+// перевод месяцев на русский
+const changeMonthLanguage = (date) => {
+  const RussianMonth = {
+    Jan: 'янв',
+    Feb: 'фев',
+    Mar: 'мар',
+    Apr: 'апр',
+    May: 'май',
+    Jun: 'июн',
+    Jul: 'июл',
+    Aug: 'авг',
+    Sep: 'сен',
+    Oct: 'окт',
+    Nov: 'ноя',
+    Dec: 'дек',
+  }
+  const dateArray = date.split(' ')
+  for (let key in RussianMonth) {
+    if (key === dateArray[1])
+      return `${dateArray[0]} ${RussianMonth[key]} ${dateArray[2]}`
+  }
+}
 
 export default function MasterProfile() {
   const navigate = useNavigate()
@@ -41,6 +66,7 @@ export default function MasterProfile() {
   const [service, setService] = useState([])
   const [itemChange, setItemChange] = useState(false)
   const [itemId, setItemId] = useState(null)
+  const [dataEvents, setDataEvents] = useState([])
 
   const clipboard = useClipboard()
   const params = useParams()
@@ -198,9 +224,11 @@ export default function MasterProfile() {
     const serviceItemInfo = await $api.get(
       `http://localhost:3500/masters/${params.id}/serviceItemInfo`
     )
-    const eventInfo = await $api.get(`http://localhost:3500/clients/${params.id}/eventInfo`)
+    const eventInfo = await $api.get(
+      `http://localhost:3500/clients/${params.id}/eventInfo`
+    )
 
-    console.log(eventInfo)
+    setDataEvents(eventInfo.data.event)
 
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)
@@ -531,11 +559,11 @@ export default function MasterProfile() {
             }}
           >
             <ul className='divide-y divide-gray-200'>
-              {service &&
-                service.map((position) => (
-                  <li key={position.id}>
+              {dataEvents.length &&
+                dataEvents.map((dataEvent) => (
+                  <li key={dataEvent.id}>
                     <div
-                      onClick={() => serviceItemChange(position.id)}
+                      // onClick={() => serviceItemChange(position.id)}
                       className='block hover:bg-gray-50'
                     >
                       <div className='px-4 py-4 sm:px-6'>
@@ -544,31 +572,40 @@ export default function MasterProfile() {
                             className='text-base font-medium truncate'
                             style={{ color: 'rgb(98, 97, 95)' }}
                           >
-                            {position.title}
+                            {dataEvent.serviceItem.title}
                           </p>
                           <div className='ml-2 flex-shrink-0 flex'>
                             <p
-                              className='px-2 inline-flex  text-sm truncate'
-                              style={{ color: 'rgb(124, 156, 154)' }}
+                              className='px-2 inline-flex  text-sm truncate text-uni-gray'
+                              // style={{ color: 'rgb(124, 156, 154)' }}
                             >
-                              {position.price}₽
+                              {dataEvent.serviceItem.price}₽
                             </p>
                           </div>
                         </div>
                         <div className='mt-2 mt-style sm:flex sm:justify-between'>
                           <div className='sm:flex justify-between w-full'>
                             <p className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0'>
-                              Длительность {position.duration} мин
+                              {dataEvent.serviceItem.master.username}
                             </p>
                             <p className='flex items-center text-sm text-gray-500'>
-                              {position.serviceCategory.title}
+                              {changeMonthLanguage(
+                                moment(
+                                  new Date(dataEvent.startDateTime)
+                                ).format('DD MMM HH:mm')
+                              )}
                             </p>
                           </div>
-                          {/* <div className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0  sm:ml-6'
-                          style={{ color: 'rgb(124, 156, 154)' }}
+                          <div
+                            className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0  sm:ml-6'
+                            style={{ color: 'rgb(124, 156, 154)' }}
                           >
-                            <p>Создано {position.createdAt.slice(0, 10)}</p>
-                          </div> */}
+                            {dataEvent.status === 'new' ? (
+                              <CheckIcon />
+                            ) : (
+                              <SpinnerIcon />
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
