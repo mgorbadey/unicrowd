@@ -4,6 +4,7 @@ const initState = {
   master: [],
   event: [],
   localStorage: false,
+  picture: false,
 }
 
 export default initState

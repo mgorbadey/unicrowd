@@ -17,6 +17,7 @@ import { CheckIcon, DeleteIcon, SpinnerIcon } from "@chakra-ui/icons";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deleteClientSlot } from "../../redux/actions/eventAction";
+import { getPicture } from "../../redux/actions/pictureAction";
 
 // перевод месяцев на русский
 const changeMonthLanguage = (date) => {
@@ -42,6 +43,7 @@ const changeMonthLanguage = (date) => {
 };
 
 export default function MasterProfile() {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
 
   const [authUser, setAuthUser] = useState({});
@@ -85,6 +87,7 @@ export default function MasterProfile() {
         },
       });
       setAvatar(res.data.path);
+      dispatch(getPicture())
     } catch (error) {
       console.log(error.message);
     }
@@ -376,7 +379,10 @@ export default function MasterProfile() {
                             bg="white"
                             w="100px"
                             size="sm"
-                            onClick={sendFile}
+                            onClick={(e) => {
+                              sendFile(e)
+                              
+                            }}
                           >
                             Добавить
                           </Button>

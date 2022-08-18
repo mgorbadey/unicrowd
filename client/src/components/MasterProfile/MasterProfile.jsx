@@ -14,8 +14,11 @@ import {
   Select,
   Textarea,
 } from '@chakra-ui/react'
+import {useDispatch} from 'react-redux'
+import { getPicture } from "../../redux/actions/pictureAction";
 
 export default function MasterProfile() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [authUser, setAuthUser] = useState({})
@@ -58,6 +61,7 @@ export default function MasterProfile() {
         },
       })
       setAvatar(res.data.path)
+      dispatch(getPicture())
     } catch (error) {
       console.log(error.message)
     }

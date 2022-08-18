@@ -13,6 +13,8 @@ const Header = () => {
   const navigate = useNavigate()
   const [authUser, setAuthUser] = useState({})
   const render = useSelector((store) => store.localStorage)
+  const picture = useSelector((store) => store.picture)
+  const [user, setUser] = useState({})
 
   const logout = () => {
     navigate('/search', { replace: false })
@@ -43,6 +45,12 @@ const Header = () => {
   useEffect(() => {
     setAuthUser(JSON.parse(window.localStorage.getItem('user')))
   }, [render])
+
+  useEffect(() => {
+    if (authUser?.id) {
+      $api.get(`/masters/${authUser.id}`).then((response) => setUser(response.data))
+    }
+  }, [picture, authUser])
   
 
   return (
@@ -101,10 +109,10 @@ const Header = () => {
                     <div>
                       <Menu.Button className='max-w-xs rounded-full flex items-center text-sm'>
                         <span className='sr-only'>Open user menu</span>
-                        {authUser?.userPic ? (
+                        {user?.userPic ? (
                           <img
                             className='h-8 w-8 rounded-full'
-                            src={`/${authUser.userPic}`}
+                            src={`/${user?.userPic}`}
                             alt='user'
                           />
                         ) : (
