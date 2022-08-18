@@ -215,7 +215,7 @@ router
   .post(editWorkingSlot)
 
 router
-  .route("/:id/schedules/:id/status")
+  .route("/:masterId/schedules/:id/status")
   .get(getAvailabilityStatus)
 
 router

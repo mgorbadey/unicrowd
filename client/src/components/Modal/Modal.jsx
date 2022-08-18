@@ -93,6 +93,17 @@ const EventModal = ({ open, setOpen }) => {
           </ModalBody>
 
           <ModalFooter justifyContent='space-around'>
+            <Button
+                type='button'
+                color='rgb(108, 114, 127)'
+                cursor='pointer'
+                bg='white'
+                w='100px'
+                size='md'
+                onClick={() => setOpen(false)}
+              >
+                Отменить
+              </Button>
           <Button
                 type='button'
                 color='rgb(108, 114, 127)'
@@ -105,17 +116,6 @@ const EventModal = ({ open, setOpen }) => {
                 Добавить
               </Button>
             {/* <Spacer /> */}
-            <Button
-                type='button'
-                color='rgb(108, 114, 127)'
-                cursor='pointer'
-                bg='white'
-                w='100px'
-                size='md'
-                onClick={() => setOpen(false)}
-              >
-                Отменить
-              </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -11,7 +11,6 @@ function ButtonsEditDeleteWorkingSlot({ workingSlot, handleInputOpen }) {
 
   function getWorkingSlotStatus(e) {
     e.preventDefault();
-    console.log("hehehe");
     let startDateOnly = moment(workingSlot.startDateForFilter).format(
       "YYYY-MM-DD"
     );
@@ -36,7 +35,6 @@ function ButtonsEditDeleteWorkingSlot({ workingSlot, handleInputOpen }) {
         `http://localhost:3500/masters/${workingSlot.masterId}/schedules/${workingSlot.id}`
       )
       .then((response) => {
-        console.log("deleted!!!");
         dispatch(deleteWorkingSlots(workingSlot.id));
       })
       .catch((error) => {

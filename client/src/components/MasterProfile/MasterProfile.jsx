@@ -823,7 +823,6 @@ export default function MasterProfile() {
                         }
                         defaultValue='Canada'
                       >
-                        <option>30 мин</option>
                         <option>60 мин</option>
                         <option>90 мин</option>
                         <option>120 мин</option>
