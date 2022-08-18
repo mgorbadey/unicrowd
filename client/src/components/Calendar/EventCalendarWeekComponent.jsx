@@ -293,3 +293,4 @@ export default function EventCalendarWeekComponent({ workingSlot, authUser, send
     </>
   )
 }
+
