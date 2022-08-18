@@ -1,4 +1,11 @@
-import { Input, Button, Select, FormControl, FormHelperText, FormErrorMessage } from '@chakra-ui/react'
+import {
+  Input,
+  Button,
+  Select,
+  FormControl,
+  FormHelperText,
+  FormErrorMessage,
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -24,7 +31,9 @@ export default function Example() {
     str.length === 0 ? setIsEmailError(true) : setIsEmailError(false)
   }
   const checkPasswordLength = (str) => {
-    (str.length < 4 || str.length > 10) ? setIsPasswordError(true) : setIsPasswordError(false)
+    str.length < 4 || str.length > 10
+      ? setIsPasswordError(true)
+      : setIsPasswordError(false)
   }
 
   const registration = (e) => {
@@ -67,21 +76,20 @@ export default function Example() {
           </div>
           <form className='mt-8 space-y-6' action='#' method='POST'>
             <div className='rounded-md shadow-sm -space-y-px'>
-
               <div>
                 <FormControl isInvalid={isUsernameError}>
                   {!isUsernameError ? (
-                    <FormHelperText 
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
-                    color ='transparent'
+                    <FormHelperText
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                      color='transparent'
                     >
                       Текст
                     </FormHelperText>
                   ) : (
                     <FormErrorMessage
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
                     >
                       Поле не может быть пустым
                     </FormErrorMessage>
@@ -99,29 +107,31 @@ export default function Example() {
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
-                    placeholder='полное иимя'
-                    _placeholder={{ opacity: 0.3}}
+                    placeholder='полное имя'
+                    _placeholder={{ opacity: 0.3 }}
                     value={username}
-                    onChange={(e) => { setUsername(e.target.value); checkUsernameLength(e.target.value) }}
+                    onChange={(e) => {
+                      setUsername(e.target.value)
+                      checkUsernameLength(e.target.value)
+                    }}
                   />
-
                 </FormControl>
               </div>
 
               <div>
                 <FormControl isInvalid={isEmailError}>
                   {!isEmailError ? (
-                    <FormHelperText 
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
-                    color ='transparent'
+                    <FormHelperText
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                      color='transparent'
                     >
                       Текст
                     </FormHelperText>
                   ) : (
-                    <FormErrorMessage 
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
+                    <FormErrorMessage
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
                     >
                       Поле не может быть пустым
                     </FormErrorMessage>
@@ -140,9 +150,12 @@ export default function Example() {
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
                     placeholder='почта'
-                    _placeholder={{ opacity: 0.3}}
+                    _placeholder={{ opacity: 0.3 }}
                     value={email}
-                    onChange={(e) => { setEmail(e.target.value); checkEmailLength(e.target.value) }}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      checkEmailLength(e.target.value)
+                    }}
                   />
                 </FormControl>
               </div>
@@ -151,16 +164,16 @@ export default function Example() {
                 <FormControl isInvalid={isPasswordError}>
                   {!isPasswordError ? (
                     <FormHelperText
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
-                    color ='transparent'
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                      color='transparent'
                     >
                       Пароль
                     </FormHelperText>
                   ) : (
-                    <FormErrorMessage 
-                    margin = '0px 5px 5px 18px' 
-                    textAlign = 'flex-start'
+                    <FormErrorMessage
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
                     >
                       Пароль должен содержать от 4 до 10 символов
                     </FormErrorMessage>
@@ -178,9 +191,12 @@ export default function Example() {
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
                     placeholder='пароль'
-                    _placeholder={{ opacity: 0.3}}
+                    _placeholder={{ opacity: 0.3 }}
                     value={password}
-                    onChange={(e) => { setPassword(e.target.value); checkPasswordLength(e.target.value) }}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      checkPasswordLength(e.target.value)
+                    }}
                   />
                 </FormControl>
               </div>
