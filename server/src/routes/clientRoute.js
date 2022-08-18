@@ -1,22 +1,22 @@
 const { Router } = require('express')
 const router = Router()
 const { PrismaClient } = require('@prisma/client')
-const { eventPositionInCal } = require("../lib/calendarFormating")
 const prisma = new PrismaClient()
+const { eventPositionInCal } = require('../lib/calendarFormating')
 
 router.get('/:id/profile', async (req, res) => {
     const { id } = req.params
 
-    const { username, email, info, userPic, city, role} = await prisma.user.findFirst({
+    const { username, email, info, userPic, city, role } = await prisma.user.findFirst({
         where: {
-          id: Number(id),
+            id: Number(id),
         },
         include: {
             city: true,
         },
-      })
+    })
 
-    res.json({username, email, info, userPic, city, role})
+    res.json({ username, email, info, userPic, city, role })
 })
 
 router.get('/:id/events', async (req, res) => {
@@ -32,17 +32,17 @@ router.get('/:id/events', async (req, res) => {
     //     }
     // })
 
-    res.json([{startDateTime: Date.now(), masterId: '3', status: 'Не подвержден', serviceItemId: 'Маникюр', masterName: 'Кеча'}])
+    res.json([{ startDateTime: Date.now(), masterId: '3', status: 'Не подвержден', serviceItemId: 'Маникюр', masterName: 'Кеча' }])
 })
 
 router.get('/cityInfo', async (req, res) => {
     const city = await prisma.city.findMany()
-    res.send({city})
+    res.send({ city })
 })
 
 router.get('/categoryInfo', async (req, res) => {
     const category = await prisma.serviceCategory.findMany()
-    res.send({category})
+    res.send({ category })
 })
 
 router.get('/:id/events', async (req, res) => {
@@ -57,7 +57,30 @@ router.get('/:id/events', async (req, res) => {
         }
     })
 
-    res.json({events})
+    res.json({ events })
+})
+
+router.get('/:id/eventInfo', async (req, res) => {
+    const { id } = req.params
+
+    const event = await prisma.event.findMany({
+        where: {
+            clientId: Number(id)
+        },
+        include: {
+            serviceItem: {
+                include: {
+                    master: {
+                        select: {
+                            username: true
+                        }
+                    }
+                }
+            }
+        },
+    })
+
+    res.json({ event })
 })
 
 router.post('/cityUpdate', async (req, res) => {
@@ -69,29 +92,29 @@ router.post('/cityUpdate', async (req, res) => {
 
     const updateUser = await prisma.user.update({
         where: {
-          id: Number(id)
+            id: Number(id)
         },
         data: {
             cityId: Number(city)
         },
-      })
+    })
 
-    res.json({info: req.body})
+    res.json({ info: req.body })
 })
 
 router.post('/modalTextUpdate', async (req, res) => {
-    const { id, textarea} = req.body
+    const { id, textarea } = req.body
 
     const updateUser = await prisma.user.update({
         where: {
-          id: Number(id)
+            id: Number(id)
         },
         data: {
             info: textarea
         },
-      })
+    })
 
-    res.json({info: req.body})
+    res.json({ info: req.body })
 })
 
 router.post('/deleteItem', async (req, res) => {
@@ -105,12 +128,11 @@ router.post('/deleteItem', async (req, res) => {
         }
     })
 
-    res.json({item})
+    res.json({ item })
 })
 
 router.post('/event/schedule', async (req, res) => {
-    const {masterId, clientId, serviceItemId, startDateTime, startDateForFilter} = req.body
-    console.log(req.body)
+    const { masterId, clientId, serviceItemId, startDateTime, startDateForFilter } = req.body
 
     const event = await prisma.event.create({
         data: {
@@ -122,10 +144,9 @@ router.post('/event/schedule', async (req, res) => {
             status: 'new'
         }
     })
-
-    res.json(eventPositionInCal([event]))
-
-    console.log(event)
+    const item = await prisma.serviceItem.findMany({ where: { id: event.serviceItemId } })[0]
+    const formatData = eventPositionInCal([event])
+    res.json()
 })
 
 module.exports = router
