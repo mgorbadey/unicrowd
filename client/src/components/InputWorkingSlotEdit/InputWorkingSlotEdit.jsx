@@ -1,19 +1,27 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Button, Input, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { editWorkingSlots } from "../../redux/actions/masterAction";
 import $api from "../../http";
 const moment = require("moment");
 
 function InputWorkingSlotEdit({ handleInputOpen, HoursCalDisp, workingSlot }) {
-  const [startInput, setStartInput] = useState("");
-  const [endInput, setEndInput] = useState("");
+  const [startInput, setStartInput] = useState(`${HoursCalDisp.startHours}:${HoursCalDisp.startMinutes}`);
+  const [endInput, setEndInput] = useState(`${HoursCalDisp.endHours}:${HoursCalDisp.endMinutes}`);
+  const dispatch = useDispatch();
 
   function onChangeHandlerStart(e) {
-    setStartInput(e.target.value);
+    e.target.value ? 
+    setStartInput(e.target.value) :
+    setStartInput(startInput)
+
   }
 
   function onChangeHandlerEnd(e) {
-    setEndInput(e.target.value);
+    e.target.value ? 
+    setEndInput(e.target.value) :
+    setEndInput(endInput)
   }
 
   function onSubmitHandler(e) {
@@ -26,6 +34,7 @@ function InputWorkingSlotEdit({ handleInputOpen, HoursCalDisp, workingSlot }) {
     let newEndDateTime = `${startDateOnly} ${endInput}`;
     let ISOnewStartDateTime = moment(newStartDateTime).toISOString();
     let ISOnewEndDateTime = moment(newEndDateTime).toISOString();
+    let newPeriod = {ISOnewStartDateTime, ISOnewEndDateTime}
     console.log(ISOnewStartDateTime, ISOnewEndDateTime);
     $api
       .post(
@@ -36,7 +45,8 @@ function InputWorkingSlotEdit({ handleInputOpen, HoursCalDisp, workingSlot }) {
         }
       )
       .then((response) => {
-        // dispatch(renderAuth())
+        console.log(response.data[0])
+        dispatch(editWorkingSlots(response.data[0]))
       })
       .catch((error) => {
         console.log(error);
@@ -51,7 +61,7 @@ function InputWorkingSlotEdit({ handleInputOpen, HoursCalDisp, workingSlot }) {
           size="xs"
           type="time"
           value={`${HoursCalDisp.startHours}:${HoursCalDisp.startMinutes}`}
-          onChange={(e) => onChangeHandlerStart(e)}
+          onChange={onChangeHandlerStart}
         />
         <Input
           placeholder="Select Date and Time"

@@ -12,3 +12,7 @@ export const addWorkingSlots = (arr) => ({
 export const deleteWorkingSlots = (arr) => ({
   type: masterType.DELETEWORKINGSLOTS, payload: arr
 })
+
+export const editWorkingSlots = (obj) => ({
+  type: masterType.EDITWORKINGSLOTS, payload: obj
+})
