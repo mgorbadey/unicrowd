@@ -228,7 +228,8 @@ export default function MasterProfile() {
       `http://localhost:3500/clients/${params.id}/eventInfo`
     )
 
-    setDataEvents(eventInfo.data.event)
+    setDataEvents(eventInfo?.data.event)
+    console.log('eventInfo.data.event: ', eventInfo.data.event)
 
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)
@@ -559,58 +560,59 @@ export default function MasterProfile() {
             }}
           >
             <ul className='divide-y divide-gray-200'>
-              {dataEvents.length &&
-                dataEvents.map((dataEvent) => (
-                  <li key={dataEvent.id}>
-                    <div
-                      // onClick={() => serviceItemChange(position.id)}
-                      className='block hover:bg-gray-50'
-                    >
-                      <div className='px-4 py-4 sm:px-6'>
-                        <div className='flex items-center justify-between'>
-                          <p
-                            className='text-base font-medium truncate'
-                            style={{ color: 'rgb(98, 97, 95)' }}
-                          >
-                            {dataEvent.serviceItem.title}
-                          </p>
-                          <div className='ml-2 flex-shrink-0 flex'>
+              {dataEvents?.length
+                ? dataEvents?.map((dataEvent) => (
+                    <li key={dataEvent.id}>
+                      <div
+                        // onClick={() => serviceItemChange(position.id)}
+                        className='block hover:bg-gray-50'
+                      >
+                        <div className='px-4 py-4 sm:px-6'>
+                          <div className='flex items-center justify-between'>
                             <p
-                              className='px-2 inline-flex  text-sm truncate text-uni-gray'
-                              // style={{ color: 'rgb(124, 156, 154)' }}
+                              className='text-base font-medium truncate'
+                              style={{ color: 'rgb(98, 97, 95)' }}
                             >
-                              {dataEvent.serviceItem.price}₽
+                              {dataEvent.serviceItem.title}
                             </p>
+                            <div className='ml-2 flex-shrink-0 flex'>
+                              <p
+                                className='px-2 inline-flex  text-sm truncate text-uni-gray'
+                                // style={{ color: 'rgb(124, 156, 154)' }}
+                              >
+                                {dataEvent.serviceItem.price}₽
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className='mt-2 mt-style sm:flex sm:justify-between'>
-                          <div className='sm:flex justify-between w-full'>
-                            <p className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0'>
-                              {dataEvent.serviceItem.master.username}
-                            </p>
-                            <p className='flex items-center text-sm text-gray-500'>
-                              {changeMonthLanguage(
-                                moment(
-                                  new Date(dataEvent.startDateTime)
-                                ).format('DD MMM HH:mm')
+                          <div className='mt-2 mt-style sm:flex sm:justify-between'>
+                            <div className='sm:flex justify-between w-full'>
+                              <p className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0'>
+                                {dataEvent.serviceItem.master.username}
+                              </p>
+                              <p className='flex items-center text-sm text-gray-500'>
+                                {changeMonthLanguage(
+                                  moment(
+                                    new Date(dataEvent.startDateTime)
+                                  ).format('DD MMM HH:mm')
+                                )}
+                              </p>
+                            </div>
+                            <div
+                              className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0  sm:ml-6'
+                              style={{ color: 'rgb(124, 156, 154)' }}
+                            >
+                              {dataEvent.status === 'new' ? (
+                                <SpinnerIcon />
+                              ) : (
+                                <CheckIcon />
                               )}
-                            </p>
-                          </div>
-                          <div
-                            className='mt-2 mt-style flex items-center text-sm text-gray-500 sm:mt-0  sm:ml-6'
-                            style={{ color: 'rgb(124, 156, 154)' }}
-                          >
-                            {dataEvent.status === 'new' ? (
-                              <CheckIcon />
-                            ) : (
-                              <SpinnerIcon />
-                            )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  ))
+                : null}
             </ul>
           </div>
         </GridItem>
