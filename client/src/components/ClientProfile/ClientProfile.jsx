@@ -198,9 +198,9 @@ export default function MasterProfile() {
     const serviceItemInfo = await $api.get(
       `http://localhost:3500/masters/${params.id}/serviceItemInfo`
     )
+    const eventInfo = await $api.get(`http://localhost:3500/clients/${params.id}/eventInfo`)
 
-    // console.log(serviceItemInfo, 'serviceItemInfo')
-    // console.log(categoryInfo, 'categoryInfo')
+    console.log(eventInfo)
 
     setService(serviceItemInfo.data.serviceItem)
     setCity(cityInfo)
