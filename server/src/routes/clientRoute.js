@@ -131,7 +131,7 @@ router.post('/deleteItem', async (req, res) => {
 })
 
 router.post('/event/schedule', async (req, res) => {
-    const {masterId, clientId, serviceItemId, startDateTime} = req.body
+    const {masterId, clientId, serviceItemId, startDateTime, startDateForFilter} = req.body
 
     const event = await prisma.event.create({
         data: {
@@ -142,8 +142,9 @@ router.post('/event/schedule', async (req, res) => {
             status: 'Not approved'
         }
     })
-
-    console.log(event)
+    const item = await prisma.serviceItem.findMany({where: {id: event.serviceItemId}})[0]
+    const formatData = eventPositionInCal([event])
+    res.json()
 })
 
 module.exports = router

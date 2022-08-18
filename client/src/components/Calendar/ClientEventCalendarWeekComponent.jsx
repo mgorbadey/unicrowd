@@ -24,7 +24,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot, authUser 
         ),
       };
 
-    console.log(HoursCalDisp, 'HoursCalDisp')
+    // console.log(HoursCalDisp, 'HoursCalDisp')
       
   const dispatch = useDispatch();
 

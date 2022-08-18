@@ -92,10 +92,30 @@ const EventModal = ({ open, setOpen }) => {
           </Select> */}
           </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='teal' onClick={() => createEvent()}>Добавить слот</Button>
-            <Spacer />
-            <Button colorScheme='red' onClick={() => setOpen(false)}>Закрыть</Button>
+          <ModalFooter justifyContent='space-around'>
+          <Button
+                type='button'
+                color='rgb(108, 114, 127)'
+                cursor='pointer'
+                bg='white'
+                w='100px'
+                size='md'
+                onClick={() => createEvent()}
+              >
+                Добавить
+              </Button>
+            {/* <Spacer /> */}
+            <Button
+                type='button'
+                color='rgb(108, 114, 127)'
+                cursor='pointer'
+                bg='white'
+                w='100px'
+                size='md'
+                onClick={() => setOpen(false)}
+              >
+                Отменить
+              </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
