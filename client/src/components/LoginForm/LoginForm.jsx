@@ -1,4 +1,4 @@
-import { Button, Input } from '@chakra-ui/react'
+import { Input, Button, FormControl, FormHelperText, FormErrorMessage } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +10,16 @@ export default function Example() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const [isEmailError, setIsEmailError] = useState(false)
+  const [isPasswordError, setIsPasswordError] = useState(false)
+
+  const checkEmailLength = (str) => {
+    str.length === 0 ? setIsEmailError(true) : setIsEmailError(false)
+  }
+  const checkPasswordLength = (str) => {
+    (str.length < 4 || str.length > 10) ? setIsPasswordError(true) : setIsPasswordError(false)
+  }
 
   const login = (e) => {
     e.preventDefault()
@@ -50,39 +60,78 @@ export default function Example() {
           <form className='mt-8 space-y-6' action='#' method='POST'>
             <div className='rounded-md shadow-sm -space-y-px'>
               <div>
-                <Input
-                  id='email-address'
-                  name='email'
-                  type='email'
-                  autoComplete='email'
-                  required
-                  bg='white'
-                  mb='10px'
-                  color='rgb(108, 114, 127)'
-                  border='2px solid white'
-                  focusBorderColor='rgb(140, 175, 174)'
-                  size='md'
-                  placeholder='почта'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <FormControl isInvalid={isEmailError}>
+                  {!isEmailError ? (
+                    <FormHelperText
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                      color='transparent'
+                    >
+                      Текст
+                    </FormHelperText>
+                  ) : (
+                    <FormErrorMessage
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                    >
+                      Поле не может быть пустым
+                    </FormErrorMessage>
+                  )}
+                  <Input
+                    id='email-address'
+                    name='email'
+                    type='email'
+                    autoComplete='email'
+                    required
+                    bg='white'
+                    mb='10px'
+                    color='rgb(108, 114, 127)'
+                    border='2px solid white'
+                    focusBorderColor='rgb(140, 175, 174)'
+                    size='md'
+                    placeholder='почта'
+                    _placeholder={{ opacity: 0.3 }}
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); checkEmailLength(e.target.value) }}
+                  />
+                </FormControl>
               </div>
+
               <div>
-                <Input
-                  id='password'
-                  name='password'
-                  type='password'
-                  autoComplete='current-password'
-                  required
-                  bg='white'
-                  color='rgb(108, 114, 127)'
-                  border='2px solid white'
-                  focusBorderColor='rgb(140, 175, 174)'
-                  size='md'
-                  placeholder='пароль'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <FormControl isInvalid={isPasswordError}>
+                  {!isPasswordError ? (
+                    <FormHelperText
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                      color='transparent'
+                    >
+                      Пароль
+                    </FormHelperText>
+                  ) : (
+                    <FormErrorMessage
+                      margin='0px 5px 5px 18px'
+                      textAlign='flex-start'
+                    >
+                      Пароль должен содержать от 4 до 10 символов
+                    </FormErrorMessage>
+                  )}
+                  <Input
+                    id='password'
+                    name='password'
+                    type='password'
+                    autoComplete='current-password'
+                    required
+                    bg='white'
+                    color='rgb(108, 114, 127)'
+                    border='2px solid white'
+                    focusBorderColor='rgb(140, 175, 174)'
+                    size='md'
+                    placeholder='пароль'
+                    _placeholder={{ opacity: 0.3 }}
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); checkPasswordLength(e.target.value) }}
+                  />
+                </FormControl>
               </div>
             </div>
             <div className='flex justify-center'>

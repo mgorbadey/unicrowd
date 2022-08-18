@@ -71,11 +71,18 @@ export default function Example() {
               <div>
                 <FormControl isInvalid={isUsernameError}>
                   {!isUsernameError ? (
-                    <FormHelperText style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
-                      Ваше имя
+                    <FormHelperText 
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    color ='transparent'
+                    >
+                      Текст
                     </FormHelperText>
                   ) : (
-                    <FormErrorMessage style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
+                    <FormErrorMessage
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    >
                       Поле не может быть пустым
                     </FormErrorMessage>
                   )}
@@ -92,7 +99,7 @@ export default function Example() {
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
-                    placeholder='Иван Зайцев'
+                    placeholder='полное иимя'
                     _placeholder={{ opacity: 0.3}}
                     value={username}
                     onChange={(e) => { setUsername(e.target.value); checkUsernameLength(e.target.value) }}
@@ -104,11 +111,18 @@ export default function Example() {
               <div>
                 <FormControl isInvalid={isEmailError}>
                   {!isEmailError ? (
-                    <FormHelperText style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
-                      Почта
+                    <FormHelperText 
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    color ='transparent'
+                    >
+                      Текст
                     </FormHelperText>
                   ) : (
-                    <FormErrorMessage style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
+                    <FormErrorMessage 
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    >
                       Поле не может быть пустым
                     </FormErrorMessage>
                   )}
@@ -125,24 +139,29 @@ export default function Example() {
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
-                    placeholder='ivanzaytcev@unicrowd.ru'
+                    placeholder='почта'
                     _placeholder={{ opacity: 0.3}}
                     value={email}
                     onChange={(e) => { setEmail(e.target.value); checkEmailLength(e.target.value) }}
                   />
-
-
                 </FormControl>
               </div>
 
               <div>
                 <FormControl isInvalid={isPasswordError}>
                   {!isPasswordError ? (
-                    <FormHelperText style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
+                    <FormHelperText
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    color ='transparent'
+                    >
                       Пароль
                     </FormHelperText>
                   ) : (
-                    <FormErrorMessage style={{ margin: '0px 5px 5px 18px', textAlign: 'flex-start' }}>
+                    <FormErrorMessage 
+                    margin = '0px 5px 5px 18px' 
+                    textAlign = 'flex-start'
+                    >
                       Пароль должен содержать от 4 до 10 символов
                     </FormErrorMessage>
                   )}
@@ -158,7 +177,7 @@ export default function Example() {
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
                     size='md'
-                    placeholder='От 4 до 10 символов'
+                    placeholder='пароль'
                     _placeholder={{ opacity: 0.3}}
                     value={password}
                     onChange={(e) => { setPassword(e.target.value); checkPasswordLength(e.target.value) }}
