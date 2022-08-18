@@ -13,11 +13,20 @@ import {
   Input,
   Select,
   Textarea,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react'
-import {useDispatch} from 'react-redux'
-import { getPicture } from "../../redux/actions/pictureAction";
+import { useDispatch } from 'react-redux'
+import { getPicture } from '../../redux/actions/pictureAction'
 
 export default function MasterProfile() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -287,9 +296,11 @@ export default function MasterProfile() {
                       w='150px'
                       size='md'
                       onClick={() =>
-                        navigate(`/masters/${params.id}/schedules`, {
-                          replace: false,
-                        })
+                        authUser?.id
+                          ? navigate(`/masters/${params.id}/schedules`, {
+                              replace: false,
+                            })
+                          : onOpen()
                       }
                     >
                       Записаться
@@ -1049,7 +1060,6 @@ export default function MasterProfile() {
                         }
                         defaultValue='Canada'
                       >
-                        <option>30 мин</option>
                         <option>60 мин</option>
                         <option>90 мин</option>
                         <option>120 мин</option>
@@ -1106,6 +1116,49 @@ export default function MasterProfile() {
           </div>
         </Dialog>
       </Transition.Root>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            textAlign='center'
+            mt='20px'
+            style={{
+              fontSize: '1.5rem',
+              color: 'rgb(98, 97, 95)',
+            }}
+          >
+            Доступно только авторизированным пользователям
+          </ModalBody>
+
+          <ModalFooter justifyContent='space-around'>
+            <Button
+              type='button'
+              color='rgb(108, 114, 127)'
+              cursor='pointer'
+              bg='white'
+              w='150px'
+              size='md'
+              onClick={() => navigate('/auth/registration', { replace: false })}
+            >
+              Регистрация
+            </Button>
+            <Button
+              type='button'
+              color='rgb(108, 114, 127)'
+              cursor='pointer'
+              bg='white'
+              w='100px'
+              size='md'
+              onClick={() => navigate('/auth/login', { replace: false })}
+            >
+              Войти
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   )
 }

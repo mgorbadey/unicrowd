@@ -229,7 +229,7 @@ export default function EventCalendarWeekComponent({
                   {HoursCalDisp.endHours}:{HoursCalDisp.endMinutes}
                 </time>
               </p>
-              {authUser.role === 'master' ? (
+              {authUser.id === Number(params.id) ? (
                 <ButtonsEditDeleteWorkingSlot
                   workingSlot={workingSlot}
                   handleInputOpen={handleInputOpen}

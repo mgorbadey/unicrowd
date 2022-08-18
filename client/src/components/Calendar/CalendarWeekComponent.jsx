@@ -272,17 +272,19 @@ export default function CalendarComponent() {
               </Transition> */}
               </Menu>
               <div className='ml-6 h-6 w-px bg-gray-300' />
-              <Button
-                type='button'
-                color='rgb(108, 114, 127)'
-                cursor='pointer'
-                bg='white'
-                w='150px'
-                size='md'
-                onClick={() => setOpen(true)}
-              >
-                Добавить слот
-              </Button>
+              {Number(masterId) === authUser.id && (
+                <Button
+                  type='button'
+                  color='rgb(108, 114, 127)'
+                  cursor='pointer'
+                  bg='white'
+                  w='150px'
+                  size='md'
+                  onClick={() => setOpen(true)}
+                >
+                  Добавить слот
+                </Button>
+              )}
 
               <Modal open={open} setOpen={setOpen} />
             </div>

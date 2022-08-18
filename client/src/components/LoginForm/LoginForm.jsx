@@ -1,4 +1,10 @@
-import { Input, Button, FormControl, FormHelperText, FormErrorMessage } from '@chakra-ui/react'
+import {
+  Input,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormErrorMessage,
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -18,7 +24,9 @@ export default function Example() {
     str.length === 0 ? setIsEmailError(true) : setIsEmailError(false)
   }
   const checkPasswordLength = (str) => {
-    (str.length < 4 || str.length > 10) ? setIsPasswordError(true) : setIsPasswordError(false)
+    str.length < 4 || str.length > 10
+      ? setIsPasswordError(true)
+      : setIsPasswordError(false)
   }
 
   const login = (e) => {
@@ -92,7 +100,10 @@ export default function Example() {
                     placeholder='почта'
                     _placeholder={{ opacity: 0.3 }}
                     value={email}
-                    onChange={(e) => { setEmail(e.target.value); checkEmailLength(e.target.value) }}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      checkEmailLength(e.target.value)
+                    }}
                   />
                 </FormControl>
               </div>
@@ -129,7 +140,10 @@ export default function Example() {
                     placeholder='пароль'
                     _placeholder={{ opacity: 0.3 }}
                     value={password}
-                    onChange={(e) => { setPassword(e.target.value); checkPasswordLength(e.target.value) }}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      checkPasswordLength(e.target.value)
+                    }}
                   />
                 </FormControl>
               </div>
@@ -144,7 +158,7 @@ export default function Example() {
                 size='md'
                 onClick={(e) => {
                   login(e)
-                  navigate('/search', { replace: false })
+                  navigate(-1)
                 }}
               >
                 Войти

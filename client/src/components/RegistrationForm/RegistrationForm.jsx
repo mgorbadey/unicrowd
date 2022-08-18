@@ -228,7 +228,7 @@ export default function Example() {
                 size='md'
                 onClick={(e) => {
                   registration(e)
-                  navigate('/search', { replace: false })
+                  navigate(-1)
                 }}
               >
                 Зарегистрироваться
