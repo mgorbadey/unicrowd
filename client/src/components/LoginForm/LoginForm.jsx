@@ -84,7 +84,7 @@ export default function Example() {
                     autoComplete='email'
                     required
                     bg='white'
-                    mb='10px'
+                    mb='6px'
                     color='rgb(108, 114, 127)'
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'

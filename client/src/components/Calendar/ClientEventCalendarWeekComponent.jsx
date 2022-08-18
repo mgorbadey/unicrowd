@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
+import { CheckIcon, CloseIcon, SmallCloseIcon } from '@chakra-ui/icons'
 import { useDispatch } from "react-redux";
 import { approveClientSlot, deleteClientSlot } from "../../redux/actions/eventAction";
 import $api from "../../http";
@@ -68,7 +68,7 @@ export default function ClientEventCalendarWeekComponent({ clientSlot, authUser 
           <p className={`order-1 font-semibold text-${style[clientSlot.status]}-700`}>
             {clientSlot.clientName}
           </p>
-          <Stack spacing={1} direction="row" align="right">
+          <Stack spacing={1} direction="row" align="right" justify='space-between'>
           <p className={`text-${style[clientSlot.status]}-500 group-hover:text-${style[clientSlot.status]}-700 py-1`}>
             <time dateTime={clientSlot.startDateTime}>
               {HoursCalDisp.startHours}:{HoursCalDisp.startMinutes}-
@@ -76,20 +76,20 @@ export default function ClientEventCalendarWeekComponent({ clientSlot, authUser 
             </time>
           </p>
           {clientSlot.status==="new" ? (
-            <div className="px-1">
+            <div className="flex flex-col">
             <button
-              className="bg-teal-500 text-white active:bg-teal-600 font-bold uppercase text-xs px-1 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              className="bg-transparent font-bold uppercase text-xs rounded outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={(e)=>approveEvent(e)}
             >
-              <CheckIcon w={4} h={2}/>
+              <CheckIcon w={3} h={5} color='rgb(78, 128, 238)'/>
             </button>
             <button
-              className="bg-rose-500 text-white active:bg-rose-600 font-bold uppercase text-xs px-1 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              className="bg-transparent font-bold uppercase text-xs rounded outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={(e)=>deleteEvent(e)}
             >
-              <CloseIcon w={4} h={2}/>
+              <CloseIcon w={3} h={3} color='rgb(78, 128, 238)'/>
             </button>
             </div>
           ):(

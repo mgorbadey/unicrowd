@@ -356,9 +356,9 @@ export default function MasterProfile() {
                         <div className="flex min-h-full items-center justify-center p-3">
                           <Input
                             pt="3px"
+                            type="file"
                             borderRadius="8px"
                             cursor="pointer"
-                            type="file"
                             bg="white"
                             color="rgb(108, 114, 127)"
                             border="2px solid white"
