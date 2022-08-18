@@ -92,3 +92,23 @@ exports.getAvailabilityStatus = async (req, res) => {
   // если в таблице с эвентами есть эвент на эту дату, то статус 204 и потом на фронте отказ удаления   
   tryingToFindClientEventsInWorkingSlot.length ? res.sendStatus(204) : res.sendStatus(200)
 };
+
+exports.editWorkingSlot = async (req, res) => {
+  let {id} = req.params;
+  console.log("achived!", id)
+  let {startDateTime, endDateTime} = req.body
+  console.log(req.body)
+  // console.log('startDateTime', startDateTime)
+  // console.log('endDateTime', endDateTime)
+  // const updateWorkingSlot = await prisma.schedule.update({
+  //   where: {
+  //     id: id
+  //   },
+  //   data: {
+  //     startDateTime: startDateTime,
+  //     endDateTime: endDateTime
+  //   },
+  // })
+  res.sendStatus(200)
+
+}

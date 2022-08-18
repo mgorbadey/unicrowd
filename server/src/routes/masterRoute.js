@@ -7,7 +7,8 @@ const {
   changeStatus,
   deleteEvent,
   deleteWorkingSlot,
-  getAvailabilityStatus
+  getAvailabilityStatus,
+  editWorkingSlot
 } = require("../controllers/masterController");
 const { PrismaClient } = require("@prisma/client");
 
@@ -211,6 +212,7 @@ router
 router
   .route("/:id/schedules/:id")
   .delete(deleteWorkingSlot)
+  .post(editWorkingSlot)
 
 router
   .route("/:id/schedules/:id/status")

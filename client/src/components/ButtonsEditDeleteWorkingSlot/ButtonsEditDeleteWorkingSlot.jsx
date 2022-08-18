@@ -45,7 +45,7 @@ function ButtonsEditDeleteWorkingSlot({ workingSlot, handleInputOpen }) {
       });
   }
 
-  function getWorkingSlotsOptions() {
+  function openInput() {
     handleInputOpen()
   }
 
@@ -61,7 +61,7 @@ function ButtonsEditDeleteWorkingSlot({ workingSlot, handleInputOpen }) {
       <Button
         colorScheme="white"
         size="xxs"
-        onClick={(e) => getWorkingSlotsOptions(e)}
+        onClick={(e) => openInput(e)}
       >
         <EditIcon w={4} h={3} color="gray.500" />
       </Button>
