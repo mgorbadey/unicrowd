@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router()
 const { PrismaClient } = require('@prisma/client')
-const { eventPositionInCal } = require("../lib/calendarFormating")
 const prisma = new PrismaClient()
 
 router.get('/:id/profile', async (req, res) => {
@@ -60,6 +59,29 @@ router.get('/:id/events', async (req, res) => {
     res.json({events})
 })
 
+router.get('/:id/eventInfo', async (req, res) => {
+    const { id } = req.params
+
+    const event = await prisma.event.findMany({
+        where: {
+            clientId: Number(id)
+        },
+        include: {
+            serviceItem: {
+                include: {
+                    master: {
+                        select: {
+                            username: true
+                        }
+                    }
+                }
+            }
+        },
+    })
+
+    res.json({event})
+})
+
 router.post('/cityUpdate', async (req, res) => {
     let { id, city } = req.body
 
@@ -114,19 +136,15 @@ router.post('/event/schedule', async (req, res) => {
     const event = await prisma.event.create({
         data: {
             startDateTime,
-            startDateForFilter,
             masterId: Number(masterId),
             clientId: Number(clientId),
             serviceItemId: Number(serviceItemId),
-            status: 'new'
+            status: 'Not approved'
         }
     })
     const item = await prisma.serviceItem.findMany({where: {id: event.serviceItemId}})[0]
     const formatData = eventPositionInCal([event])
-
     res.json()
-
-    console.log(event)
 })
 
 module.exports = router
