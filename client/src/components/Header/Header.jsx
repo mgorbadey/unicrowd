@@ -43,6 +43,7 @@ const Header = () => {
   useEffect(() => {
     setAuthUser(JSON.parse(window.localStorage.getItem('user')))
   }, [render])
+  
 
   return (
     <Disclosure as='nav' className='bg-white'>
