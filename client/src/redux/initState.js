@@ -5,6 +5,7 @@ const initState = {
   event: [],
   localStorage: false,
   picture: false,
+  navigator: false,
 }
 
 export default initState

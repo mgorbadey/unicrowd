@@ -5,6 +5,7 @@ import resultReducer from './resultsReducer'
 import eventReducer from './eventReducer'
 import localeStorageReducer from './localeStorageReducer'
 import pictureReducer from './pictureReducer'
+import navigatorReducer from './navigatorReducer'
 
 const rootReducer = combineReducers({
   search: searchReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   event: eventReducer,
   localStorage: localeStorageReducer,
   picture: pictureReducer,
+  navigator: navigatorReducer,
 })
 
 export default rootReducer

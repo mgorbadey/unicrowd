@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import $api from '../../http/index'
 import { renderAuth } from '../../redux/actions/localeStorageAction'
+import { updateMasterProfile } from '../../redux/actions/navigatorAction'
 
 export default function Example() {
   const dispatch = useDispatch()
@@ -40,6 +41,7 @@ export default function Example() {
         window.localStorage.setItem('accessToken', response.data.accessToken)
         window.localStorage.setItem('user', JSON.stringify(response.data.user))
         dispatch(renderAuth())
+        dispatch(updateMasterProfile())
       })
       .catch(function (error) {
         console.log(error)

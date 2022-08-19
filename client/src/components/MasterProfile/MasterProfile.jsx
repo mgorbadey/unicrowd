@@ -22,10 +22,11 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getPicture } from '../../redux/actions/pictureAction'
 
 export default function MasterProfile() {
+  const navigator = useSelector((store) => store.navigator)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -34,7 +35,7 @@ export default function MasterProfile() {
 
   useEffect(() => {
     setAuthUser(JSON.parse(window.localStorage.getItem('user')))
-  }, [])
+  }, [navigator])
 
   const [img, setImg] = useState(null)
   const [avatar, setAvatar] = useState(null)
@@ -46,7 +47,7 @@ export default function MasterProfile() {
   const [select, setSelect] = useState(null)
   const [categoryInfo, setCategoryInfo] = useState(null)
   const [itemTitle, setItemTitle] = useState('')
-  const [itemDuration, setItemDuration] = useState('')
+  const [itemDuration, setItemDuration] = useState('60')
   const [itemPrice, setItemPrice] = useState('')
   const [textarea, setTextarea] = useState(null)
   const [render, setRender] = useState(true)
@@ -226,7 +227,7 @@ export default function MasterProfile() {
   React.useEffect(() => {
     getUserInfo()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [avatar, render])
+  }, [avatar, render, navigator])
 
   return (
     <>
