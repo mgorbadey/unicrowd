@@ -33,6 +33,48 @@ class MailService {
     });
   }
 
+  async sendAcceptEventMail(to, masterName, serviceItem, dateTime) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: 'Подтверждение вашей записи на UniCrowd',
+      text: '',
+      html:
+        `
+            <div>
+              <h1>Ваша запись подтверждена:</h1>
+              <ul>
+              <li>Мастер: ${masterName}</li>
+              <li>Процедура: ${serviceItem}</li>
+              <li>Дата и время: ${dateTime}</li>
+              </ul>
+            </div>
+          `,
+    });
+  }
+
+  async sendCancelEventMail(to, masterName, serviceItem, dateTime, masterId) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: 'Отмена вашей записи на UniCrowd',
+      text: '',
+      html:
+        `
+            <div>
+              <h1>К сожалению, ваша запись была отменена мастером:</h1>
+              <ul>
+              <li>Мастер: ${masterName}</li>
+              <li>Процедура: ${serviceItem}</li>
+              <li>Дата и время: ${dateTime}</li>
+              </ul>
+              <h1>Попробуйте подобрать новое подходящее время:</h1>
+              <a href=http://localhost:3000/masters/${masterId}/schedules>Расписание мастера ${masterName}</a>
+            </div>
+          `,
+    });
+  }
+
   async sendActivationMail(to, link) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
