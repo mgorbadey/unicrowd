@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import $api from '../../http/index'
+import { setHLFalse, setHLTrue } from '../../redux/actions/loaderAction'
 import { renderAuth } from '../../redux/actions/localeStorageAction'
 import { updateMasterProfile } from '../../redux/actions/navigatorAction'
 
@@ -38,6 +39,7 @@ export default function Example() {
   }
 
   const registration = (e) => {
+    dispatch(setHLTrue())
     e.preventDefault()
     $api
       .post('http://localhost:3500/auth/registration', {
@@ -51,6 +53,7 @@ export default function Example() {
         window.localStorage.setItem('user', JSON.stringify(response.data.user))
         dispatch(renderAuth())
         dispatch(updateMasterProfile())
+        dispatch(setHLFalse())
       })
       .catch(function (error) {
         console.log(error)
