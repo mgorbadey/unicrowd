@@ -69,7 +69,8 @@ class MailService {
               <li>Дата и время: ${dateTime}</li>
               </ul>
               <h1>Попробуйте подобрать новое подходящее время:</h1>
-              <a href=http://localhost:3000/masters/${masterId}/schedules>Расписание мастера ${masterName}</a>
+              <h3>Расписание мастера ${masterName}</h3>
+              <a href=http://localhost:3000/masters/${masterId}/schedules>http://localhost:3000/masters/${masterId}/schedules</a>
             </div>
           `,
     });
