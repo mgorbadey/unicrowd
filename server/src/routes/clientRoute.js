@@ -3,6 +3,8 @@ const router = Router()
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const { eventPositionInCal } = require('../lib/calendarFormating')
+const moment = require('moment');
+const mailService = require('../service/mail-service')
 
 router.get('/:id/profile', async (req, res) => {
     const { id } = req.params
@@ -146,6 +148,13 @@ router.post('/event/schedule', async (req, res) => {
     })
     const item = await prisma.serviceItem.findMany({ where: { id: event.serviceItemId } })[0]
     const formatData = eventPositionInCal([event])
+
+    //отправка письма-уведомления мастеру о новой записи
+    const master = await prisma.user.findMany({ where: { id: Number(masterId) } })
+    const client = await prisma.user.findMany({ where: { id: Number(clientId) } })
+    const serviceItem = await prisma.serviceItem.findMany({ where: { id: Number(serviceItemId) } })
+    await mailService.sendNotificationMail(master[0].email, client[0].username, serviceItem[0].title, moment(startDateTime).format("YYYY-MM-DD HH:mm"))
+    
     res.json()
 })
 
