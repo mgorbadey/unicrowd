@@ -102,7 +102,7 @@ export default function Example() {
                     autoFocus={false}
                     required
                     bg='white'
-                    mb='10px'
+                    mb='6px'
                     color='rgb(108, 114, 127)'
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
@@ -144,7 +144,7 @@ export default function Example() {
                     autoFocus={false}
                     required
                     bg='white'
-                    mb='10px'
+                    mb='6px'
                     color='rgb(108, 114, 127)'
                     border='2px solid white'
                     focusBorderColor='rgb(140, 175, 174)'
@@ -228,7 +228,7 @@ export default function Example() {
                 size='md'
                 onClick={(e) => {
                   registration(e)
-                  navigate('/search', { replace: false })
+                  navigate(-1)
                 }}
               >
                 Зарегистрироваться

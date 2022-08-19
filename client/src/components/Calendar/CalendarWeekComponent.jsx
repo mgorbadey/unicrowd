@@ -272,17 +272,19 @@ export default function CalendarComponent() {
               </Transition> */}
               </Menu>
               <div className='ml-6 h-6 w-px bg-gray-300' />
-              <Button
-                type='button'
-                color='rgb(108, 114, 127)'
-                cursor='pointer'
-                bg='white'
-                w='150px'
-                size='md'
-                onClick={() => setOpen(true)}
-              >
-                Добавить слот
-              </Button>
+              {Number(masterId) === authUser.id && (
+                <Button
+                  type='button'
+                  color='rgb(108, 114, 127)'
+                  cursor='pointer'
+                  bg='white'
+                  w='150px'
+                  size='md'
+                  onClick={() => setOpen(true)}
+                >
+                  Добавить слот
+                </Button>
+              )}
 
               <Modal open={open} setOpen={setOpen} />
             </div>
@@ -485,7 +487,7 @@ export default function CalendarComponent() {
                 <div className='col-end-1 w-14' />
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[0][0]) &
                       (todayMonthNum === monthNum)
@@ -508,7 +510,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[1][0]) &
                       (todayMonthNum === monthNum)
@@ -531,7 +533,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[2][0]) &
                       (todayMonthNum === monthNum)
@@ -554,7 +556,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[3][0]) &
                       (todayMonthNum === monthNum)
@@ -577,7 +579,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[4][0]) &
                       (todayMonthNum === monthNum)
@@ -600,7 +602,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[5][0]) &
                       (todayMonthNum === monthNum)
@@ -623,7 +625,7 @@ export default function CalendarComponent() {
                 </div>
                 <div className='flex items-center justify-center py-3'>
                   <span
-                  style={{ color: 'rgb(108, 114, 127)' }}
+                    style={{ color: 'rgb(108, 114, 127)' }}
                     className={
                       (todayNum === wholeWeek[6][0]) &
                       (todayMonthNum === monthNum)
@@ -648,7 +650,10 @@ export default function CalendarComponent() {
             </div>
             <div className='flex flex-auto'>
               <div className='sticky left-0 z-10 w-14 flex-none bg-white ring-1 ring-gray-100' />
-              <div className='grid flex-auto grid-cols-1 grid-rows-1'>
+              <div
+                className='grid flex-auto grid-cols-1 grid-rows-1'
+                style={{ backgroundColor: '#dad6cf' }}
+              >
                 {/* Horizontal lines */}
                 <div
                   className='col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100'

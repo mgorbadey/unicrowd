@@ -101,7 +101,6 @@ const ResultSelect = ({
         disabled={selectedItem ? false : true}
         onChange={(e) => setSelectedDuration(e.target.value)}
       >
-        <option value='30'>30 минут</option>
         <option value='60'>60 минут</option>
         <option value='90'>90 минут</option>
         <option value='120'>120 минут</option>
